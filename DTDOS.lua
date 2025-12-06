@@ -34,6 +34,10 @@ _G.args = {}
 _G.new = {}
 -----------
 function new.cmd(name, func, desc)
+  for i,v in ipairs(_G.cmd) do
+    if v == name then return end
+  end
+  
   if name then
     table.insert(_G.cmd, name)
     if func then
