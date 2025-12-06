@@ -31,14 +31,16 @@ new.cmd("connect",function()
     local url = args[2]
     
     url = url:gsub("market","https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDMarketPacks.txt")
-local get = io.popen("curl -s "..url)
-local content = get:read("*a")
-get:close()
-if content then
-  pcall(function() load(content)() end)
-else
-print("\27[0m\27[91mno content received!")
-end
-else
-print("\27[0m\27[91mno url provided")
+    local get = io.popen("curl -s "..url)
+    local content = get:read("*a")
+    get:close()
+    if content then
+      pcall(function() load(content)() end)
+      
+    else
+      print("\27[0m\27[91mno content received!")
+    end
+  else
+    print("\27[0m\27[91mno url provided")
+  end
 end, "load lua content from a url")
