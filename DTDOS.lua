@@ -60,6 +60,8 @@ if not cmd[1] then
   print("\27[0m\27[44m[DTD::SYS]:\27[0m\27[41mNO COMMAND REGISTED\27[0m")
 end
 
+new.cmd("finish", os.exit, "finish the session")
+
 ::s::
 args = {}
 
