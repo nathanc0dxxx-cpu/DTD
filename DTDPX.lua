@@ -43,4 +43,4 @@ new.cmd("connect",function()
   else
     print("\27[0m\27[91mno url provided")
   end
-end, "load lua content from a url")
+end "load lua content from a url")
