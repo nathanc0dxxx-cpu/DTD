@@ -43,3 +43,9 @@ new.cmd("connect", function()
     print("\27[0m\27[91mno url provided")
   end
 end, "load lua content from a url")
+
+new.cmd("help",function()
+  for i,v in ipairs(cmd) do
+    print("\27[92m"..i.."- [ \27[0m"..v.."\27[92m ]\n\27[93m\27[1m--desc: \27[0m"..cmdd[i]")
+  end
+end, "literally helps you... :|")
