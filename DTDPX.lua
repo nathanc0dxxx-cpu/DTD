@@ -26,7 +26,7 @@ new.cmd("pi", function()
   end
 end, "manage plugins session")
 
-new.cmd("connect",function()
+new.cmd("connect", function()
   if args[2] then
     local url = args[2]
     
@@ -36,11 +36,10 @@ new.cmd("connect",function()
     get:close()
     if content then
       pcall(function() load(content)() end)
-      
     else
       print("\27[0m\27[91mno content received!")
     end
   else
     print("\27[0m\27[91mno url provided")
   end
-end "load lua content from a url")
+end, "load lua content from a url")
