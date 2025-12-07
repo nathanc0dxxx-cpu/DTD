@@ -9,3 +9,7 @@ f
 
 fdddd
 c<<
+
+resourcepack.dtdp.lua>>prate=5p<<>>c
+new.cmd("test",function() print("test") end, "test")
+c<<
