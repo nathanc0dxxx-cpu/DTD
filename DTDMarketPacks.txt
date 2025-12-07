@@ -1,8 +1,8 @@
-gg.txt>>prate=5<<p>>c
+gg.txt>>prate=5p<<>>c
 gg
 c<<
 
-aksjjssksj>>prate=5<<p>>c
+aksjjssksj>>prate=5p<<>>c
 didiririjff
 f
 f
