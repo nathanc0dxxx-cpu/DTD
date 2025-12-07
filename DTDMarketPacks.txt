@@ -1,3 +1,3 @@
-gg>>prate=5<<p>>c
+gg.txt>>prate=5<<p>>c
 gg
 c<<
