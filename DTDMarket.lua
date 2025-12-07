@@ -1,4 +1,3 @@
-
 os.execute("clear")
 for i = 1,5 do
   print()
@@ -18,12 +17,13 @@ end function escc(txt)
   return txt
 end
 
+show = true
 loadpack()
 
 function s()
   local get = esc(packs)
   local f = get
-  
+  if show == true then
   f = f:gsub(">>c%s*(.-)%s*c<<","")
   f = f:gsub(">>prate=.","")
   f = f:gsub("p<<","")
@@ -53,7 +53,7 @@ function s()
   for v in f:gmatch("%S+") do
     i = i + 1
     if v:match("dtd") then
-      print("\27[96m  \n  \27[92m [\27[0m"..i.."\27[92m]\27[94m \27[1m"..v.." \27[0m")
+      print("\27[0m  \n \27[92m [\27[93m"..i.."\27[92m]\27[94m \27[1m"..v.." \27[0m")
     end
   end
   print("\27[0m".. [[
@@ -70,20 +70,23 @@ function s()
     end
   end
   
-  print()
+  print("\n\27[44m|--------------------------|\27[0m\n")
   
-  print("\27[93m[ type: search, exit or name ]")
+  print("\n\n\27[93m[ type: search, exit or name ]\27[3A")
+  
+    show = false
+  end
+  
   io.write(" \27[92m=> \27[0m")
   
   inp = io.read()
-  if inp == "search" then
-    os.execute("clear")
+  if inp:sub(1,6) == "search" then
     search()
   elseif inp == "exit" then
     exit = true
-    os.execute("clear")
+    for i = 1,1000 do io.write("\27[1B\27[") end
   else
-    os.execute("clear")
+    io.write("\27[2K\27[1A\27[2K")
     interface()
   end
   
@@ -94,6 +97,37 @@ function interface()
 end
 
 function search()
+  local query = inp:sub(7)
+  local f = esc(packs)
+  
+  f = f:gsub(">>c%s*(.-)%s*c<<","")
+  f = f:gsub(">>prate=.","")
+  f = f:gsub("p<<","")
+  
+  if f:match(query) then
+    os.execute("clear")
+    print("\27[44m.Results! : \27[0m\n")
+    
+  else
+    io.write("\27[2K\27[1A\27[C")
+    s()
+  end
+  
+  for v in f:gmatch("%S+") do
+    if v:match(query) then
+      print("\27[42m : \27[46m"..escc(v).."\27[0m\n")
+    end
+  end
+  print("\n\n\27[93m[ type: back, or name ]\27[0m\27[3A \27[92m\27[0m")
+  local useri = io.read()
+  if useri == "back" then
+    os.execute("clear")
+    print("\n\n\n\n")
+    show = true
+    s()
+  else
+    interface()
+  end
 end
 
 if exit == true then
