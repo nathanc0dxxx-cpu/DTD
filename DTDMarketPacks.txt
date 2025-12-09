@@ -1,1 +1,7 @@
-StarterPack=FreeProPack=15UltraPack=30MegaPack=50
+DTDtest.lua>>prate=5 owner=Dougla037p<<>>c
+print("HELLO! this is your first file code")
+print("installed from the market!")
+print("you can update and launch files")
+print("from your device only copying and paste")
+print("send the file format for us check and post on the dtdmarket!")
+c<<>>d the first pack for you install! d<<
