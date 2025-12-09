@@ -31,13 +31,14 @@ _G.DTDPackManager = {
     print("\27[44m[DTD::PM]:\27[0m \27[93minstalling...\27[0m")
     if mainpack then
       if packcont then
+        local package
         local package = io.open(mainpack, "r")
         if package then
           package:write(packcont)
           print("\27[44m[DTD::PM]:\27[0m \27[93mupdated pack: \n"..mainpack.."\n\27[92m at: ")
           os.execute("pwd")
         else
-          package = io.open(mainpack, "w")
+          package = io.open("./"..mainpack, "w")
           package:write(packcont)
           print("\27[44m[DTD::PM]:\27[0m \27[92minstalled pack: \n"..mainpack.."\n\27[92m at: ")
           os.execute("pwd")
@@ -57,5 +58,4 @@ _G.DTDPackManager = {
     print("\27[44m[DTD::PM]:\27[0m \27[96mfinished")
   end,
 }
-
-print("\27[44m[DTD::PM]:\27[0m \27[92minjected DTDPackManager\27[0m")
+DTDPackManager:install()
