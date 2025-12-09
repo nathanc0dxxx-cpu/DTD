@@ -60,4 +60,4 @@ _G.DTDPackManager = {
     print("\27[44m[DTD::PM]:\27[0m \27[96mfinished")
   end,
 }
-DTDPackManager:install()
+pcall(function() 67 end)
