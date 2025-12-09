@@ -1,4 +1,4 @@
-
+os.execute("clear")
 io.write("\27[0m")
 _G.plugins = {}
 function loadplugins()
