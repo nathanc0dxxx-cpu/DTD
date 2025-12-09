@@ -43,6 +43,7 @@ _G.DTDPackManager = {
           print("\27[44m[DTD::PM]:\27[0m \27[92minstalled pack: \n"..mainpack.."\n\27[92m at: ")
           os.execute("pwd")
           package:close()
+          os.execute("sleep 2")
         end
       end
     else
