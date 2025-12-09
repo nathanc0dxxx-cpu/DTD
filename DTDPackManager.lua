@@ -2,7 +2,6 @@
 print("\27[0m\27[44m[DTD::PM]:\27[0m \27[93minitializing...\27[0m")
 
 _G.DTDPackManager = {
-  
   pack = "PlaceHolder",
   store = [[
   PlaceHolder.txt>>prate=5 owner=Dougla037p<<>>c
@@ -43,13 +42,12 @@ _G.DTDPackManager = {
           print("\27[44m[DTD::PM]:\27[0m \27[92minstalled pack: \n"..mainpack.."\n\27[92m at: ")
           os.execute("pwd")
           package:close()
-          os.execute("sleep 2")
         end
       end
     else
       print("\27[44m[DTD::PM]:\27[0m \27[91mnot found!")
     end
-    
+    os.execute("sleep 2")
     print("\27[0m\27[44m[DTD::PM]:\27[0m \27[93mfinishing session...\27[0m")
     if self then
       for i in ipairs(self) do
@@ -60,4 +58,3 @@ _G.DTDPackManager = {
     print("\27[44m[DTD::PM]:\27[0m \27[96mfinished")
   end,
 }
-pcall(function() 67 end)
