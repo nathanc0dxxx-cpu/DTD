@@ -44,7 +44,16 @@ _G.DTDPackManager = {
             os.execute("pwd")
             package:close()
           else
-            print("\27[44m[DTD::PM]:\27[0m \27[91mfailed to install pack"..DTDPackManager.pack)
+            print("\27[44m[DTD::PM]:\27[0m \27[91mfailed to install pack "..DTDPackManager.pack.." retrying...\27[0m")
+            local package = io.open("./"..mainpack, "w")
+            os.execute("sleep 0.3")
+            if package then
+              package:write(packcont)
+              print("\27[44m[DTD::PM]:\27[0m \27[92mdone!")
+              os.execute("pwd")
+              package:close()
+            else
+              print("\27[44m[DTD::PM]:\27[0m \27[91mFATAL FAIL\27[0m")
           end
         end
       end
