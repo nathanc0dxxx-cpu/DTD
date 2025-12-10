@@ -18,6 +18,9 @@ _G.DTDPackManager = {
         print("\27[44m[DTD::PM]:\27[0m \27[92mfound:\n\27[0m"..v)
       end
     end
+    
+    mainpack = mainpack:gsub("^%s+", ""):gsub("%s+$", ""):gsub("\n", ""):gsub("\r", "")
+    
     local packcont = ""
     for v in self.store:gmatch("(.-%s*>>p%s*.-%s*p<<>>c%s*.-%s*c<<)") do
       local packmatch = v:match("(.-)%s*>>p%s*.-%s*p<<")
