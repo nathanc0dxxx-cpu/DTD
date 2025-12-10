@@ -1,4 +1,5 @@
 os.execute("clear")
+local exit = false
 for i = 1,5 do
   print()
 end
@@ -17,7 +18,7 @@ end function escc(txt)
   return txt
 end
 
-show = true
+local show = true
 loadpack()
 if packs == "" then
   packs = [[
@@ -85,7 +86,6 @@ function s()
   print("\n\27[44m|--------------------------|\27[0m\n")
   
   print("\n\n\27[93m[ type: search, exit or name ]\27[3A")
-  
     show = false
   end
   
