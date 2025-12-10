@@ -34,3 +34,25 @@ end, "vírus for terminal")
 c<<>>d
 Pack de comandos Fluxal Copyright criado por Fffars39.
 d<<
+
+Nexality.dtdp.lua>>prate=5 owner=ScripthBob45<<>>c
+print("\27[44m[NX::MSG]:\27[0m running nexality v1")
+new.cmd("nx",function()
+    if args[2] == "clear" then
+        os.execute(args[2])
+    elseif args[2] == "testwifi" then
+        local http = io.popen("https://dtdserver.42web.io")
+        if http then
+            print("\27[44m[NX::WC]:\27[0m good connection")
+            http:close()
+        else
+            print("\27[44m[NX::WC]:\27[0m bad wifi! Go buy a good wifi")
+            http:close()
+        end
+    elseif args[2] == "bash" then
+        os.execute(input:sub(1,9))
+    end
+end, "Nexality Usefull DTDOS Plugin Pack. By ScripthBob45")
+c<<>>d
+Usefull and util DTDOS Plugin pack! Enjoy!
+d<<
