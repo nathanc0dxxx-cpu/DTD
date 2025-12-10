@@ -40,7 +40,7 @@ _G.DTDPackManager = {
           os.execute("pwd")
           package:close()
         else
-          local package = io.open("/storage/emulated/0/Download/"..mainpack, "w")
+          local package = io.open(mainpack, "w")
           if package then
             package:write(packcont)
             print("\27[44m[DTD::PM]:\27[0m \27[92minstalled pack: \n"..mainpack.."\n\27[92m at: ")
@@ -48,7 +48,7 @@ _G.DTDPackManager = {
             package:close()
           else
             print("\27[44m[DTD::PM]:\27[0m \27[91mfailed to install pack "..DTDPackManager.pack.." retrying...\27[0m")
-            local package = io.open("/storage/emulated/0/Download/"..mainpack, "w")
+            local package = io.open(mainpack, "w")
             os.execute("sleep 0.3")
             if package then
               package:write(packcont)
