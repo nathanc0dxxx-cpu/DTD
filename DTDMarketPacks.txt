@@ -6,7 +6,7 @@ print("from your device only copying and paste")
 print("send the file format for us check and post on the dtdmarket!")
 c<<>>d the first pack for you install! d<<
 
-myplug.dtdp.lua>>prate=2p<<>>c
+myplug.dtdp.lua>>prate=2 owner=fluxusp<<>>c
 new.cmd("fluxus",function()
 
 if args[2] == "help" then
@@ -20,7 +20,7 @@ end
 end, "fluxus cmd pack")
 c<<>>dfluxus virusd<<
 
-fluxalcopyright.dtdp.lua>>prate=3 owner=Fffars39<<>>c
+fluxalcopyright.dtdp.lua>>prate=3 owner=Fffars39p<<>>c
 print("FLUXAL COPYRIGHT")
 print("cmds: viruse")
 new.cmd("fluxal",function()
@@ -35,7 +35,7 @@ c<<>>d
 Pack de comandos Fluxal Copyright criado por Fffars39.
 d<<
 
-Nexality.dtdp.lua>>prate=5 owner=ScripthBob45<<>>c
+Nexality.dtdp.lua>>prate=5 owner=ScripthBob45p<<>>c
 print("\27[44m[NX::MSG]:\27[0m running nexality v1")
 new.cmd("nx",function()
     if args[2] == "clear" then
