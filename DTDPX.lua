@@ -29,12 +29,17 @@ end, "manage plugins session")
 new.cmd("connect", function()
   if args[2] then
     local url = args[2]
-    local server = "https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDMarket.lua"
+    print("\27[0m\27[44m[DTD::SM]:\27[0m \27[93mgetting DTD servers...\27[0m")
+    local server = "https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDServers.txt"
     local handle = io.popen("curl -s "..server)
     local hc = handle:read("*a") handle:close()
-    for v in hc:gmatch("(.-%s*<<%s*.-%s*>>)") do
-      if url:match(hc:gsub("(<<%s*.-%s*>>)","")) then
-        url = hc:match(".-%s*<<%s*(.-)%s*>>")
+    print(hc)
+    
+    print("\27[44m[DTD::SM]:\27[0m \27[93mchecking url match server...\27[0m")
+    
+    for alias, link in hc:gmatch("([%w_%-]+)%s*<<%s*(https?://.-)>>") do
+      if url == alias then
+        url = link
         break
       end
     end
