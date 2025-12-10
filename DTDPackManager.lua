@@ -54,6 +54,7 @@ _G.DTDPackManager = {
               package:close()
             else
               print("\27[44m[DTD::PM]:\27[0m \27[91mFATAL FAIL\27[0m")
+            end
           end
         end
       end
