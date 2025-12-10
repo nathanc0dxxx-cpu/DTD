@@ -30,7 +30,7 @@ _G.DTDPackManager = {
     print("\27[44m[DTD::PM]:\27[0m \27[93minstalling...\27[0m")
     if mainpack then
       if packcont then
-        local package = io.open(mainpack, "r")
+        local package = io.open(mainpack, "r+") or nil
         if package then
           package:write(packcont)
           print("\27[44m[DTD::PM]:\27[0m \27[93mupdated pack: \n"..mainpack.."\n\27[92m at: ")
