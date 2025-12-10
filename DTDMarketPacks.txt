@@ -5,3 +5,16 @@ print("you can update and launch files")
 print("from your device only copying and paste")
 print("send the file format for us check and post on the dtdmarket!")
 c<<>>d the first pack for you install! d<<
+
+myplug.dtdp.lua>>prate=2p<<>>c
+new.cmd("fluxus",function()
+
+if args[2] == "help" then
+print("cmd:\nhelp\nvirus\n")
+elseif args[2] == "vírus" then
+for i = 1,100 do os.execute("sleep 0.2")
+print("VIRUSE OF FLUXUS")
+end
+end
+
+end, "fluxus cmd pack")
