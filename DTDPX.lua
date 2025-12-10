@@ -35,11 +35,12 @@ new.cmd("connect", function()
     local hc = handle:read("*a") handle:close()
     print(hc)
     
-    print("\27[44m[DTD::SM]:\27[0m \27[93mchecking url match server...\27[0m")
+    print("\27[44m[DTD::SM]:\27[0m \27[93mchecking url equals host...\27[0m")
     
     for alias, link in hc:gmatch("([%w_%-]+)%s*<<%s*(https?://.-)>>") do
       if url == alias then
         url = link
+        print(url)
         break
       end
     end
