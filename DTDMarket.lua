@@ -94,7 +94,7 @@ function s()
   inp = io.read()
   if inp:sub(1,6) == "search" then
     search()
-  elseif inp == "exit" then
+  elseif inp:sub(1,4) == "exit" then
     exit = true
     for i = 1,1000 do io.write("\27[1B\27[") end
   else
