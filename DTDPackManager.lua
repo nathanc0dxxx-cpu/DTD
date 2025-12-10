@@ -20,7 +20,7 @@ _G.DTDPackManager = {
     end
     
     mainpack = mainpack:gsub("^%s+", ""):gsub("%s+$", ""):gsub("\n", ""):gsub("\r", "")
-    
+    print("MAINPACK RAW = [" .. tostring(mainpack) .. "]")
     local packcont = ""
     for v in self.store:gmatch("(.-%s*>>p%s*.-%s*p<<>>c%s*.-%s*c<<)") do
       local packmatch = v:match("(.-)%s*>>p%s*.-%s*p<<")
