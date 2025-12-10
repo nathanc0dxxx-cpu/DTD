@@ -38,10 +38,14 @@ _G.DTDPackManager = {
           package:close()
         else
           local package = io.open("./"..mainpack, "w")
-          package:write(packcont)
-          print("\27[44m[DTD::PM]:\27[0m \27[92minstalled pack: \n"..mainpack.."\n\27[92m at: ")
-          os.execute("pwd")
-          package:close()
+          if package then
+            package:write(packcont)
+            print("\27[44m[DTD::PM]:\27[0m \27[92minstalled pack: \n"..mainpack.."\n\27[92m at: ")
+            os.execute("pwd")
+            package:close()
+          else
+            print("\27[44m[DTD::PM]:\27[0m \27[91mfailed to install pack"..DTDPackManager.pack)
+          end
         end
       end
     else
