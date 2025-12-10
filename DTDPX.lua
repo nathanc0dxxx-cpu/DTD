@@ -30,7 +30,15 @@ new.cmd("connect", function()
   if args[2] then
     local url = args[2]
     
-    url = url:gsub("market","https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDMarketPacks.txt")
+    local handle = io.popen("curl -s "..server)
+    local hc = handle:read("*a") handle:close()
+    for v in hc:gmatch("(.-%s*<<%s*.-%s*>>)") do
+      if url:match(hc:gsub("(<<%s*.-%s*>>)","")) then
+        url = hc:match(".-%s*<<%s*(.-)%s*>>")
+        break
+      end
+    end
+    
     local get = io.popen("curl -s "..url)
     local content = get:read("*a")
     get:close()
