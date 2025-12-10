@@ -18,3 +18,18 @@ end
 end
 
 end, "fluxus cmd pack")
+
+fluxalcopyright.dtdp.lua>>prate=3 owner=Fffars39<<>>c
+print("FLUXAL COPYRIGHT")
+print("cmds: viruse")
+new.cmd("fluxal",function()
+    if args[2] == "viruse" then
+        for i = 1,100 do
+            os.execute("sleep 0.2")
+            print("viruse")
+        end
+    end
+end, "vírus for terminal")
+c<<>>d
+Pack de comandos Fluxal Copyright criado por Fffars39.
+d<<
