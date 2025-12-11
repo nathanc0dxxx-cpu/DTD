@@ -61,7 +61,7 @@ function s()
   i = 0
   for v in f:gmatch("%S+") do
     if i <= 3 then
-    if v:match("^dtd") then
+    if v:match("^DTD") then
       i = i + 1
       print("\27[0m  \n \27[92m [\27[93m"..i.."\27[92m]\27[94m \27[1m"..v.." \27[0m")
     end
@@ -101,7 +101,6 @@ function s()
     io.write("\27[2K\27[1A\27[2K")
     interface()
   end
-  
 end
 
 function interface()
@@ -202,8 +201,8 @@ function search()
   local f = esc(packs)
   
   f = f:gsub(">>c%s*(.-)%s*c<<","")
-  f = f:gsub(">>prate=.","")
-  f = f:gsub("p<<","")
+  f = f:gsub(">>p%s*(.-)%s*p<<","")
+  f = f:gsub(">>d%s*(.-)%s*d<<","")
   
   if f:match(query) then
     os.execute("clear")
@@ -232,6 +231,9 @@ end
 
 if exit == true then
   print("\n \n \n")
+  goto exit
 else
   s()
 end
+::exit::
+print()
