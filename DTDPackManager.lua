@@ -14,13 +14,15 @@ _G.DTDPackManager = {
     for v in self.store:gmatch("(.-)%s*>>p%s*.-%s*p<<") do
       if v:match(self.pack) then
         v = v:gsub(">>p%s*(.-)%s*p<<","")
+        v = v:gsub(">>c%s*(.-)%s*c<<","")
+        v = v:gsub(">>d%s*(.-)%s*d<<","")
+        v = v:gsub("\n","")
         mainpack = v
         print("\27[44m[DTD::PM]:\27[0m \27[92mfound:\n\27[0m"..v)
       end
     end
     
-    mainpack = mainpack:gsub("^%s+", ""):gsub("%s+$", ""):gsub("\n", ""):gsub("\r", "")
-    print("MAINPACK RAW = [" .. tostring(mainpack) .. "]")
+    print("MAINPACK RAW = [" .. mainpack .. "]")
     local packcont = ""
     for v in self.store:gmatch("(.-%s*>>p%s*.-%s*p<<>>c%s*.-%s*c<<)") do
       local packmatch = v:match("(.-)%s*>>p%s*.-%s*p<<")
