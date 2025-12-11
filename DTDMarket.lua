@@ -96,7 +96,9 @@ function s()
     search()
   elseif inp:sub(1,4) == "exit" then
     exit = true
-    for i = 1,1000 do io.write("\27[1B\27[") end
+    for i = 1,1000 do io.write("\27[1B\27[")
+    goto exit
+ end
   else
     io.write("\27[2K\27[1A\27[2K")
     interface()
