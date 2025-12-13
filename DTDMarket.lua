@@ -97,7 +97,7 @@ function s()
   elseif inp:sub(1,4) == "exit" then
     exit = true
     for i = 1,1000 do io.write("\27[1B\27[")
-    goto exit
+      exitt()
  end
   else
     io.write("\27[2K\27[1A\27[2K")
@@ -233,9 +233,10 @@ end
 
 if exit == true then
   print("\n \n \n")
-  goto exit
+  exitt()
 else
   s()
 end
-::exit::
+local function exitt()
 print()
+end
