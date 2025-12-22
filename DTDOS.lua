@@ -1,7 +1,6 @@
 os.execute("clear")
 io.write("\27[0m")
-_G.plugins = {}
-function loadplugins()
+function loadplugins() _G.plugins = {}
   local havepi = false
   print("\27[44m[DTD::PIL]:\27[0m\27[93m initializing...")
   local get = io.popen("ls")
