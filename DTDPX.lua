@@ -33,8 +33,7 @@ new.cmd("connect", function()
     local server = "https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDServers.txt"
     local handle = io.popen("curl -s "..server)
     local hc = handle:read("*a") handle:close()
-    print(hc)
-    
+    if hc then print("\27[0m\27[92msucess\27[0m") else print("\27[0m\27[91mfail\27[0m") end
     print("\27[44m[DTD::SM]:\27[0m \27[93mchecking url equals host...\27[0m")
     
     for alias, link in hc:gmatch("([%w_%-]+)%s*<<%s*(https?://.-)>>") do
@@ -63,3 +62,7 @@ new.cmd("help",function()
     print("\27[92m"..i.."- [ \27[0m"..v.."\27[92m ]\n\27[93m\27[1m--desc: \27[0m"..cmdd[i].."\n\n")
   end
 end, "literally helps you... :|")
+
+new.cmd("out",function()
+  print(input:sub(5, 100))
+end, "prints a text in terminal")
