@@ -1,3 +1,5 @@
 market<<https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDMarket.lua>>
 
 dtdservers<<https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Manager/DTDServersManager.lua>>
+
+installsettings<<https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTD
