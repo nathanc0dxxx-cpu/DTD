@@ -1,4 +1,4 @@
-print("\27[44m[DTD::SI]:\27[0m \27[93minitializing...\27[0m:)
+print("\27[44m[DTD::SI]:\27[0m \27[93minitializing...\27[0m")
 local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDSettings.html")
 if ss then
 local sc = ss:read("*a")
