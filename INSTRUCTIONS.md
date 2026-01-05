@@ -4,7 +4,7 @@ let me tell you...
 
 ## Where i Start?
 
-you first need to run the DTDBTL.lua (BootLoader) and it will automatically run the BootStrap session, now, you need to install the plugin package typing loadpack in the bootstrap command, and when installed you type start to start the whole system, PLEASE CONFIRM THE DTDPX.dtdp.lua IS ON THE SAME DIRECTORY OF DTDBTL.lua OR IT WILL NOT WORK.
+you first need to run the DTDBTL.lua (BootLoader) and it will automatically run the BootStrap session, now, you need to install the plugin package typing loadpack in the bootstrap command (YOU NEED THE DTDPX.dtdp.lua TO USE really... so... type loadpack before start) and when installed you type start to start the whole system, PLEASE CONFIRM THE DTDPX.dtdp.lua IS ON THE SAME DIRECTORY OF DTDBTL.lua OR IT WILL NOT WORK.
 
 ## How to use?
 
