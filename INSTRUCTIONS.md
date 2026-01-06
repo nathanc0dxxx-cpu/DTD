@@ -20,3 +20,17 @@ type **help** for more info or read this:
 *out*: [out "(your text here)"] *LITERALLY PRINT EVERYTHING BETWEEN THE QUOTES!*
 
 [click here](https://raw.githubusercontent.com/DTD/main/DTDPX.dtdp.lua) to see an example of plugin structure and to see the code to view with more precision the commands
+
+## Default Servers for you!
+
+### market
+
+use **connect market** cmd to acess the market. To install a pack you need to type a pack name or something and if it show the current pack that you want Just type ENTER to install in your device. if you want to search, Just type search (your query) to find some packs. type exit to exit.
+
+### dtdservers
+
+its in works and just show the servers working in DTD, type any key to show and to exit Just type exit.
+
+### installsettings 
+
+Just connect it to inject the settings file in your device to configurate your OS.
