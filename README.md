@@ -30,3 +30,5 @@ YES! Just talk to me in Discord (dougla037) and get your DTD ToolBox Stuff Modul
 ## PUC RIO™
 
 [Click Here!](https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/whydidyouclick.md)
+
+if you want instructions read INSTRUCTIONS.md on the same branch without additional directories
