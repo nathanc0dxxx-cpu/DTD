@@ -1,6 +1,6 @@
 id:0
 name:User
-pass:
+pass:User
 xname:AnonymousUser
 
 id:1
