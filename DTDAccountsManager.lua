@@ -52,5 +52,3 @@ _G.DTDAccountsManager = {
     end self = nil
   end,
 }
-
-print(DTDAccountsManager:getpass("Dougla037", "imaop!dud:p"))
