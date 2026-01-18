@@ -7,12 +7,7 @@ load(ss:read("*a"))()
 print("\27[93mloaded!\27[0m")
 
 local so = os.execute
-
-pcall(function()
     local names = DTDAccountsManager:getusersname()
-end)
-
-if names == nil then names = "Dougla037" end
 
 local username = nil
 local password = nil
