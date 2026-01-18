@@ -47,7 +47,8 @@ while session do
             io.write("\27[0m > \27[96m ...\27[0m\27[3D")
             local ups = io.read()
             local upw = DTDAccountsManager:getpass(username, "imaop!dud:p")
-            if ups == upw then password = upw session = false buildaccount(username, password)else print("\27[91mINCORRECT PASSWORD! dont try enter others account...\27[0m\npress any key to procced") io.read() username = nil end
+            if ups == upw then password = upw session = false buildaccount(username, password)else print("\27[91mINCORRECT PASSWORD! dont try enter others account...\27[0m\npress any key to procced") io.read() 
+username = nil end
         end
     end
    if not username then print("\27[44m[DTD::LG]:\27[0m \27[91myour current username does not match any dtdaccount,\ntry check if your username exists or try later...\27[0m\npress any key to procced") io.read() end
