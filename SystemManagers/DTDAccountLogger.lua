@@ -12,8 +12,8 @@ pcall(function()
     local names = DTDAccountsManager:getusersname()
 end)
 
-if not names then names = "Dougla037" end
-    
+if names == nil then names = "Dougla037" end
+
 local username = nil
 local password = nil
 
@@ -27,17 +27,17 @@ local function buildaccount(nm, ps)
     save:close()
     print("\27[92maccount construction completed!\27[0m")
 end
-
-local filetest = io.open("DTDUser","r")
+local session = false
+local filetest = io.open("DTDUser","r+")
 if filetest then
-  local fc = filetest:read("*a")
+  local filet = filetest:read("*a")
   filetest:close()
   local datat = {}
-  for v in fc:gmatch("%S+") do
+  for v in filet:gmatch("%S+") do
     table.insert(datat,v)
   end buildaccount(datat[1], datat[2])
 else
-  local session = true
+  session = true
 end
 
 while session do
@@ -51,7 +51,7 @@ while session do
             print("\27[44m[DTD::LG]:\27[0m \27[93mPassWord")
             io.write("\27[0m > \27[96m ...\27[0m\27[3D")
             local ups = io.read()
-            local upw = pcall(function() return DTDAccountsManager:getpass("imaop!dud:p") end)
+            local upw = DTDAccountsManager:getpass(username, "imaop!dud:p")
             if not upw then upw = "TEST" end
             if ups == upw then password = upw session = false buildaccount(username, password)else print("\27[91mINCORRECT PASSWORD! dont try enter others account...\27[0m\npress any key to procced") io.read() end
         end
