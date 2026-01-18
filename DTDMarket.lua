@@ -97,6 +97,7 @@ function s()
   elseif inp:sub(1,4) == "exit" then
     exit = true
     for i = 1,1000 do io.write("\27[1B\27[")
+    os.execute("clear")
       exitt()
  end
   else
