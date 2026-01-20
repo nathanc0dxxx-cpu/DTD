@@ -1,4 +1,4 @@
---please dont destroy my project:c
+--please dont destroy my project!
 
 
 -- Função para codificar Base64 manualmente
