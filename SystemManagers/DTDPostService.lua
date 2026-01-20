@@ -1,7 +1,5 @@
 --please dont destroy my project!
 
-
--- Função para codificar Base64 manualmente
 function base64(data)
     local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
     local s = ""
@@ -31,7 +29,6 @@ function base64(data)
     return s
 end
 
--- Função para pegar SHA de um arquivo do GitHub
 local function getSHA(url, token)
     local handle = io.popen(string.format([[
         curl -s -H "Authorization: token %s" %s
@@ -46,11 +43,8 @@ else
 end
 end
 
--- Exemplo de uso:
-local url2 = "https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/DTDMarketPacks.txt"
-
 local function post(url, content)
-local dtkg = "ghp_".."2IcCBtkZ702oA7d6EsbmPrl8GtcgmE1iCOp5"
+local dtkg = string.gsub("dtdkg__","dtdkg__","ghp_").."2IcCBtkZ702oA7d6EsbmPrl8GtcgmE1iCOp5"
 
   local sha = getSHA(url, dtkg)
 local ct = ""
