@@ -65,5 +65,8 @@ _G.DTDPostService = {
   market = function(self, cont)
     post("https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/DTDMarketPacks.txt", cont)
   end,
+  servers = function(self, cont)
+    post("https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/DTDServers.txt", cont)
+  end,
 }
 
