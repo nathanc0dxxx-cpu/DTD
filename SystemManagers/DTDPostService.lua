@@ -34,12 +34,16 @@ end
 -- Função para pegar SHA de um arquivo do GitHub
 local function getSHA(url, token)
     local handle = io.popen(string.format([[
-        curl -s -H "Authorization: token %s " %s
+        curl -s -H "Authorization: token %s" %s
     ]], token, url))
     local result = handle:read("*a")
     handle:close()
     local sha = result:match('"sha"%s*:%s*"([%w]+)"')
+if sha == nil then
+  print(result)
+else
     return sha
+end
 end
 
 -- Exemplo de uso:
