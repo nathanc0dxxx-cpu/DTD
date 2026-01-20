@@ -2,6 +2,10 @@
 os.execute("clear")
 print("\27[0m\27[44m[DTD::SM]:\27[0m \27[93minitializing...")
 
+local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDPostService.lua")
+load(ss:read("*a"))()
+ss:close()
+
 exit = false
 
 local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDServers.txt")
