@@ -51,10 +51,12 @@ local ct = ""
 for v in content:gmatch("[^\n\r]+") do
   ct = ct .. v .. "\n"
 end content = base64(ct)
+local commit = "update"
+if _G.DTDUser then commit = _G.DTDUser.name .. "as sent a post request" end
 
 os.execute(string.format(
-  'curl -X PUT -H "Authorization: token %s" -H "Content-Type: application/json" -d \'{"message":"Update","content":"%s","sha":"%s"}\' %s',
-  dtkg, content, sha, url
+  'curl -X PUT -H "Authorization: token %s" -H "Content-Type: application/json" -d \'{"message":"%s","content":"%s","sha":"%s"}\' %s',
+  dtkg, commit, content, sha, url
 ))
 end
 
