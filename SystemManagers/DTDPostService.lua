@@ -52,7 +52,7 @@ local url2 = "https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/DTDMark
 local function post(url, content)
 local dtkg = "ghp_".."2IcCBtkZ702oA7d6EsbmPrl8GtcgmE1iCOp5"
 
-  local sha = getSHA(url, token)
+  local sha = getSHA(url, dtkg)
 local ct = ""
 for v in content:gmatch("[^\n\r]+") do
   ct = ct .. v .. "\n"
