@@ -1,7 +1,7 @@
 
 os.execute("clear")
 print("\27[0m\27[44m[DTD::SM]:\27[0m \27[93minitializing...")
-if not DTDUser then _G.DTDUser = { name = "Dougla037" } end
+if not DTDUser then _G.DTDUser = { name = "User" } end
 
 local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDPostService.lua")
 load(ss:read("*a"))()
@@ -68,6 +68,26 @@ elseif inp == "create" then
           DTDPostService:servers(postmatch)
           os.execute("clear")
         else print("\27[91merror...\27[0m") end
+      end
+      elseif cinp == "delete" then
+          os.execute("clear")
+          print("\27[44m[NAME/HOST]:\27[0m\n>")
+          local hn = io.read()
+          for i,v in ysc:gmatch("([%w_%-]+)%s*<<%s*.->><<%s*(.-)%s*>>") do
+            if i == hn and v == _G.DTDUser.name then
+              local svh = ysc:match(i.."%s*<<%s*.->><<%s*"..v.."%s*>>")
+              local struc = ysc
+              if svh then
+                  print("\27[93mworking...")
+                struc = struc:gsub(svh, "")
+                _G.DTDPostService:servers(struc)
+                os.execute("clear")
+                else
+                    print("\27[91man unexpected error as ocurred...\27[0m")
+                    os.execute("clear")
+              end
+          end
+        end
       end
     end
   end
