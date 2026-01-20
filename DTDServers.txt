@@ -1,4 +1,3 @@
 market<<https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDMarket.lua>><<Dougla037>>
 dtdservers<<https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Manager/DTDServersManager.lua>><<Dougla037>>
-gg<<gg>><<Dougla037>>
 test<<https://test.com>><<User>>
