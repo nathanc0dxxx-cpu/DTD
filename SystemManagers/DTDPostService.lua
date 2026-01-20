@@ -55,8 +55,8 @@ for v in content:gmatch("[^\n\r]+") do
 end content = base64(ct)
 
 os.execute(string.format(
-  'curl -X PUT -H "Authorization: token %s" -H "Content-Type: application/json" -d \'{"message":"Update","content":"%s","sha":"%s"}\' https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/DTDMarketPacks.txt',
-  dtkg, content, sha
+  'curl -X PUT -H "Authorization: token %s" -H "Content-Type: application/json" -d \'{"message":"Update","content":"%s","sha":"%s"}\' %s',
+  dtkg, content, sha, url
 ))
 end
 
