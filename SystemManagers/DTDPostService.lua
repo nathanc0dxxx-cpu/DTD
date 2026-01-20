@@ -43,7 +43,7 @@ else
 end
 end
 
-local function post(url, content)
+local function post(url, content, mode)
 local dtkg = string.gsub("dtdkg__","dtdkg__","ghp_").."2IcCBtkZ702oA7d6EsbmPrl8GtcgmE1iCOp5"
 
   local sha = getSHA(url, dtkg)
@@ -53,19 +53,33 @@ for v in content:gmatch("[^\n\r]+") do
 end content = base64(ct)
 local commit = "update"
 if _G.DTDUser then commit = _G.DTDUser.name .. "as sent a post request" end
+if content == nil then content = "PLACEHOLDER" end
 
+local jsun = '{"message":"%s","content":"%s","sha":"%s"}'
+print(jsun)
+if mode == "POST" then
+    jsun = jsun:gsub(",\"sha\":\"%s\"","")
+    jsun = jsun:format(commit, content,sha)
+elseif mode == "DELETE" then
+    jsun = jsun:gsub(",\"content\":\"%s\"","")
+    jsun = jsun:format(commit,content, sha)
+elseif mode == "PUT" then
+    jsun = jsun:format(commit, content, sha)
+end
+
+if mode then
 os.execute(string.format(
-  'curl -X PUT -H "Authorization: token %s" -H "Content-Type: application/json" -d \'{"message":"%s","content":"%s","sha":"%s"}\' %s',
-  dtkg, commit, content, sha, url
+  'curl -X '..mode:gsub("POST","PUT")..' -H "Authorization: token %s" -H "Content-Type: application/json" -d \'%s\' %s',
+  dtkg, jsun, url
 ))
+end
 end
 
 _G.DTDPostService = {
-  market = function(self, cont)
-    post("https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/DTDMarketPacks.txt", cont)
+  market = function(self, cont, file, mode)
+    post("https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Market/"..file, cont, mode)
   end,
-  servers = function(self, cont)
-    post("https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/DTDServers.txt", cont)
+  servers = function(self, cont, file, mode)
+    post("https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Servers/"..file, cont, mode)
   end,
 }
-
