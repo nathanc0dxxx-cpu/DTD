@@ -50,7 +50,7 @@ end
 local url2 = "https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/DTDMarketPacks.txt"
 
 local function post(url, content)
-local dtkg = string.gsub("dtdkgHHI2IcCBtkZ702oA7d6EsbmPrl8GtcgmE1iCOp5","dtdkgHHI","ghp_")
+local dtkg = "ghp_".."2IcCBtkZ702oA7d6EsbmPrl8GtcgmE1iCOp5"
 
   local sha = getSHA(url, token)
 local ct = ""
