@@ -30,9 +30,8 @@ function base64(data)
 end
 
 local function getSHA(url, token)
-    local handle = io.popen(string.format([[
-        curl -s -H "Authorization: token %s" %s
-    ]], token, url))
+    local handle = io.popen(string.format('
+        curl -s -H "Authorization: token %s" %s', token, url))
     local result = handle:read("*a")
     handle:close()
     local sha = result:match('"sha"%s*:%s*"([%w]+)"')
