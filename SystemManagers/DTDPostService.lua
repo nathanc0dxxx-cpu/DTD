@@ -68,9 +68,7 @@ end
 
 if mode then
 os.execute(string.format(
-  'curl -s -X '..mode:gsub("POST","PUT")..' -H "Authorization: token %s" -H "Content-Type: application/json" -d \'%s\' %s',
-  dtkg, jsun, url
-))
+  'curl -s -X '..mode:gsub("POST","PUT")..' -H "Authorization: token %s" -H "Content-Type: application/json" -d \'%s\' %s', dtkg, jsun, url))
 end
 end
 
