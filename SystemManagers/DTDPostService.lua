@@ -67,8 +67,7 @@ elseif mode == "PUT" then
 end
 
 if mode then
-os.execute(string.format(
-  'curl -s -X %s -H "Authorization: token %s" -H "Content-Type: application/json" -d \' %s \' %s ',mode:gsub("POST","PUT"),dtkg,jsun,url))
+os.execute(string.format('curl -s -X %s -H "Authorization: token %s" -H "Content-Type: application/json" -d \' %s \' %s ',mode:gsub("POST","PUT"),dtkg,jsun,url))
 end
 end
 
