@@ -36,7 +36,7 @@ new.cmd("connect", function()
         handle:close()
 print("\27[93mformating objects...\27[0m")
         local hs = {}
-        for i,v in hcont:gmatch("%s*\"name\%s*"%s*:%s*\"%s*(.-)@(.-)\"") do
+        for i,v in hcont:gmatch("%s*\"name\"%s*:%s*\"%s*(.-)@(.-)\"") do
             local obj = { name = i, owner = v }
             table.insert(hs, obj)
         end
