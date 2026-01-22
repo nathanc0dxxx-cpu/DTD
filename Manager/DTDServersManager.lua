@@ -2,10 +2,10 @@ os.execute("clear")
 print("\27[0m\27[44m[DTD::SM]:\27[0m \27[93minitializing...")
 if not DTDUser then _G.DTDUser = { name = "User" } end
 local serverstxt = nil
-local function loadservers() end
-
+local function loadservers()
 local ss = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Servers")
 serverstxt = ss:read("*a") ss:close()
+end loadservers()
 
 
 local ssa = io.popen("curl -v https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDPostService.lua")
