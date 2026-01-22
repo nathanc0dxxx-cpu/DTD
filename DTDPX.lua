@@ -46,7 +46,8 @@ print("\27[93mformating objects...\27[0m")
                 local urlh = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Servers/"..v.name)
                 local urlfetch = urlh:read("*a")
                 urlh:close()
-                print("\27[93mconnecting to url...\26[0m")
+                print("\27[93mconnecting to url...\27[0m")
+                print(urlfetch)
                 url = urlfetch
                 break
             end
