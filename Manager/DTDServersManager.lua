@@ -18,7 +18,7 @@ print("\27[0m\27[44m[DTD::SERVERS]:\27[41m[=======================]")
 ----------
 
 local servers = {}
-for i,v in serverstxt:gmatch("%s*\"name\"%s*:%s*\"(.-)%s*<(.-)>\"") do
+for i,v in serverstxt:gmatch("%s*\"name\"%s*:%s*\"(.-)%s*@(.-)@\"") do
     local obj = { name = i, owner = v }
     table.insert(servers, obj)
 end
@@ -77,9 +77,10 @@ elseif inp == "create" then
             if can == true then
                 local url = io.read()
                 if url then
-                    local strucn = name.."<".._G.DTDUser.name..">"
+                    local strucn = name.."@".._G.DTDUser.name.."@"
+                    strucn = strucn:gsub("\n",""):gsub(" ","")
                     DTDPostService:servers(url, strucn, "POST")
-                    os.execute("sleep 20")
+                    os.execute("clear")
                     print("\27[92m created sucessfully!")
                 else
                     print("bro we literally cant create a server without a url! :|")
