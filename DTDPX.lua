@@ -30,28 +30,14 @@ new.cmd("connect", function()
   if args[2] then
     local url = args[2]
     if url:sub(1, 8) ~= "https://" then 
-        print("\27[0m\27[44m[DTD::SM]:\27[0m \27[93mfetching servers...\27[0m")
-        local handle = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Servers")
-        local hcont = handle:read("*a")
-        handle:close()
-print("\27[93mformating objects...\27[0m")
-        local hs = {}
-        for i,v in hcont:gmatch("%s*\"name\"%s*:%s*\"%s*(.-)@(.-)\"") do
-            local obj = { name = i, owner = v }
-            table.insert(hs, obj)
-        end
-        for i,v in ipairs(hs) do
-            if v.name == url then
-                print("\27[93mconnecting server host...\27[0m")
-                local urlh = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Servers/"..v.name)
-                local urlfetch = urlh:read("*a")
-                urlh:close()
-                print("\27[93mconnecting to url...\27[0m")
-                print(urlfetch)
-                url = urlfetch
-                break
-            end
-        end
+        print("\27[0m\27[44m[DTD::SM]:\27[0m \27[93mfetching server...\27[0m")
+        print("\27[93mconnecting server host...\27[0m")
+        local urlh = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Servers/"..v.name)
+        local urlfetch = urlh:read("*a")
+        urlh:close()
+        print("\27[93mconnecting to url...\27[0m")
+        print(urlfetch)
+        url = urlfetch
     end
     
     local get = io.popen("curl -s "..url)
