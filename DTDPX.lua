@@ -29,19 +29,26 @@ end, "manage plugins session")
 new.cmd("connect", function()
   if args[2] then
     local url = args[2]
-    print("\27[0m\27[44m[DTD::SM]:\27[0m \27[93mgetting DTD servers...\27[0m")
-    local server = "https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDServers.txt"
-    local handle = io.popen("curl -s "..server)
-    local hc = handle:read("*a") handle:close()
-    if hc then print("\27[0m\27[92msucess\27[0m") else print("\27[0m\27[91mfail\27[0m") end
-    print("\27[44m[DTD::SM]:\27[0m \27[93mchecking url equals host...\27[0m")
-    
-    for alias, link in hc:gmatch("([%w_%-]+)%s*<<%s*(https?://.-)>>") do
-      if url == alias then
-        url = link
-        print(url)
-        break
-      end
+    if url:sub(1, 8) ~= "https://" then 
+        print("\27[0m\27[44m[DTD::SM]:\27[0m \27[93mfetching servers...\27[0m")
+        local handle = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Servers")
+        local hcont = handle:read("*a")
+        handle:close()
+        local hs = {}
+        for i,v in hcont:gmatch("\"name\":\"(.-)@(.-)@\"") do
+            local obj = { name = i, owner = v }
+            table.insert(hs, obj)
+        end
+        for i,v in ipairs(hs) do
+            if v.name == url then
+                print("\27[93mconnecting server host...\27[0m")
+                local urlh = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Servers/"..v.name)
+                local urlfetch = urlh:read("*a")
+                urlh:close()
+                print("\27[93mconnecting to url...\26[0m")
+                url = urlfetch
+            end
+        end
     end
     
     local get = io.popen("curl -s "..url)
