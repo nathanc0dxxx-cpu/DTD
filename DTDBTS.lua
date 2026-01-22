@@ -1,3 +1,22 @@
+--inject cmd
+local hm = os.getenv("HOME")
+local bsf = io.open(hm.."/.bashrc","r")
+if not bsf then
+    bsf = io.open(hm.."/.bashrc","w")
+    if bsf then
+        bsf:write("alias dtdos='lua5.4 DTDBTL.lua'\n")
+        bsf:close()
+    end
+else
+    local cont = bsf:read("*a")
+    bsf:close()
+    bsf = io.open(hm.."/.bashrc","w")
+    if bsf and( not cont:match("alias%s*dtdos")) then
+        bsf:write(cont,"\nalias dtdos='lua5.4 DTDBTL.lua'")
+        bsf:close()
+    end
+end
+
 
 function start()
 print("\27[44m[DTD::BOOTSTRAP]:\27[0m\27[93m initializing...\27[0m")
