@@ -35,7 +35,7 @@ new.cmd("connect", function()
         local hcont = handle:read("*a")
         handle:close()
         local hs = {}
-        for i,v in hcont:gmatch("\"name\":\"(.-)@(.-)@\"") do
+        for i,v in hcont:gmatch("\"name\":\"(.-)@(.-)\"") do
             local obj = { name = i, owner = v }
             table.insert(hs, obj)
         end
