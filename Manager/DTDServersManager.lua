@@ -39,7 +39,7 @@ print(header)
 print("\n\27[0m\27[44m[======================================]\27[0m")
 
 exit = false
-io.write("\27[0m > \27[92m")
+io.write("\27[0m > \27[90mexit, create\27[12D\27[92m")
 inp = io.read()
 
 if inp == "exit" then
