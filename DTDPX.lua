@@ -34,8 +34,9 @@ new.cmd("connect", function()
         local handle = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Servers")
         local hcont = handle:read("*a")
         handle:close()
+print("\27[93mformating objects...\27[0m")
         local hs = {}
-        for i,v in hcont:gmatch("\"name\":\"(.-)@(.-)\"") do
+        for i,v in hcont:gmatch("%s*\"name\%s*"%s*:%s*\"%s*(.-)@(.-)\"") do
             local obj = { name = i, owner = v }
             table.insert(hs, obj)
         end
@@ -47,6 +48,7 @@ new.cmd("connect", function()
                 urlh:close()
                 print("\27[93mconnecting to url...\26[0m")
                 url = urlfetch
+                break
             end
         end
     end
