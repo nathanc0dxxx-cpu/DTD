@@ -32,7 +32,7 @@ new.cmd("connect", function()
     if url:sub(1, 8) ~= "https://" then 
         print("\27[0m\27[44m[DTD::SM]:\27[0m \27[93mfetching server...\27[0m")
         print("\27[93mconnecting server host...\27[0m")
-        local urlh = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Servers/"..v.name)
+        local urlh = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Servers/"..url)
         local urlfetch = urlh:read("*a")
         urlh:close()
         print("\27[93mconnecting to url...\27[0m")
