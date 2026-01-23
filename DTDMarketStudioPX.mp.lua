@@ -77,11 +77,22 @@ std:newcmd({
     func = function()
         local query = std.args[2]
         local ss = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Market")
-        local ssc = ss:read("*a")
-        ss:close()
+        local ssc if ss then ssc = ss:read("*a") ss:close() else print("\27[91mfailed server connection...\27[0m") return end
+        
         local packgs = {}
         for i,v in ssc:gmatch("%s*\"name\"%s*:%s*\"(.-)@(.-)\"") do
-            local obj =
+            local obj = { name = i, owner = v }
+            table.insert(packgs, obj)
+        end print("\27[93mloading postservice...\27[0m")
+        local ss = io.popen("curl -s https://raw.githubusercontent.com/nathac0dxxx-cpu/DTD/main/SystemManagers/DTDPostService.lua")
+        if ss then load(ss:read("*a"))() ss:close() else print("\27[91mfailed to load...\27[0m") return end
+        for i,v in ipairs(packgs) do
+            if v.name == query and v.owner == _G.DTDUser.name then
+                print("\27[93mdeleting...\27[0m")
+                DTDPostService:market("",v.name.."@".._G.DTDUser.name, "DELETE")
+                print("\27[92mdeleted sucefully!")
+            end
+        end
     end,
     desc = "delete an market file in who you deployed"
 })
