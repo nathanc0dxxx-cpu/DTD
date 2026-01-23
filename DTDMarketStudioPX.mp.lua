@@ -84,15 +84,24 @@ std:newcmd({
             local obj = { name = i, owner = v }
             table.insert(packgs, obj)
         end print("\27[93mloading postservice...\27[0m")
-        local ss = io.popen("curl -s https://raw.githubusercontent.com/nathac0dxxx-cpu/DTD/main/SystemManagers/DTDPostService.lua")
-        if ss then load(ss:read("*a"))() ss:close() else print("\27[91mfailed to load...\27[0m") return end
+        local sss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDPostService.lua")
+        if sss then load(sss:read("*a"))() sss:close() else print("\27[91mfailed to load...\27[0m") return end
+        local sucessd = false
         for i,v in ipairs(packgs) do
-            if v.name == query and v.owner == _G.DTDUser.name then
-                print("\27[93mdeleting...\27[0m")
-                DTDPostService:market("",v.name.."@".._G.DTDUser.name, "DELETE")
-                print("\27[92mdeleted sucefully!")
+            if v.name:match(query) and v.owner == _G.DTDUser.name then
+                print("\27[93mis "..v.name.." what you want to delete?\27[0m\27[92m[Y]\27[0m/\27[91m[N]\27[0m?\n")
+                local answer = io.read()
+                if answer == "y" or answer == "Y" then
+                    print("\27[93mdeleting...\27[0m")
+                    DTDPostService:market("",v.name.."@".._G.DTDUser.name, "DELETE")
+                    print("\27[92mdeleted sucefully!")
+                    sucessd = true
+                    break
+                else
+                    print("\27[93mok! seeking...\27[0m")
+                end
             end
-        end
+        end if sucessd == false then print("\27[96msorry i dont found any pack named "..query.." or likey in your posts... :c\27[0m") end
     end,
     desc = "delete an market file in who you deployed"
 })
