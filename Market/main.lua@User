@@ -72,5 +72,5 @@ while stdsession do
         else
             io.write("\27[2A\27[0m\27[91mcmd \27[93m"..std.args[1].."\27[91m inval or not registed\27[0m\n")
         end
-    end
+    
 end
