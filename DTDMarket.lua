@@ -69,7 +69,7 @@ function hub(query)
             obj = v
             break
         end
-    end obj.desc = "\27[0m no description provided!"
+    end if not obj.name then market() end obj.desc = "\27[0m no description provided!"
     print("\27[0m\27[44m[HUB]:\27[41m[==========]\27[0m")
     print(string.format([[
   .--_____
