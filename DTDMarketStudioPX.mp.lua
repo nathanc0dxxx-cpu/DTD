@@ -73,6 +73,19 @@ std:newcmd({
     desc = "deploy a file to the market"
 })
 std:newcmd({
+    token = "deorbit",
+    func = function()
+        local query = std.args[2]
+        local ss = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Market")
+        local ssc = ss:read("*a")
+        ss:close()
+        local packgs = {}
+        for i,v in ssc:gmatch("%s*\"name\"%s*:%s*\"(.-)@(.-)\"") do
+            local obj =
+    end,
+    desc = "delete an market file in who you deployed"
+})
+std:newcmd({
     token = "view",
     func = function()
         local ss = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Market")
