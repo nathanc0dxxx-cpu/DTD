@@ -33,7 +33,7 @@ local function market()
     inp = io.read()
     if inp == "exit" then
         os.execute("clear")
-        exit = true
+        print("\27[91mlogout\27[0m")
     elseif inp == "reset" then
         loadpacks()
         market()
@@ -110,12 +110,4 @@ function hub(query)
     end
 end
 
-local function exitt()
-if exit == true then
-    print("\27[91mlogout")
-else
-    market()
-end
-end
-
-exitt()
+market()
