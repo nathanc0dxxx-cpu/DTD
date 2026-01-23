@@ -1,55 +1,82 @@
-os.execute("clear")
-print("\27[93minitializing...")
-print("\27[93mgetting account Services...")
-local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDAccountsManager.lua")
-print("injecting...")
-load(ss:read("*a"))()
-print("\27[93mloaded!\27[0m")
 
-local so = os.execute
-    local names = DTDAccountsManager:getusersname()
+local doreq = true
+local users = {}
 
-local username = nil
-local password = nil
-
-local function buildaccount(nm, ps)
-    _G.DTDUser = {
-        name = nm,
-        id = pcall(function() DTDAccountsManager:getid(nm) end),
-    } buildaccount = nil
-    local save = io.open("DTDUser","w")
-    save:write(nm.."\n"..ps)
-    save:close()
-    print("\27[92maccount construction completed!\27[0m")
-end
-local session = false
-local filetest = io.open("DTDUser","r+")
-if filetest then
-  local filet = filetest:read("*a")
-  filetest:close()
-  local datat = {}
-  for v in filet:gmatch("%S+") do
-    table.insert(datat,v)
-  end buildaccount(datat[1], datat[2])
-else
-  session = true
-end
-
-while session do
-    so("clear")
-    username = nil
-    print("\27[44m[DTD::LG]:\27[0m \27[93mUsername:")
-    io.write("\27[0m > \27[96m ...\27[0m\27[3D")
-    local uinp = io.read()
-    for v in names:gmatch("%S+") do
-        if uinp == v then
-            username = v
-            print("\27[44m[DTD::LG]:\27[0m \27[93mPassWord")
-            io.write("\27[0m > \27[96m ...\27[0m\27[3D")
-            local ups = io.read()
-            local upw = DTDAccountsManager:getpass(username, "imaop!dud:p")
-            if ups == upw then password = upw session = false buildaccount(username, password)else print("\27[91mINCORRECT PASSWORD! dont try enter others account...\27[0m\npress any key to procced") io.read() end
-        end
+local function buildaccount(nm, ps, idd)
+    local file = io.open("DTDUser","w")
+    if file then
+        file:write(nm.."\n"..ps)
+        file:close()
+        _G.DTDUser = { name = nm, id = idd }
     end
-   if not username then print("\27[44m[DTD::LG]:\27[0m \27[91myour current username does not match any dtdaccount,\ntry check if your username exists or try later...\27[0m\npress any key to procced") io.read() end
 end
+
+local function main()
+    if doreq == true then
+        local ss = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Accounts")
+        users = {}
+        if ss then
+        for v in ss:read("*a"):gmatch("%s*\"name\"%s*:%s*\"(.-)\"") do
+            table.insert(users, v)
+        end ss:close()
+        local ss2 = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDAccountGenerator.lua")
+        if ss2 then
+            load(ss2:read("*a"))()
+            ss2:close()
+        else return 
+        end
+        doreq = false
+    else
+        return
+    end end
+    local name
+    local pass
+    local session = true
+    local file = io.open("DTDUser","r")
+    if file then
+        local tab2 = {}
+        for v in file:read("*a"):gmatch("%S+") do
+            table.insert(tab2, v)
+        end name = tab2[1] pass = tab2[2]
+        registed = true
+        file:close()
+    end
+    
+    while session do
+    os.execute("clear")
+    local sucess = false
+    
+    print("\27[0m\27[44m[UserName]:\27[0m")
+    io.write(" > \27[90mUser\27[4D\27[92m")
+    if not registed then 
+        name = io.read()
+    end
+    if name ~= "" then
+        for i,v in ipairs(users) do
+            if name == v then
+                print("\27[0m\27[44m[PassWord]:\27[0m")
+                io.write(" > \27[90mUser\27[4D\27[92m")
+                if not registed then
+                    pass = io.read()
+                end
+                local info = ""
+                local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Accounts/"..name)
+                if ss then info = ss:read("*a") ss:close() else print("\27[91man unexpected error as ocurred...\27[0m") return end
+                local tab = {}
+                for v in info:gmatch("%S+") do
+                    table.insert(tab, v)
+                end local salt = tab[3] local hash = tab[1]
+                local hashg = simple_hash(pass, salt)
+                if hashg == hash then
+                    local id = tab[2]
+                    buildaccount(name, pass, id)
+                    sucess = true session = false
+                else
+                    print("\27[91mincorrect password\27[0m")
+                    io.read()
+                end
+            end
+        end
+    end end
+end
+main()
