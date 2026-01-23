@@ -1,9 +1,0 @@
-id:0
-name:User
-pass:User
-xname:AnonymousUser
-
-id:1
-name:Dougla037
-pass:HashxBash
-xname:Bobo
