@@ -22,7 +22,7 @@ while session do
     for i,v in ipairs(users) do
         print("\27[92m "..i.." \27[93m"..v.."")
     end print("\n\27[0m\27[44m[=========]\27[0m")
-    io.write(" > \27[90mexit, reset, new\27[16D\27[92m")
+    io.write(" > \27[90mexit, reset, new, logout\27[24D\27[92m")
     local uinp = io.read()
     if uinp == "exit" then
         session = false
@@ -45,6 +45,7 @@ while session do
                     print(tab.nm)
                     print(tab.ps)
                     local file = io.open("DTDUser","r")
+                    io.read()
                     if file then 
                         os.remove("DTDUser")
                         os.execute("clear")
@@ -61,5 +62,9 @@ while session do
             print("\27[91mtype a name bro...\27[0m")
             io.read()
         end
+    elseif uinp == "logout" then
+        os.remove("DTDUser")
+        os.execute("clear")
+        os.exit()
     end
 end
