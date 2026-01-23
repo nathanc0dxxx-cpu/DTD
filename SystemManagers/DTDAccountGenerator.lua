@@ -26,17 +26,17 @@ function genuser(name, pass)
     local ssa = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Accounts")
     local ssac = nil
     if ssa then ssac = ssa:read("*a") ssa:close() else return nil end
-    local users = {}
+    local users = {} local id = 0
     for v in ssac:gmatch("%s*\"name\"%s*:%s*\"(.-)\"") do
         table.insert(users, v)
+        id = id + 1
     end 
-    local id = 0
-    local sse = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Accounts/"..users[#users])
+    local sse = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Accounts/"..users[id])
     if sse then
         local tab = {} 
         for v in sse:read("*a"):gmatch("%S+") do
             table.insert(tab, v)
-        end ss:close()
+        end sse:close()
         id = tonumber(tab[2]) + 1
     else
         return nil
