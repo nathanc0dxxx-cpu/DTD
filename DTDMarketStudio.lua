@@ -1,7 +1,7 @@
 
 os.execute("clear")
 local stdsession = true
-
+if not _G.DTDUser then _G.DTDUser = { name = "User" } end
 function start()
     local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDMarketStudioPX.mp.lua")
     if ss then load(ss:read("*a"))() end
@@ -43,6 +43,14 @@ end  loadpacks() _G.std = {
         print("\27[44m[MS::PIL]:\27[0m \27[91mno plugin found")
     end
 end loadplugins() start()
+
+std:newcmd({
+    token = "exit",
+    func = function()
+        stdsession = false
+    end,
+    desc = "finish the session"
+})
 
 while stdsession do
     io.write("\27[0m > \27[90mhelp\27[4D\27[92m")
