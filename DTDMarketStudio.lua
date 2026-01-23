@@ -2,11 +2,11 @@
 os.execute("clear")
 local stdsession = true
 
-function()
+function start()
     local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDMarketStudioPX.mp.lua")
-    if ss then load(ss:read("*a")) end
+    if ss then load(ss:read("*a"))() end
     ss:close()
-end
+end start()
 
 local packs = {}
 local function loadpacks()
