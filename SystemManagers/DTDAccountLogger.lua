@@ -8,7 +8,7 @@ local function buildaccount(nm, ps, idd)
         file:write(nm.."\n"..ps)
         file:close()
         _G.DTDUser = { name = nm, id = idd }
-    end
+    end os.execute("clear")
 end
 
 local function main()
