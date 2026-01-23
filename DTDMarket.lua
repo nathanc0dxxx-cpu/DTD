@@ -1,121 +1,80 @@
 
 os.execute("clear")
-local exit = false
+local stdsession = true
+if not _G.DTDUser then _G.DTDUser = { name = "User" } end
+function start()
+    local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDMarketStudioPX.mp.lua")
+    if ss then load(ss:read("*a"))() end
+    ss:close()
+end
+
 local packs = {}
 local function loadpacks()
     local ss = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Market")
-    local sst = ss:read("*a")
+    local ssc = ss:read("*a")
     ss:close()
     packs = {}
-    for i,v in sst:gmatch("%s*\"name\"%s*:%s*\"%s*(.-)@(.-)\"") do
+    for i,v in ssc:gmatch("%s*\"name\"%s*:%s*\"(.-)@(.-)\"") do
         local obj = { name = i, owner = v }
         table.insert(packs, obj)
     end
-end loadpacks()
+end  loadpacks() _G.std = {
+    newcmd = function(self, json)
+        local obj = {
+            token = json.token,
+            func = json.func,
+            desc = json.desc,
+        } table.insert(self.cmd, obj)
+    end,
+    cmd = {},
+    args = {},
+} local function loadplugins()
+    local fpipe = io.popen("ls")
+    local files = fpipe:read("*a")
+    fpipe:close()
+    local found = false
+    for v in files:gmatch("%S+") do
+        if v:match(".mp.lua$") then
+            found = true
+            dofile(v)
+            print("\27[44m[MS::PIL]:\27[0m \27[92mloaded "..v)
+        end
+    end if found == false then
+        print("\27[44m[MS::PIL]:\27[0m \27[91mno plugin found")
+    end
+end loadplugins() start()
 
-local inp = nil
+std:newcmd({
+    token = "exit",
+    func = function()
+        stdsession = false
+    end,
+    desc = "finish the session"
+})
 
-local function market()
-    os.execute("clear")
+while stdsession do
+    io.write("\27[0m > \27[90mhelp\27[4D\27[92m")
+    local inp = io.read() print()
+    std.args = {}
+    for v in inp:gmatch("%S+") do
+        table.insert(std.args, v)
+    end io.write("\27[0m")
     
-    print("\27[0m\27[44m[Market]:\27[41m[=============]\27[0m\n")
-    local maxi = 3
-    for i = 1,9 do
-        if packs[i] then
-        io.write("\27[92m [\27[93m"..packs[i].name.."\27[92m]\27[0m")
-        if i > maxi then
-            maxi = maxi + 3
-            print("\n")
-        end end
-    end
-    print("\n\n\27[44m[======================]\27[0m")
-    io.write(" > \27[90m<pack>, search, exit, reset\27[27D\27[92m")
-    inp = io.read()
-    if inp == "exit" then
-        os.execute("clear")
-        exit = true
-    elseif inp == "reset" then
-        loadpacks()
-        market()
-    elseif inp:sub(1,7) == "search " then
-        search(inp:sub(8))
-    else
-        hub(inp)
-    end
-end
-
-function search(query)
-    os.execute("clear")
-    print("\27[0m\27[44m[Results]:\27[41m[============]\27[0m\n")
-    for i,v in ipairs(packs) do
-        if v.name:match(query) then
-            print("\27[92m [ \27[93m"..i.."\27[92m ]: \27[0m\27[42m"..v.name.."\27[0m \27[90m"..v.owner.."\n")
-        end
-    end print("\27[0m\27[44m[======================]\27[0m")
-    io.write(" > \27[90m<pack>, back\27[12D\27[92m")
-    inp = io.read()
-    if inp == "back" then
-        market()
-    else
-        hub(inp)
-    end
-end
-
-function hub(query)
-    os.execute("clear")
-    local obj = {}
-    for i,v in ipairs(packs) do
-        if v.name:match(query) then
-            obj = v
-            break
-        end
-    end obj.desc = "\27[0m no description provided!"
-    print("\27[0m\27[44m[HUB]:\27[41m[==========]\27[0m")
-    print(string.format([[
-  .--_____
-  |       | %s
-  |---?---| %s %s
-  |       |
-  |_______|
-  %s
-    ]], "\27[96m"..obj.name.."\27[0m", "\27[90mby ", obj.owner.."\27[0m", obj.desc))
-    print("\27[0m\27[44m[================]\27[0m")
-    io.write(" > \27[90mback, install\27[13D\27[92m")
-    local uinp = io.read()
-    if uinp == "back" then
-        market()
-    elseif uinp == "install" then
-        os.execute("clear")
-        print("\27[93mdownloading...\27[0m")
-        local ssi = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Market/"..obj.name.."@"..obj.owner)
-        local ssic = ssi:read("*a")
-        ssi:close()
-        if ssic then
-            print("\27[93minstalling...\27[0m")
-            local file = io.open(obj.name, "w")
-            if file then
-                file:write(ssic)
-                file:close()
-                print("\27[92minstalled!\n\27[0mpath: ")
-                os.execute("pwd")
-                os.execute("sleep 3")
-                hub(query)
+    local sucess = false
+    for i,v in ipairs(std.cmd) do
+        if std.args[1] == v.token then
+            if std.args[2] == "--help" then
+                print("\27[32m --description: \27[0m\n"..v.desc)
             else
-                print("\27[91merror while downloading...\27[0m")
+                v.func()
             end
+            sucess = true
         end
-        market()
-    else
-        hub(query)
+    end if sucess == false then
+        if not std.args[1] then
+            io.write("\27[2A\r      \r")
+        else
+            io.write("\27[2A\27[0m\27[91mcmd \27[93m"..std.args[1].."\27[91m inval or not registed\27[0m\n")
+        end
     end
 end
-
-local function exitt()
-if exit == true then
-    print("\27[91mlogout")
-else
-    market()
-end
-end
-
-exitt()
