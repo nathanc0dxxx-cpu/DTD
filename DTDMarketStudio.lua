@@ -6,7 +6,7 @@ function start()
     local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDMarketStudioPX.mp.lua")
     if ss then load(ss:read("*a"))() end
     ss:close()
-end start()
+end
 
 local packs = {}
 local function loadpacks()
@@ -42,7 +42,7 @@ end  loadpacks() _G.std = {
     end if found == false then
         print("\27[44m[MS::PIL]:\27[0m \27[91mno plugin found")
     end
-end loadplugins()
+end loadplugins() start()
 
 while stdsession do
     io.write("\27[0m > \27[90mhelp\27[4D\27[92m")
