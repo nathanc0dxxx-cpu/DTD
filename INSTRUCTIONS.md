@@ -35,4 +35,8 @@ show the servers working in DTD, type exit to exit,  type create to open creatin
 
 ### marketstudio
 
-SORRY WE STILL WORKING IN THIS...
+Just an server for you deploy your files, type help for more info.
+
+### accounts
+
+Just the accounts server, type new to regist your own account (WARNING: it will automatically logout).
