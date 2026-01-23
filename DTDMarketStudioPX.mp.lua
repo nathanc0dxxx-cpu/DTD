@@ -8,6 +8,13 @@ std:newcmd({
   desc = "it helps you bro... JUST!"
 })
 std:newcmd({
+    token = "clear",
+    func = function()
+        os.execute("clear")
+    end,
+    desc = "clear the screen"
+})
+std:newcmd({
     token = "deploy",
     func = function()
     end,
