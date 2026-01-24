@@ -1,0 +1,20 @@
+std:newcmd({
+    token = "memo",
+    func = function ()
+    	local memo = {
+            "newfile" = function ()
+            	
+            end,
+        }
+        if std.args[2] then
+            local query = memo[std.args[2]]
+            if query then query() end
+        else
+            print("usage:\n")
+            for i,v in ipairs(memo) do
+                print("  "..i..": "..v)
+            end
+        end
+    end,
+    desc = "memo framework package type memo for more info."
+})
