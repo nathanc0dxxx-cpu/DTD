@@ -1,11 +1,9 @@
 
 os.execute("clear")
 local stdsession = true
-if not _G.DTDUser then _G.DTDUser = { name = "User" } end
 function start()
     local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDMarketStudioPX.mp.lua")
-    if ss then load(ss:read("*a"))() end
-    ss:close()
+    if ss then load(ss:read("*a"))() ss:close() end
 end
 
 local packs = {}
