@@ -17,7 +17,7 @@ local function loadpacks()
         local obj = { name = i, owner = v }
         table.insert(packs, obj)
     end
-end print("\27[93mloading market packages...\27[0m") loadpacks() print("\27[93msetting std table...\27[0m") _G.dtdstd = {
+end print("\27[93msetting std table...\27[0m") _G.dtdstd = {
     newcmd = function(self, json)
         local obj = {
             token = json.token,
@@ -41,7 +41,8 @@ end print("\27[93mloading market packages...\27[0m") loadpacks() print("\27[93ms
     for v in files:gmatch("%S+") do
         if v:match(".mp.lua$") then
             found = true
-            dofile(v)
+            local sucess, err = pcall(function() dofile(v) end)
+            if not sucess then print("\27[91mplugin error: \27[0m"..tostring(err)) end
             print("\27[0m\27[44m[MS::PIL]:\27[0m \27[92mloaded "..v)
         end
     end if found == false then
@@ -51,6 +52,7 @@ end
 print("\27[93mloading plugins...\27[0m")
 loadplugins()
 print("\27[93mstarting...\27[0m")
+startp()
 
 dtdstd:newcmd({
     token = "exit",
