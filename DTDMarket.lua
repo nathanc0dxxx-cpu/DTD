@@ -44,7 +44,7 @@ local function market()
     end
 end
 
-function search(query)
+local function search(query)
     os.execute("clear")
     print("\27[0m\27[44m[Results]:\27[41m[============]\27[0m\n")
     for i,v in ipairs(packs) do
@@ -61,7 +61,7 @@ function search(query)
     end
 end
 
-function hub(query)
+local function hub(query)
     os.execute("clear")
     local obj = {}
     for i,v in ipairs(packs) do
