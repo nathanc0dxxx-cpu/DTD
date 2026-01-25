@@ -34,6 +34,7 @@ local function market()
     if inp == "exit" then
         os.execute("clear")
         print("\27[91mlogout\27[0m")
+        return
     elseif inp == "reset" then
         loadpacks()
         market()
