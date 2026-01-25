@@ -4,7 +4,7 @@ print("\27[93minitializing studio...\27[0m")
 local studiosession = true
 local function startp()
     local sspp = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDMarketStudioPX.mp.lua")
-    if sspp then local fn, err = load(sspp:read("*a")) if not fn then print(tostring(err)) else fn() end sspp:close() else print("\27[91mfailed while loading default plugin...\27[0m") end
+    if sspp then local fn, err = load(sspp:read("*a")) if not fn then print(tostring(err)) return else fn() end sspp:close() else print("\27[91mfailed while loading default plugin...\27[0m") end
 end print("\27[93msetting functions...\27[0m")
 
 local packs = {}
@@ -29,8 +29,13 @@ end print("\27[93mloading market packages...\27[0m") loadpacks() print("\27[93ms
     args = {},
 } local function loadplugins()
     local fpipe = io.popen("ls")
-    local files = fpipe:read("*a")
-    fpipe:close()
+    if fpipeline then
+        local files = fpipe:read("*a")
+        fpipe:close()
+    else
+        return
+        print("\27[91mfailed reading local files...\27[0m")
+    end
     local found = false
     for v in files:gmatch("%S+") do
         if v:match(".mp.lua$") then
@@ -76,7 +81,7 @@ while studiosession do
         if not dtdstd.args[1] then
             io.write("\27[2A\r      \r")
         else
-            io.write("\27[2A\27[0m\27[91mcmd \27[93m"..std.args[1].."\27[91m inval or not registed\27[0m\n")
+            io.write("\27[2A\27[0m\27[91mcmd \27[93m"..dtdstd.args[1].."\27[91m inval or not registed\27[0m\n")
         end
     end
 end
