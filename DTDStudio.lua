@@ -4,7 +4,7 @@ print("\27[93minitializing studio...\27[0m")
 local studiosession = true
 local function startp()
     local sspp = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDMarketStudioPX.mp.lua")
-    if sspp then load(sspp:read("*a"))() sspp:close() else print("\27[91mfailed while loading default plugin...\27[0m") end
+    if sspp then local fn, err = load(sspp:read("*a")) if not fn then print(tostring(err)) else fn() end sspp:close() else print("\27[91mfailed while loading default plugin...\27[0m") end
 end print("\27[93msetting functions...\27[0m")
 
 local packs = {}
