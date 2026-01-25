@@ -7,7 +7,15 @@ local function buildaccount(nm, ps, idd)
     if file then
         file:write(nm.."\n"..ps)
         file:close()
-        _G.DTDUser = { name = nm, id = idd }
+        local raw = { name = nm, id = idd }
+
+_G.DTDUser = setmetatable({}, {
+    __index = raw,
+    __newindex = function()
+        error("attempt to modify a constant", 2)
+    end,
+    __metatable = false
+})
     end os.execute("clear")
 end
 
@@ -41,11 +49,11 @@ local function main()
         registed = true
         file:close()
     end
-    
+
     while session do
     os.execute("clear")
     local sucess = false
-    
+
     print("\27[0m\27[44m[UserName]:\27[0m")
     io.write(" > \27[90mUser\27[4D\27[92m")
     if not registed then 
