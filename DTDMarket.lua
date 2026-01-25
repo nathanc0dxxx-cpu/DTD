@@ -1,4 +1,5 @@
 
+if not DTDUser then DTDUser = { name = "Dougla037" } end
 os.execute("clear")
 local exit = false
 local hubs = false
@@ -98,10 +99,10 @@ local function hub(query)
     elseif uinp == "install" then
         os.execute("clear")
         print("\27[93mdownloading...\27[0m")
-        local ssi = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Market/"..obj.name.."@"..obj.owner)
-        local ssic = ssi:read("*a")
-        ssi:close()
-        if ssic then
+        local ssi = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Market/"..obj.name.."@"..obj.owner.."/content")
+        if ssi then
+            local ssic = ssi:read("*a")
+            ssi:close()
             print("\27[93minstalling...\27[0m")
             local file = io.open(obj.name, "w")
             if file then
