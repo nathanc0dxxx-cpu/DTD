@@ -3,7 +3,6 @@ os.execute("clear")
 local exit = false
 local hubs = false
 local markets = true
-local uinp = ""
 local packs = {}
 local function loadpacks()
     local ss = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Market")
@@ -64,7 +63,7 @@ local function market()
         markets = true
         return
     elseif inp:sub(1,7) == "search " then
-        search(uinp:sub(8))
+        search(inp:sub(8))
     else
         hubs = true
         return
@@ -91,8 +90,8 @@ local function hub(query)
   %s
     ]], "\27[96m"..obj.name.."\27[0m", "\27[90mby ", obj.owner.."\27[0m", obj.desc))
     print("\27[0m\27[44m[================]\27[0m")
-    io.write(" > \27[90mback, install\27[13D\27[92m")
-    uinp = io.read()
+    io.write(" > \27[90mback, install, comments\27[23D\27[92m")
+    local uinp = io.read()
     if uinp == "back" then
         markets = true
         return
@@ -119,6 +118,73 @@ local function hub(query)
         end
         markets = true
         return
+    elseif uinp == "comments" then
+        local commentss = true
+        local doreqc = true
+        while commentss do
+            os.execute("clear")
+            local issues = ""
+            if doreqc == true then
+                print("\27[93mloading...\27[0m")
+                local dds = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDIssueService.lua")
+                if dds then load(dds:read("*a"))() dds:close() else hubs = true return end
+                doreqc = false
+                issues = DTDIssueService:get()
+            end
+            
+            print("\27[44m[Comments]:\27[0m") local foundcm = false
+            for i,v in ipairs(issues) do
+                local a, b, c = v.content:match("^(.-)@(.-)@(.*)$")
+                if c == obj.name then
+                    foundcm = true
+                    print("\n\27[94m @"..a.."\27[0m\n  "..b.."\n----")
+                end
+            end if foundcm == false then print("\n\27[90mno comments yet.\27[0m\n") end
+            print("\27[0m\27[44m[=========]:\27[0m")
+            io.write(" > \27[90mback, comment, reset, removeall\27[31D\27[92m")
+            local cminp = io.read() io.write("\27[0m")
+            if cminp == "back" then
+                os.execute("clear")
+                commentss = false
+                hubs = true
+                return
+            elseif cminp == "comment" then
+                doreqc = true
+                os.execute("clear")
+                print("\27[96m leave your comment!\n\27[93mpress ENTER to send\27[0m")
+                io.write(" > \27[90mwhat are you thinking now?...\27[29D\27[0m")
+                local ucm = io.read()
+                if ucm:gsub(" ","") ~= "" then
+                    for i,v in ipairs(issues) do
+                        local a, b, c = v.content:match("(.-)@(.-)@(.-)")
+                        if a == _G.DTDUser.name and b == ucm and c == obj.name then
+                            print("\27[91mspam detected\27[0m")
+                            io.read()
+                            break
+                        end
+                        DTDIssueService.new(_G.DTDUser.name.."@"..ucm.."@"..obj.name)
+                        os.execute("sleep 2")
+                        break
+                    end
+                else
+                    print("\27[91mnot a valid comment!\27[0m")
+                    os.execute("clear")
+                end
+            elseif cminp == "reset" then
+                doreqc = true
+            elseif cminp == "debug" then
+                for i,v in ipairs(issues) do
+                    print(v.content)
+                end io.read()
+            elseif cminp == "removeall" then
+                for i,v in ipairs(issues) do
+                    local a, b, c = v.content:match("^(.-)@(.-)@(.*)$")
+                    if a == DTDUser.name and c == obj.name then
+                        DTDIssueService.close(v.content)
+                    end
+                end
+            end
+        end
     else
         hubs = true
         return
@@ -131,6 +197,6 @@ while not exit do
         market()
     elseif hubs == true then
         hubs = false
-        hub(uinp)
+        hub(inp)
     end
 end
