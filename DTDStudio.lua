@@ -29,8 +29,9 @@ end print("\27[93mloading market packages...\27[0m") loadpacks() print("\27[93ms
     args = {},
 } local function loadplugins()
     local fpipe = io.popen("ls")
-    if fpipeline then
-        local files = fpipe:read("*a")
+    local files = ""
+    if fpipe then
+        files = fpipe:read("*a")
         fpipe:close()
     else
         return
