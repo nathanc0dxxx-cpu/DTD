@@ -1,18 +1,51 @@
 std:newcmd({
     token = "memo",
     func = function ()
-    	local memo = {
-            "newfile" = function ()
-            	
+            _G.memo = {
+                cmd = {
+                    ["newfile"] = function()
+                        local filename = std.args[3]
+                       if filename then
+                           local file = io.open(filename, "r")
+                           if file then
+                               memo.err("file already exists!")
+                           else
+                               local file = io.open(filename, "w")
+                               file:write("")
+                               file:close()
+                               memo.notify("created new file "..filename.." at:")
+                               os.execute("pwd")
+                           end
+                       else
+                           memo.err("no file name provided!")
+                       end
+                   end,
+                   ["openfile"] = function ()
+                       local filename = std.args[3]
+                       local file = io.open(filename,"r+")
+                       if file then
+                           memo.notify("opening file editor...")
+                           
+                       else
+                           memo.err("no file with name "..filename.." found.")
+                       end
+                   end,
+            },
+            err = function(str)
+                print("\27[0m[memo]: \27[91m"..str.."\27[0m")
+            end,
+            
+            notify = function(str)
+                print("\27[0m[memo]: \27[93m"..str.."\27[0m")
             end,
         }
         if std.args[2] then
-            local query = memo[std.args[2]]
+            local query = memo.cmd[std.args[2]]
             if query then query() end
         else
             print("usage:\n")
-            for i,v in ipairs(memo) do
-                print("  "..i..": "..v)
+            for i,v in ipairs(memo.cmd) do
+                 print("  "..i..": "..v)
             end
         end
     end,
