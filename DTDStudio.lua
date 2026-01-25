@@ -36,17 +36,20 @@ end print("\27[93mloading market packages...\27[0m") loadpacks() print("\27[93ms
         if v:match(".mp.lua$") then
             found = true
             dofile(v)
-            print("\27[44m[MS::PIL]:\27[0m \27[92mloaded "..v)
+            print("\27[0m\27[44m[MS::PIL]:\27[0m \27[92mloaded "..v)
         end
     end if found == false then
-        print("\27[44m[MS::PIL]:\27[0m \27[91mno plugin found")
+        print("\27[0m\27[44m[MS::PIL]:\27[0m \27[91mno plugin found")
     end
-end print("\27[93mloading plugins...\27[0m") loadplugins() print("\27[93mstarting...\27[0m") startp()
+end
+print("\27[93mloading plugins...\27[0m")
+loadplugins()
+print("\27[93mstarting...\27[0m")
 
-std:newcmd({
+dtdstd:newcmd({
     token = "exit",
     func = function()
-        stdsession = false
+        studiosession = false
     end,
     desc = "finish the session"
 })
@@ -54,15 +57,15 @@ std:newcmd({
 while studiosession do
     io.write("\27[0m > \27[90mhelp\27[4D\27[92m")
     local inp = io.read() print()
-    std.args = {}
+    dtdstd.args = {}
     for v in inp:gmatch("%S+") do
-        table.insert(std.args, v)
+        table.insert(dtdstd.args, v)
     end io.write("\27[0m")
 
     local sucess = false
-    for i,v in ipairs(std.cmd) do
-        if std.args[1] == v.token then
-            if std.args[2] == "--help" then
+    for i,v in ipairs(dtdstd.cmd) do
+        if dtdstd.args[1] == v.token then
+            if dtdstd.args[2] == "--help" then
                 print("\27[32m --description: \27[0m\n"..v.desc)
             else
                 v.func()
@@ -70,7 +73,7 @@ while studiosession do
             sucess = true
         end
     end if sucess == false then
-        if not std.args[1] then
+        if not dtdstd.args[1] then
             io.write("\27[2A\r      \r")
         else
             io.write("\27[2A\27[0m\27[91mcmd \27[93m"..std.args[1].."\27[91m inval or not registed\27[0m\n")
