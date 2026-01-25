@@ -17,7 +17,7 @@ local function loadpacks()
         local obj = { name = i, owner = v }
         table.insert(packs, obj)
     end
-end print("\27[93mloading market packages...\27[0m") loadpacks() print("\27[93msettinf std table...\27[0m") _G.std = {
+end print("\27[93mloading market packages...\27[0m") loadpacks() print("\27[93msetting std table...\27[0m") _G.dtdstd = {
     newcmd = function(self, json)
         local obj = {
             token = json.token,
