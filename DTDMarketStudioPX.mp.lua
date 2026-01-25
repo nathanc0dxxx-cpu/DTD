@@ -31,7 +31,7 @@ dtdstd:newcmd({
                     if file then
                         local content = file:read("*a")
                         file:close()
-                        local strucn = v.."@".._G.DTDUser.name
+                        local strucn = v.."@".._G.DTDUser.name.."/content"
                         print("\27[93mloading postservice...")
                         local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDPostService.lua")
                         if ss then load(ss:read("*a"))() ss:close()
@@ -93,7 +93,7 @@ dtdstd:newcmd({
                 local answer = io.read()
                 if answer == "y" or answer == "Y" then
                     print("\27[93mdeleting...\27[0m")
-                    DTDPostService:market("",v.name.."@".._G.DTDUser.name, "DELETE")
+                    DTDPostService:market("",v.name.."@".._G.DTDUser.name.."/content", "DELETE")
                     print("\27[92mdeleted sucefully!")
                     sucessd = true
                     break
