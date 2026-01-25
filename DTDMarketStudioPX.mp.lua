@@ -126,7 +126,7 @@ dtdstd:newcmd({
     token = "ls",
     func = function()
         local pip = io.popen("ls")
-        print("\27[96mcurrent files:\n\27[0m  "..pip:read("*a"))
+        print("\27[96mcurrent files:\n\27[0m"..pip:read("*a"))
         pip:close()
     end,
     desc = "list your local files"
