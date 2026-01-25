@@ -1,6 +1,6 @@
 
 os.execute("clear")
-local stdsession = true
+local studiosession = true
 function start()
     local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDMarketStudioPX.mp.lua")
     if ss then load(ss:read("*a"))() ss:close() end
@@ -50,7 +50,7 @@ std:newcmd({
     desc = "finish the session"
 })
 
-while stdsession do
+while studiosession do
     io.write("\27[0m > \27[90mhelp\27[4D\27[92m")
     local inp = io.read() print()
     std.args = {}
