@@ -1,7 +1,7 @@
 dtdstd:newcmd({
   token = "help",
   func = function()
-    for i,v in ipairs(std.cmd) do
+    for i,v in ipairs(dtdstd.cmd) do
       print("\27[96m"..i.." \27[92m"..v.token.."\n  \27[93m"..v.desc.."\27[0m\n")
     end
   end,
@@ -17,7 +17,7 @@ dtdstd:newcmd({
 dtdstd:newcmd({
     token = "deploy",
     func = function()
-        local query = std.args[2]
+        local query = dtdstd.args[2]
         local pip = io.popen("ls")
         local pipc = pip:read("*a")
         pip:close()
@@ -75,10 +75,10 @@ dtdstd:newcmd({
 dtdstd:newcmd({
     token = "deorbit",
     func = function()
-        local query = std.args[2]
+        local query = dtdstd.args[2]
         local ss = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Market")
         local ssc if ss then ssc = ss:read("*a") ss:close() else print("\27[91mfailed server connection...\27[0m") return end
-        
+
         local packgs = {}
         for i,v in ssc:gmatch("%s*\"name\"%s*:%s*\"(.-)@(.-)\"") do
             local obj = { name = i, owner = v }
