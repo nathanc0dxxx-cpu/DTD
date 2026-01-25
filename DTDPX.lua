@@ -59,8 +59,8 @@ new.cmd("connect", function()
     local content = get:read("*a")
     get:close()
     if content then
-      local err = pcall(function() load(content)() end)
-      if err then print(err) end
+      local fn, err = load(content)
+      if not fn then print(tostring(err)) else fn() end
     else
       print("\27[0m\27[91mno content received!")
     end
