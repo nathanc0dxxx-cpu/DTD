@@ -1,4 +1,4 @@
-std:newcmd({
+dtdstd:newcmd({
   token = "help",
   func = function()
     for i,v in ipairs(std.cmd) do
@@ -7,14 +7,14 @@ std:newcmd({
   end,
   desc = "it helps you bro... JUST!"
 })
-std:newcmd({
+dtdstd:newcmd({
     token = "clear",
     func = function()
         os.execute("clear")
     end,
     desc = "clear the screen"
 })
-std:newcmd({
+dtdstd:newcmd({
     token = "deploy",
     func = function()
         local query = std.args[2]
@@ -72,7 +72,7 @@ std:newcmd({
     end,
     desc = "deploy a file to the market"
 })
-std:newcmd({
+dtdstd:newcmd({
     token = "deorbit",
     func = function()
         local query = std.args[2]
@@ -105,7 +105,7 @@ std:newcmd({
     end,
     desc = "delete an market file in who you deployed"
 })
-std:newcmd({
+dtdstd:newcmd({
     token = "view",
     func = function()
         local ss = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Market")
@@ -122,7 +122,7 @@ std:newcmd({
     end,
     desc = "view your deployed files"
 })
-std:newcmd({
+dtdstd:newcmd({
     token = "ls",
     func = function()
         local pip = io.popen("ls")
