@@ -1,10 +1,11 @@
 
 os.execute("clear")
+print("\27[93minitializing studio...\27[0m")
 local studiosession = true
 function start()
     local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDMarketStudioPX.mp.lua")
     if ss then load(ss:read("*a"))() ss:close() end
-end
+end print("\27[93msetting functions...\27[0m")
 
 local packs = {}
 local function loadpacks()
@@ -16,7 +17,7 @@ local function loadpacks()
         local obj = { name = i, owner = v }
         table.insert(packs, obj)
     end
-end  loadpacks() _G.std = {
+end print("\27[93mloading market packages...\27[0m") loadpacks() print("\27[93msettinf std table...\27[0m") _G.std = {
     newcmd = function(self, json)
         local obj = {
             token = json.token,
@@ -40,7 +41,7 @@ end  loadpacks() _G.std = {
     end if found == false then
         print("\27[44m[MS::PIL]:\27[0m \27[91mno plugin found")
     end
-end loadplugins() start()
+end print("\27[93mloading plugins...\27[0m") loadplugins() print("\27[93mstarting...\27[0m") start()
 
 std:newcmd({
     token = "exit",
