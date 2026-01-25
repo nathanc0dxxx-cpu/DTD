@@ -2,9 +2,9 @@
 os.execute("clear")
 print("\27[93minitializing studio...\27[0m")
 local studiosession = true
-function start()
+local function start()
     local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDMarketStudioPX.mp.lua")
-    if ss then load(ss:read("*a"))() ss:close() end
+    if ss then load(ss:read("*a"))() ss:close() else print("\27[91mfailed while loading default plugin...\27[0m") end
 end print("\27[93msetting functions...\27[0m")
 
 local packs = {}
