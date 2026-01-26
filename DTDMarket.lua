@@ -1,5 +1,4 @@
 
-if not DTDUser then DTDUser = { name = "Dougla037" } end
 os.execute("clear")
 local exit = false
 local hubs = false
