@@ -21,10 +21,45 @@ _G.memo = {
         end},
         [2] = { name = "openfile", act = function ()
             local filename = dtdstd.args[3]
-            local file = io.open(filename,"r+")
+            if not filename then memo.err("no file name provided!") return end
+            local file = io.open(filename,"r")
             if file then
-                memo.notify("opening file editor...")
                 file:close()
+                memo.notify("opening file editor...")
+                local editor = true
+                local up = 2
+                while editor do
+                    local file = io.open(filename,"r")
+                    local cont = file:read("*a") file:close()
+                    local file = io.open(filename, "w")
+                    os.execute("clear")
+                    io.write("\27[92m")
+                    os.execute("pwd")
+                    print("\27[0m\27[44m["..filename.."]:\27[0m")
+                    print(cont.." ")
+                    print("\27[0m\27[44m[==============]\27[0m\n>")
+                    for i = 0,up do io.write("\27[1A") io.flush() end
+                    local actualline = ""
+                    for v in cont:gmatch("([^\r\n]+)") do
+                        actualline = v
+                    end io.write("\27[1D")
+                    for v in actualline:gmatch("(.)") do
+                        io.write("\27[1C")
+                        io.flush()
+                    end io.write("\27[92m")
+                    local cmdinp = io.read()
+                    io.write("\27[0m")
+                    if cmdinp:sub(1,2) == "up" then
+                        up = tonumber(cmdinp:sub(3))
+                    elseif cmdinp == "" then
+                        file:write(cont.."\n")
+                    elseif cmdinp == "clearall" then
+                        file:write("")
+                    else
+                        file:write(cont..cmdinp)
+                    end
+                    file:close()
+                end
             else
                 memo.err("no file with name "..filename.." found.")
             end
@@ -33,10 +68,12 @@ _G.memo = {
     err = function(str)
         print("\27[0m[memo]: \27[91m"..str.."\27[0m")
     end,
+
    notify = function(str)
        print("\27[0m[memo]: \27[93m"..str.."\27[0m")
    end,
 }
+
 dtdstd:newcmd({
     token = "memo",
     func = function ()
