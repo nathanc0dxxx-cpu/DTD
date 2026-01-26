@@ -22,19 +22,77 @@ _G.memo = {
         [2] = { name = "openfile", act = function ()
             local filename = dtdstd.args[3]
             if not filename then memo.err("no file name provided!") return end
+            
             local file = io.open(filename,"r")
             if file then
                 file:close()
                 memo.notify("opening file editor...")
                 local editor = true
                 local up = 2
+                local file = io.open(filename, "w+")
+                local cont = file:read("*a")
+                memo.notify("do you want to install a lang plugin suport?")
+                    io.write("\27[92m[Y]\27[0m/\27[91m[N]\27[0m: ")
+                    local yon = io.read()
+                    
+                    if yon == "y" or yon == "Y" then
+                        memo.notify("\27[93mloading...")
+                        os.execute("clear")
+                        local memop = {}
+                        local function reloadmemop()
+                        local memos = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Market")
+                        if not memos then memo.err("error while loading market...") return end
+                        local memosc = memos:read("*a") memos:close()
+                        for i,v in memosc:gmatch('"name"%s*:%s*"(.-)%.memolang%.lua@(.-)"') do
+                            local obj = { name = i, owner = v }
+                            table.insert(memop, obj)
+                        end end reloadmemop()
+                        local pses = true
+                        while pses do
+                            os.execute("clear")
+                            print("\27[44m[Memo Plugins]:\27[0m")
+                            for i,v in ipairs(memop) do
+                                print("\27[93m "..i.."\27[0m \27[92m"..v.name.."\27[90m by "..v.owner"\27[0m")
+                            end
+                            print("\27[44m[---------------]:\27[0m")
+                            io.write(" > \27[90m<name>, exit, reset\27[19D\27[92m")
+                            local userinput = io.read()
+                            if userinput == "exit" then
+                                pses = false
+                                os.execute("clear")
+                            elseif userinput == "reset" then
+                                reloadmemop()
+                            else
+                                for i,v in ipairs(memop) do
+                                    if v.name:match(userinput) then
+                                        os.execute("clear")
+                                        memo.notify("is "..v.name.." you want to install?\n\27[92m[Y]\27[0m/\27[91m[N]\27[0m:")
+                                        io.write(" > ")
+                                        local hmm = io.read()
+                                        if hmm == "y" or hmm == "Y" then
+                                            memo.notify("installing...")
+                                            local installp = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Market/"..v.name.."@"..v.owner.."/content")
+                                            if not installp then memo.err("failed installing plugin...") return end
+                                            local pgcontent = installp:read("*a")
+                                            installp:close()
+                                            local try, perr = load(pgcontent)
+                                            if not try then memo.err(tostring(perr)) else try() end
+                                        end
+                                    end
+                                end
+                            end
+                            
+                        end
+                    end
                 while editor do
-                    local file = io.open(filename,"r")
-                    local cont = file:read("*a") file:close()
-                    local file = io.open(filename, "w")
                     os.execute("clear")
                     io.write("\27[92m")
                     os.execute("pwd")
+                    
+                    for i,v in ipairs(memo.highlight.words) do
+                        if v then cont = cont:gsub(word, "\27["..memo.highlight.colors.."m"..word) end
+                    end
+                    
                     print("\27[0m\27[44m["..filename.."]:\27[0m")
                     print(cont.." ")
                     print("\27[0m\27[44m[==============]\27[0m\n>")
@@ -51,9 +109,9 @@ _G.memo = {
                     if cmdinp:sub(1,2) == "up" then
                         up = tonumber(cmdinp:sub(3))
                     elseif cmdinp == "" then
-                        file:write(cont.."\n")
+                        cont = cont.."\n"
                     elseif cmdinp == "clearall" then
-                        file:write("")
+                        cont = ""
                     elseif cmdinp:sub(1,2) == "rm" then
                         local chars = tonumber(cmdinp:sub(3))
                         if chars then
@@ -63,26 +121,29 @@ _G.memo = {
                             io.write("\r"..string.rep(" ", size).."\r")
                             io.flush()
                             io.write("\27[1A\r\27[0m"..prefix.."\27[91m"..target.."\27[0m")
-                            
+
                             print("\n\27[93mdo you want to delete these chars?\npress ENTER to remove or type n to dont")
                             io.write(" > ")
                             local yes = io.read()
                             if yes == "" then
                                 cont = cont:gsub(actualline, prefix)
-                                file:write(cont)
                             else
                                 print("ok")
                             end
                         end
+                    elseif cmdinp == "closefile" then
+                        editor = false
+                        os.execute("clear")
                     else
-                        file:write(cont..cmdinp)
+                        cont = cont .. cmdinp
                     end
-                    file:close()
-                end
+                end file:write(cont)
+                file:close()
             else
                 memo.err("no file with name "..filename.." found.")
             end
-        end},
+        end
+        },
     },
     err = function(str)
         print("\27[0m[memo]: \27[91m"..str.."\27[0m")
@@ -90,6 +151,15 @@ _G.memo = {
 
    notify = function(str)
        print("\27[0m[memo]: \27[93m"..str.."\27[0m")
+   end,
+   highlight = {
+       words = {},
+       colors = {}
+   },
+   addhighl = function(word, color)
+       if not (word and color) then return end
+       table.insert(memo.highlight.words, word)
+       table.insert(memo.highlight.colors, color)
    end,
 }
 
