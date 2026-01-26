@@ -43,10 +43,9 @@ _G.memo = {
                     for v in cont:gmatch("([^\r\n]+)") do
                         actualline = v
                     end io.write("\27[1D")
-                    for v in actualline:gmatch("(.)") do
-                        io.write("\27[1C")
-                        io.flush()
-                    end io.write("\27[92m")
+                    io.write("\27["..#actualline.."C")
+                    io.flush()
+                    io.write("\27[92m")
                     local cmdinp = io.read()
                     io.write("\27[0m")
                     if cmdinp:sub(1,2) == "up" then
@@ -55,6 +54,26 @@ _G.memo = {
                         file:write(cont.."\n")
                     elseif cmdinp == "clearall" then
                         file:write("")
+                    elseif cmdinp:sub(1,2) == "rm" then
+                        local chars = tonumber(cmdinp:sub(3))
+                        if chars then
+                            local size = #actualline
+                            local prefix = actualline:sub(1, #actualline - chars)
+                            local target = actualline:sub(-chars)
+                            io.write("\r"..string.rep(" ", size).."\r")
+                            io.flush()
+                            io.write("\27[1A\r\27[0m"..prefix.."\27[91m"..target.."\27[0m")
+                            
+                            print("\n\27[93mdo you want to delete these chars?\npress ENTER to remove or type n to dont")
+                            io.write(" > ")
+                            local yes = io.read()
+                            if yes == "" then
+                                cont = cont:gsub(actualline, prefix)
+                                file:write(cont)
+                            else
+                                print("ok")
+                            end
+                        end
                     else
                         file:write(cont..cmdinp)
                     end
