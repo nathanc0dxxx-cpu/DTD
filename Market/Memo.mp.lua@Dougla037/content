@@ -43,16 +43,18 @@ _G.memo = {
                         local memos = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Market")
                         if not memos then memo.err("error while loading market...") return end
                         local memosc = memos:read("*a") memos:close()
-                        for i,v in memosc:gmatch('"name"%s*:%s*"(.-)%.memolang%.lua@(.-)"') do
+                        for i,v in memosc:gmatch('"name"%s*:%s*"(.-)@(.-)"') do
                             local obj = { name = i, owner = v }
-                            table.insert(memop, obj)
+                            if obj.name:match("%.memolang%.lua$") then
+                                table.insert(memop, obj)
+                            end
                         end end reloadmemop()
                         local pses = true
                         while pses do
                             os.execute("clear")
                             print("\27[44m[Memo Plugins]:\27[0m")
                             for i,v in ipairs(memop) do
-                                print("\27[93m "..i.."\27[0m \27[92m"..v.name.."\27[90m by "..v.owner"\27[0m")
+                                print("\27[93m "..i.."\27[0m \27[92m"..v.name.."\27[90m by "..v.owner.."\27[0m")
                             end
                             print("\27[44m[---------------]:\27[0m")
                             io.write(" > \27[90m<name>, exit, reset\27[19D\27[92m")
@@ -83,18 +85,21 @@ _G.memo = {
                             end
                             
                         end
-                    end
+                    end memo.addhighl("(%d+)",96)
                 while editor do
                     os.execute("clear")
                     io.write("\27[92m")
                     os.execute("pwd")
                     
+                    local conthl = cont
                     for i,v in ipairs(memo.highlight.words) do
-                        if v then cont = cont:gsub(word, "\27["..memo.highlight.colors.."m"..word) end
+                        if v then
+                            conthl = conthl:gsub("%f[%w]("..v..")%f[%W]", "\27["..memo.highlight.colors[i].."m%1\27[0m")
+                        end
                     end
                     
                     print("\27[0m\27[44m["..filename.."]:\27[0m")
-                    print(cont.." ")
+                    print(conthl.." ")
                     print("\27[0m\27[44m[==============]\27[0m\n>")
                     for i = 0,up do io.write("\27[1A") io.flush() end
                     local actualline = ""
