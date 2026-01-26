@@ -85,7 +85,8 @@ _G.memo = {
                             end
                             
                         end
-                    end memo.addhighl("(%d+)",96)
+                    end
+                    local indent = 0
                 while editor do
                     os.execute("clear")
                     io.write("\27[92m")
@@ -99,7 +100,7 @@ _G.memo = {
                     end
                     
                     print("\27[0m\27[44m["..filename.."]:\27[0m")
-                    print(conthl.." ")
+                    print(conthl)
                     print("\27[0m\27[44m[==============]\27[0m\n>")
                     for i = 0,up do io.write("\27[1A") io.flush() end
                     local actualline = ""
@@ -114,7 +115,7 @@ _G.memo = {
                     if cmdinp:sub(1,2) == "up" then
                         up = tonumber(cmdinp:sub(3))
                     elseif cmdinp == "" then
-                        cont = cont.."\n"
+                        cont = cont.."\n"..string.rep("  ",indent)
                     elseif cmdinp == "clearall" then
                         cont = ""
                     elseif cmdinp:sub(1,2) == "rm" then
@@ -141,6 +142,15 @@ _G.memo = {
                         os.execute("clear")
                     else
                         cont = cont .. cmdinp
+                        for i,v in ipairs(memo.highlight.keysb) do
+                            if cmdinp:match(v) then
+                                indent = indent - 1
+                            end
+                        end for i,v in ipairs(memo.highlight.keysa) do
+                            if cmdinp:match(v) then
+                                indent = indent + 1
+                            end
+                        end
                     end
                 end file:write(cont)
                 file:close()
@@ -149,6 +159,21 @@ _G.memo = {
             end
         end
         },
+        [3] = { name = "removefile" act = function()
+            local query = dtdstd.args[2]
+            if query then
+                local file = io.open(query, "r")
+                if file then
+                    file:close()
+                    os.remove(query)
+                    memo.notify("\27[92mfile removed!")
+                else
+                    memo.err("file not found")
+                end
+            else
+                memo.err("no file name provided!")
+            end
+       end},
     },
     err = function(str)
         print("\27[0m[memo]: \27[91m"..str.."\27[0m")
@@ -159,12 +184,22 @@ _G.memo = {
    end,
    highlight = {
        words = {},
-       colors = {}
+       colors = {},
+       keysa = {},
+       keysb = {}
    },
    addhighl = function(word, color)
        if not (word and color) then return end
        table.insert(memo.highlight.words, word)
        table.insert(memo.highlight.colors, color)
+   end,
+   addkeyopen = function(word)
+       if not word then return end
+       table.insert(memo.highlight.keysa, word)
+   end,
+   addkeyclose = function(word)
+       if not word then return end
+       table.insert(memo.highlight.keysb, word)
    end,
 }
 
