@@ -11,6 +11,7 @@ do
   memo.addhighl(":", spc)   -- abre bloco
   memo.addkeyopen(":")
   memo.addhighl("#end", spc)
+  memo.addkeyclose("#end")
   -- números
   memo.addhighl("(%d+)", val)
   -- valores literais
