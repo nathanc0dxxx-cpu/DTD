@@ -38,17 +38,70 @@ end
 
 local function market()
     os.execute("clear")
-    
+    local usedpacks = {}
     print("\27[0m\27[44m[Market]:\27[41m[=============]\27[0m\n")
+    do
     local maxi = 2
-    for i = 1,9 do
-        if packs[i] then
-            io.write("\27[92m [\27[93m"..packs[i].name:gsub("%.%s*(.-)$","").."\27[92m]\27[0m")
-            if i >= maxi then
-                maxi = maxi + 2
-                print("\n")
+    local foundpkg = false
+        for i = 1,9 do
+            if packs[i] then
+                table.insert(usedpacks, packs[i].name)
+                foundpkg = true
+                io.write("\27[92m [\27[93m"..packs[i].name:gsub("%.%s*(.-)$","").."\27[92m]\27[0m")
+                if i >= maxi then
+                    maxi = maxi + 2
+                    print("\n")
+                end
             end
-        end
+        end if foundpkg == false then io.write("\27[90mWOW! nothing here...\27[0m\n\n") end
+    end
+    print("\27[0m\27[45m[Some Plugins for you!]:\27[0m\n")
+    do
+    local maxi = 2
+    local foundpkg = false
+        for i = #usedpacks, #packs do
+            local target = packs[i]
+            if target and (not table.concat(usedpacks, " "):match(target.name)) and target.name:match("%.dtdp%.lua$") then
+                io.write("\27[92m [\27[93m"..target.name:gsub("%.%s*(.-)$","").."\27[92m]\27[0m")
+                foundpkg = true
+                if i >= maxi then
+                    maxi = maxi + 2
+                    print("\n")
+                end
+            end
+        end if foundpkg == false then io.write("\27[90mhmm... no plugin here today...\27[0m") end
+    end
+    print("\n\n\27[0m\27[43m[Try some of these stuff!]:\27[0m\n")
+    do
+    local maxi = 2
+    local foundpkg = false
+        for i = #packs, #packs - 9 do
+            local target = packs[i]
+            if target and (not table.concat(usedpacks, " "):match(target.name)) then
+                io.write("\27[92m [\27[93m"..target.name:gsub("%.%s*(.-)$","").."\27[92m]\27[0m")
+                foundpkg = true
+                if i >= maxi then
+                    maxi = maxi + 2
+                    print("\n")
+                end
+            end
+        end if foundpkg == false then io.write("\27[90msorry, here dont have any recent pack...\27[0m") end
+    end
+    print("\n\n\27[0m\27[46m[Some Frameworks and Studio extensions!]:\27[0m\n")
+    do
+    local maxi = 2
+    local foundpkg = false
+        for i = #usedpacks, #packs do
+            local target = packs[i]
+            if target and (not table.concat(usedpacks, " "):match(target.name)) and target.name:match("%.mp%.lua$") then
+                io.write("\27[92m [\27[93m"..packs[i].name:gsub("%.%s*(.-)$","").."\27[92m]\27[0m")
+                foundpkg = true
+                if i >= maxi then
+                    maxi = maxi + 2
+                    print("\n")
+                end
+            end
+        end if foundpkg == false then io.write("\27[90mHmm... looks like there’s nothing of this type here.\27[0m") end
     end
     print("\n\n\27[44m[======================]\27[0m")
     io.write(" > \27[90m<pack>, search, exit, reset\27[27D\27[92m")
