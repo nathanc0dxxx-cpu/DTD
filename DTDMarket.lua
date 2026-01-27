@@ -55,7 +55,7 @@ local function market()
             end
         end if foundpkg == false then io.write("\27[90mWOW! nothing here...\27[0m\n\n") end
     end
-    print("\27[0m\27[45m[Some Plugins for you!]:\27[0m\n")
+    print("\n\n\27[0m\27[45m[Some Plugins for you!]:\27[0m\n")
     do
     local maxi = 2
     local foundpkg = false
