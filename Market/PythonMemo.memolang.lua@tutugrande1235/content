@@ -8,8 +8,8 @@ do
   memo.addhighl("%-", spc)
   memo.addhighl("%*", spc)
   memo.addhighl("%/", spc)
-  memo.addhighl("%:", spc)   -- abre bloco
-  memo.addkeyopen("%:")
+  memo.addhighl(":", spc)   -- abre bloco
+  memo.addkeyopen(":")
   memo.addhighl("#end", spc)
   -- números
   memo.addhighl("(%d+)", val)
