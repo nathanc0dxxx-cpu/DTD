@@ -174,9 +174,9 @@ local function hub(query)
     elseif uinp == "comments" then
         local commentss = true
         local doreqc = true
+        local issues = ""
         while commentss do
             os.execute("clear")
-            local issues = ""
             if doreqc == true then
                 print("\27[93mloading...\27[0m")
                 local dds = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDIssueService.lua")
