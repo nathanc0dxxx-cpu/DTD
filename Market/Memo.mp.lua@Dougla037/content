@@ -76,7 +76,23 @@ _G.memo = {
                                             if not installp then memo.err("failed installing plugin...") return end
                                             local pgcontent = installp:read("*a")
                                             installp:close()
-                                            local try, perr = load(pgcontent)
+                                            local mpf = io.open(v.name, "r")
+                                            if mpf then
+                                                mpf:close()
+                                                mpf = io.open(v.name, "w")
+                                                mpf:write(pgcontent)
+                                                mpf:close()
+                                                memo.notify("updated lang support "..v.name.." at")
+                                                os.execute("pwd")
+                                                os.execute("clear")
+                                            else
+                                                mpf = io.open(v.name, "w")
+                                                mpf:write(pgcontent)
+                                                mpf:close()
+                                                memo.notify("\27[92minstalled lang support "..v.name.." at")
+                                                os.execute("pwd")
+                                                os.execute("sleep 2")
+                                            end
                                             if not try then memo.err(tostring(perr)) else try() end
                                         end
                                     end
@@ -85,6 +101,26 @@ _G.memo = {
 
                         end
                     end
+                    local function loadlangsp()
+                        memo.notify("loading local support lang plugins...")
+                        local localfiles = io.popen("ls")
+                        if localfiles then
+                            local contentfiles = localfiles:read("*a")
+                            localfiles:close()
+                            local foundmp = false
+                            for v in contentfiles:gmatch("%S+") do
+                                if v:match("%.memolang%.lua$") then
+                                    foundmp = true
+                                    dofile(v)
+                                    memo.notify("\27[92mloaded lang support "..v)
+                                end
+                            end if foundmp == false then memo.err("no lang support local plugin found...") end
+                        else
+                            memo.err("failed while loading local lang support plugins...")
+                        end
+                    end
+                    loadlangsp()
+                    io.read()
                 while editor do
                     os.execute("clear")
                     io.write("\27[92m")
@@ -129,7 +165,7 @@ _G.memo = {
                     if cmdinp:sub(1,2) == "up" and type(cmdinp:sub(3)) == "number" then
                         up = tonumber(cmdinp:sub(3))
                     elseif cmdinp == "" then
-                        
+
                         cont = cont.."\n"..string.rep("  ",indent)
                     elseif cmdinp == "clearall" then
                         cont = ""
