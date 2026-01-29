@@ -57,8 +57,8 @@ while clouds do
             local pip = io.popen("ls")
             local pipc = pip:read("*a")
             pip:close()
+            local sucess = false
             for v in pipc:gmatch("%S+") do
-                local sucess = false
                 if v:match(query) then
                     print("\27[93mis "..v.." you want to stock?\27[0m")
                     print("\27[92m[Y]\27[0m/\27[91m[N]\27[0m:")
@@ -75,6 +75,7 @@ while clouds do
                                 print("\27[93mupdating file...\27[0m")
                                 DTDPostService:cloud(filec, DTDUser.name.."/"..dirpath..v, "PUT")
                                 updatef = true
+                                os.execute("clear")
                             end
                         end if updatef == false then
                             print("\27[93mstocking file...\27[0m")
@@ -82,12 +83,14 @@ while clouds do
                             os.execute("sleep 2")
                             files = {}
                             loadfiles(files, dirpath)
+                            os.execute("clear")
                         end sucess = true
                     else
                         print("\27[93mseeking...\27[0m")
-                    end if sucess == false then print("\27[91mno file found...\27[0m") io.read() end
+                    end
                 end
             end
+            if sucess == false then print("\27[91mno file found...\27[0m") io.read() end
         end
     elseif input:sub(1,7) == "restore" then
         local query = input:sub(9)
