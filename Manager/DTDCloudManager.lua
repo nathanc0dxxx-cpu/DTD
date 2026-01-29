@@ -1,5 +1,4 @@
 
-if not DTDUser then DTDUser = { name = "Dougla037" } end
 os.execute("clear")
 print("\27[93minitializing...\27[0m")
 do
@@ -23,9 +22,9 @@ local dirpath = ""
 while clouds do
     local havefile = false
     os.execute("clear")
-    print("\27[0m\27[44m[Your files Colection!]:\27[0m")
+    print("\27[0m\27[44m[Your files Colection!]:\27[0m\n")
     do
-        local max = 3
+        local max = 2
         for i,v in ipairs(files) do
             if v.tp == "file" then
                 havefile = true
@@ -38,8 +37,25 @@ while clouds do
                 print("\n")
             end
         end
-    end if havefile == false then print("\n\27[90mHmm... Nothing stocked here...\27[0m") end
-    print("\n\27[0m\27[44m[============]:\27[0m")
+    end if havefile == false then print("\27[90mHmm... Nothing stocked here...\27[0m") end
+    print("\n\n\27[0m\27[44m[Your Local Files]:\27[0m\n")
+    do
+        local havelfile = false
+        local pip = io.popen("ls")
+        local pipc = pip:read("*a")
+        pip:close()
+        local max = 2
+        local i = 0
+        for v in pipc:gmatch("%S+") do
+            havelfile = true
+            i = i + 1
+            io.write("\27[96m"..v.."\27[0m ")
+            if i >= max then
+                print("\n")
+            end
+        end if havelfile == false then print("\27[90mWow! you dont have nothing to stock...\27[0m") end
+    end
+    print("\n\n\27[0m\27[44m[============]:\27[0m")
     if dirpath ~= "" then print("\27[93mpath:\27[92m "..dirpath.."\27[0m") else print("\27[92mat home\27[0m") end
     io.write(" > \27[90m<name>, exit, stock, restore, folder\27[36D\27[92m")
     local input = io.read()
@@ -84,7 +100,7 @@ while clouds do
                             files = {}
                             loadfiles(files, dirpath)
                             os.execute("clear")
-                        end sucess = true
+                        end sucess = true break
                     else
                         print("\27[93mseeking...\27[0m")
                     end
@@ -126,7 +142,7 @@ while clouds do
                                 loadf:close()
                                 print("\27[92mfinished!\27[0m")
                             end
-                        end
+                        end break
                     else
                         print("\27[93mseeking...\27[0m")
                     end
@@ -147,6 +163,7 @@ while clouds do
                 DTDPostService:cloud("", DTDUser.name.."/"..dirpath..name.."/Folder", "POST")
                 files = {}
                 loadfiles(files, dirpath)
+                break
             end
         elseif name:sub(1,6) == "remove" then
             local query = input:sub(15)
@@ -158,6 +175,7 @@ while clouds do
                         os.execute("sleep 3")
                         files = {}
                         loadfiles(files, dirpath)
+                        break
                     end
                 end
             else
@@ -185,6 +203,7 @@ while clouds do
                     end openeddir = true
                     files = {}
                     loadfiles(files, dirpath)
+                    break
                 end
             end
         end
@@ -237,6 +256,7 @@ while clouds do
                             if userinp == "back" then
                                 os.execute("clear")
                                 hub = false
+                                break
                             elseif userinp == "remove" then
                                 print("\27[93myou really want to remove this file?\27[0m")
                                 print("\27[92m[Y]\27[0m/\27[91m[N]\27[0m:")
