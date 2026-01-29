@@ -80,4 +80,7 @@ _G.DTDPostService = {
   accounts = function(self, cont, file, mode)
     post("https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Accounts/"..file, cont, mode)
   end,
+  cloud = function(self, cont, file, mode)
+    post("https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Cloud/"..file, cont, mode)
+  end,
 }
