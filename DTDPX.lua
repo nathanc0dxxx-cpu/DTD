@@ -31,7 +31,7 @@ new.cmd("connect", function()
     local url = args[2]
     if url:sub(1, 8) ~= "https://" then 
         print("\27[0m\27[44m[DTD::SM]:\27[0m \27[93mfetching servers...\27[0m")
-        local ssf = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Servers")
+        local ssf = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Servers")
         local ssfc = ssf:read("*a")
         ssf:close()
         print("\27[93mformating objects...\27[0m")
@@ -47,7 +47,7 @@ new.cmd("connect", function()
             end
         end
         print("\27[93mconnecting server host...\27[0m")
-        local urlh = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Servers/"..url)
+        local urlh = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Servers/"..url)
         local urlfetch = urlh:read("*a")
         urlh:close()
         print("\27[93mconnecting to url...\27[0m")
