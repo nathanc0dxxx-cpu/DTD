@@ -5,7 +5,7 @@ if not DTDUser then _G.DTDUser = { name = "User" } end
 local serversjson = nil
 local servers = {}
 local function loadservers()
-local ss = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Servers")
+local ss = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Servers")
 serversjson = ss:read("*a") ss:close()
 
 servers = {}
