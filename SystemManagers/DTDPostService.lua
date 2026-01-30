@@ -42,7 +42,7 @@ end
 end
 
 local function post(url, content, mode)
-local dtkg = string.gsub("dtdkg__","dtdkg__","ghp_").."2IcCBtkZ702oA7d6EsbmPrl8GtcgmE1iCOp5"
+local dtkg = "github_pat_11B4Z".."K35Q03lx8PW9foLDz_GKsDc3LZsfJZwfpItyBlce6wcooH4IaFqsMs43WUY52GFVHMQFXRczdslza"
 
   local sha = getSHA(url, dtkg)
 local ct = ""
@@ -72,15 +72,15 @@ end
 
 _G.DTDPostService = {
   market = function(self, cont, file, mode)
-    post("https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Market/"..file, cont, mode)
+    post("https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Market/"..file, cont, mode)
   end,
   servers = function(self, cont, file, mode)
-    post("https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Servers/"..file, cont, mode)
+    post("https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Servers/"..file, cont, mode)
   end,
   accounts = function(self, cont, file, mode)
-    post("https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Accounts/"..file, cont, mode)
+    post("https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Accounts/"..file, cont, mode)
   end,
   cloud = function(self, cont, file, mode)
-    post("https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Cloud/"..file, cont, mode)
+    post("https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Cloud/"..file, cont, mode)
   end,
 }
