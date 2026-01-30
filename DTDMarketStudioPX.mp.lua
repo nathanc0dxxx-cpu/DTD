@@ -35,7 +35,7 @@ dtdstd:newcmd({
                         print("\27[93mloading postservice...")
                         local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDPostService.lua")
                         if ss then load(ss:read("*a"))() ss:close()
-                            local test = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Market")
+                            local test = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Market")
                             local testc = test:read("*a")
                             test:close() local packgs = {}
                             for g,j in testc:gmatch("%s*\"name\"%s*:%s*\"(.-)@(.-)\"") do
@@ -76,7 +76,7 @@ dtdstd:newcmd({
     token = "deorbit",
     func = function()
         local query = dtdstd.args[2]
-        local ss = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Market")
+        local ss = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Market")
         local ssc if ss then ssc = ss:read("*a") ss:close() else print("\27[91mfailed server connection...\27[0m") return end
 
         local packgs = {}
@@ -108,7 +108,7 @@ dtdstd:newcmd({
 dtdstd:newcmd({
     token = "view",
     func = function()
-        local ss = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Market")
+        local ss = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Market")
         local handle = ss:read("*a")
         ss:close() local pkgs = {}
         for i,v in handle:gmatch("%s*\"name\"%s*:%s*\"(.-)@(.-)\"") do
