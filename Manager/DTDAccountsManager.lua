@@ -3,7 +3,7 @@ local session = true
 local users = {}
 local function loadservers()
     users = {}
-    local ss = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Accounts")
+    local ss = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Accounts")
     if ss then
         local cont = ss:read("*a")
         for v in cont:gmatch("%s*\"name\"%s*:%s*\"(.-)\"") do
