@@ -1,14 +1,14 @@
 
-local dtdks = string.gsub("ghp_".."dtdkgblah".."2IcCBtkZ702oA7d6EsbmPrl8GtcgmE1iCOp5", "dtdkgblah", "")
+local dtdks = "github_pat_11B4ZK35Q03lx8PW9foLDz_GKsDc3LZsfJZwfpItyBlce6wcoo".."H4IaFqsMs43WUY52GFVHMQFXRczdslza"
 local function newissue(title)
     if title then
-        os.execute(string.format('curl -X POST -H "Authorization: token %s" -H "Accept: application/vnd.github+json" https://api.github.com/repos/nathanc0dxxx-cpu/DTD/issues -d \'{"title": "%s"}\'',
+        os.execute(string.format('curl -X POST -H "Authorization: token %s" -H "Accept: application/vnd.github+json" https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/issues -d \'{"title": "%s"}\'',
         dtdks, title))
     end
 end
 
-local cmd2 = 'curl -s -H "Authorization: token %s" -H "Accept: application/vnd.github+json" https://api.github.com/repos/nathanc0dxxx-cpu/DTD/issues?state=all&per_page=100'
-local cmd3 = 'curl -X PATCH -H "Authorization: token %s" -H "Accept: application/vnd.github+json" https://api.github.com/repos/nathanc0dxxx-cpu/DTD/issues/%s -d \'{"state": "closed"}\''
+local cmd2 = 'curl -s -H "Authorization: token %s" -H "Accept: application/vnd.github+json" https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/issues?state=all&per_page=100'
+local cmd3 = 'curl -X PATCH -H "Authorization: token %s" -H "Accept: application/vnd.github+json" https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/issues/%s -d \'{"state": "closed"}\''
 
 local function getissues()
     local ss = io.popen(string.format(cmd2, dtdks))
