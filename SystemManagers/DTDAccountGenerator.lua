@@ -23,7 +23,7 @@ end
 function genuser(name, pass)
     local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDPostService.lua")
     if ss then load(ss:read("*a"))() ss:close() else return nil end
-    local ssa = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Accounts")
+    local ssa = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Accounts")
     local ssac = nil
     if ssa then ssac = ssa:read("*a") ssa:close() else return nil end
     local users = {} local id = 0
@@ -31,7 +31,7 @@ function genuser(name, pass)
         table.insert(users, v)
         id = id + 1
     end 
-    local sse = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Accounts/"..users[id])
+    local sse = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Accounts/"..users[id])
     if sse then
         local tab = {} 
         for v in sse:read("*a"):gmatch("%S+") do
@@ -43,13 +43,13 @@ function genuser(name, pass)
     end for i,v in ipairs(users) do
         if v == name then return nil end
     end
-    
+
     math.randomseed(os.time())
     local salt = generate_salt(16)
     local hash = simple_hash(pass, salt)
-    
+
     local content = hash .. "\n" .. id .. "\n" .. salt
     DTDPostService:accounts(content, name, "POST")
-    
+
     return { un = name, ps = pass }
 end
