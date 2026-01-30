@@ -5,7 +5,7 @@ local hubs = false
 local markets = true
 local packs = {}
 local function loadpacks()
-    local ss = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Market")
+    local ss = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Market")
     local sst = ss:read("*a")
     ss:close()
     packs = {}
@@ -151,7 +151,7 @@ local function hub(query)
     elseif uinp == "install" then
         os.execute("clear")
         print("\27[93mdownloading...\27[0m")
-        local ssi = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Market/"..obj.name.."@"..obj.owner.."/content")
+        local ssi = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Market/"..obj.name.."@"..obj.owner.."/content")
         if ssi then
             local ssic = ssi:read("*a")
             ssi:close()
