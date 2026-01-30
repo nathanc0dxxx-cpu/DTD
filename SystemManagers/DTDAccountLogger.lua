@@ -21,7 +21,7 @@ end
 
 local function main()
     if doreq == true then
-        local ss = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Accounts")
+        local ss = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Accounts")
         users = {}
         if ss then
         for v in ss:read("*a"):gmatch("%s*\"name\"%s*:%s*\"(.-)\"") do
@@ -68,7 +68,7 @@ local function main()
                     pass = io.read()
                 end
                 local info = ""
-                local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Accounts/"..name)
+                local ss = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Accounts/"..name)
                 if ss then info = ss:read("*a") ss:close() else print("\27[91man unexpected error as ocurred...\27[0m") return end
                 local tab = {}
                 for v in info:gmatch("%S+") do
