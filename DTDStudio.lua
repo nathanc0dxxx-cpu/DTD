@@ -9,7 +9,7 @@ end print("\27[93msetting functions...\27[0m")
 
 local packs = {}
 local function loadpacks()
-    local ss = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Market")
+    local ss = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Market")
     local ssc = ss:read("*a")
     ss:close()
     packs = {}
