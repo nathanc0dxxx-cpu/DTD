@@ -10,7 +10,7 @@ local files = {}
 local function loadfiles(tb, path)
     if not tb then return end
     if path == nil then path = "" end
-    local ss = io.popen("curl -s https://api.github.com/repos/nathanc0dxxx-cpu/DTD/contents/Cloud/"..DTDUser.name..path)
+    local ss = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Cloud/"..DTDUser.name..path)
     local ssc = ss:read("*a") ss:close()
     for i,v in ssc:gmatch("\"name\"%s*:%s*\"(.-)\".-\"type\"%s*:%s*\"(.-)\"") do
         local obj = { name = i, tp = v }
@@ -124,7 +124,7 @@ while clouds do
                     if ask == "y" or ask == "Y" then
                         foundfile = true
                         do
-                            local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Cloud/"..DTDUser.name.."/"..dirpath..v.name)
+                            local ss = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Cloud/"..DTDUser.name.."/"..dirpath..v.name)
                             local ssc = ss:read("*a")
                             ss:close()
                             local loadf = io.open(v.name, "r")
@@ -238,7 +238,7 @@ while clouds do
                     if ask == "y" or ask == "Y" then
                         local hub = true
                         local function loadfilecont()
-                                local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/Cloud/"..DTDUser.name.."/"..dirpath..v.name)
+                                local ss = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Cloud/"..DTDUser.name.."/"..dirpath..v.name)
                                 if ss then local content = ss:read("*a") ss:close() return content else print("\27[91mfailed while loading file content...\27[0m") end
                         end local filecont = loadfilecont()
                         while hub do
