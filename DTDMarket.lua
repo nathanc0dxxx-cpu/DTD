@@ -1,3 +1,4 @@
+if not DTDUser then DTDUser = { name = "Dougla037" } end
 
 os.execute("clear")
 local exit = false
@@ -199,10 +200,12 @@ local function hub(query)
             print("\27[44m[Comments]:\27[0m") local foundcm = false
 
             for i,v in ipairs(packcomments) do
-                local a, b = v.body:match("^(.-)@(.-)$")
-                if a == obj.name then
+                local a = v.body:find("@")
+                if a then
                     foundcm = true
-                    print("\n\27[94m @"..a.."\27[0m\n  "..b.."\n----")
+                    local ac = v.body:sub(1, a-1)
+                    local ad = v.body:sub(a+1)
+                    print("\n\27[94m @"..ac.."\27[0m\n  "..ad.."\n----")
                 end
             end if foundcm == false then print("\n\27[90mno comments yet.\27[0m\n") end
             print("\27[0m\27[44m[=========]:\27[0m")
@@ -222,7 +225,7 @@ local function hub(query)
                 local ucm = io.read()
                 if ucm:gsub(" ","") ~= "" then
                     for i,v in ipairs(packcomments) do
-                        local a, b = v.body:match("(.-)@(.-)")
+                        local a, b = v.body:match("^(.-)@(.-)$")
                         if a == _G.DTDUser.name and b == ucm then
                             print("\27[91mspam detected\27[0m")
                             io.read()
