@@ -208,7 +208,7 @@ local function hub(query)
                     foundcm = true
                     local ac = v.body:sub(1, a-1)
                     local ad = v.body:sub(a+1)
-                    print("\n\27[94m @"..ac.."\27[0m\n  "..ad.."\n----")
+                    print("\n\27[94m @"..ac.."\27[0m\n  "..ad.."\n----------------")
                 end
             end if foundcm == false and foundissue == true then
                 print("\n\27[90mno comments yet.\27[0m\n")
@@ -274,7 +274,7 @@ local function hub(query)
                     end
                 end
                 os.execute("sleep 1")
-                doreq = true
+                doreqc = true
             end
         end
     else
