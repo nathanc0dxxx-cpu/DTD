@@ -33,6 +33,28 @@ local function closeissue(issue)
     end
 end
 
+local cmdcd = 'curl -X DELETE https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/issues/comments/%s -H "Authorization: token %s" -H "Accept: application/vnd.github+json"'
+local cmdca = 'curl -X POST https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/issues/%s/comments -H "Authorization: token %s" -H "Accept: application/vnd.github+json" -H "Content-Type: application/json" -d \'{"body": "%s"}\''
+local cmdcg = 'curl -X GET https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/issues/%s/comments -H "Authorization: token %s" -H "Accept: application/vnd.github+json"'
+
+local function comment(issue, body)
+    os.execute(string.format(cmdca, issue, dtdks, body))
+end
+local function deletec(id)
+    os.execute(string.format(cmdcd, id, dtdks))
+end
+local function getcomments(number)
+    local objs = {}
+    local handle = io.popen(string.format(cmdcg, number, dtdks))
+    local header = handle:read("*a")
+    handle:close()
+    for i,v in header:gmatch("\"id\"%s*:%s*(.-),.-%s*\"body\"%s*:%s*\"(.-)\"") do
+        local obj = { id = i, body = v }
+        table.insert(objs, obj)
+    end
+    return objs
+end
+
 _G.DTDIssueService = {
     new = newissue,
     close = closeissue,
@@ -40,4 +62,9 @@ _G.DTDIssueService = {
     finish = function()
         DTDIssueService = nil
     end,
+    comment = {
+        add = comment,
+        remove = deletec,
+        read = getcomments,
+    },
 }
