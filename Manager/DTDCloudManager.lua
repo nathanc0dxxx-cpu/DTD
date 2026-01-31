@@ -1,4 +1,5 @@
 
+if not DTDUser then DTDUser = { name = "Dougla037" } end
 os.execute("clear")
 print("\27[93minitializing...\27[0m")
 do
@@ -250,6 +251,7 @@ while clouds do
                             print("\27[0m\27[93mpath: \27[92m"..dirpath2.."\27[0m")
                             print("\27[0m\27[44m["..v.name.."][content]:\27[0m")
                             print(filecont)
+                            print("\27[44m[Raw Link]:\27[92m\n".."https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Cloud/"..DTDUser.name.."/"..dirpath..v.name.."\27[0m")
                             print("\27[0m\27[44m[=============]:\27[0m")
                             io.write(" > \27[90mback, remove\27[12D\27[92m")
                             local userinp = io.read()
