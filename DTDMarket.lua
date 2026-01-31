@@ -1,3 +1,4 @@
+if not DTDUser then DTDUser = { name = "Dougla037" } end
 
 os.execute("clear")
 local exit = false
@@ -175,11 +176,13 @@ local function hub(query)
         local commentss = true
         local doreqc = true
         local issues = ""
+        local foundissue = false
         while commentss do
             os.execute("clear")
             local packcomments = {}
             local mainissue = ""
             if doreqc == true then
+                foundissue = false
                 packcomments = {}
                 print("\27[93mloading...\27[0m")
                 local dds = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDIssueService.lua")
@@ -187,10 +190,11 @@ local function hub(query)
                 doreqc = false
                 issues = DTDIssueService.get()
                 for i,v in ipairs(issues) do
-                    local a = v.content:match("^(.-)@comments$")
-                    if a == obj.name then
+                    local a = v.content
+                    if a == obj.name.."@comments" then
                         packcomments = DTDIssueService.comment.read(v.id)
                         mainissue = v.id
+                        foundissue = true
                         break
                     end
                 end
@@ -206,7 +210,11 @@ local function hub(query)
                     local ad = v.body:sub(a+1)
                     print("\n\27[94m @"..ac.."\27[0m\n  "..ad.."\n----")
                 end
-            end if foundcm == false then print("\n\27[90mno comments yet.\27[0m\n") end
+            end if foundcm == false and foundissue == true then
+                print("\n\27[90mno comments yet.\27[0m\n")
+            elseif foundissue == false then
+                print("\27[91missue root not found...\27[0m\n")
+            end
             print("\27[0m\27[44m[=========]:\27[0m")
 
             io.write(" > \27[90mback, comment, reset, removeall\27[31D\27[92m")
@@ -223,17 +231,25 @@ local function hub(query)
                 io.write(" > \27[90mwhat are you thinking now?...\27[29D\27[0m")
                 local ucm = io.read()
                 if ucm:gsub(" ","") ~= "" then
+                    local spam = false
                     for i,v in ipairs(packcomments) do
-                        local a, b = v.body:match("^(.-)@(.-)$")
-                        if a == _G.DTDUser.name and b == ucm then
-                            print("\27[91mspam detected\27[0m")
-                            io.read()
-                            break
+                        local a = v.body:find("@")
+                        if a then
+                            local b = v.body:sub(a-1)
+                            local c = v.body:sub(a+1)
+                            if b == _G.DTDUser.name and c == ucm then
+                                print("\27[91mspam detected\27[0m")
+                                io.read()
+                                spam = true
+                                break
+                            end
                         end
+                    end
+                    if spam == false then
+                        print("\27[93msendding...\27[0m")
                         DTDIssueService.comment.add(mainissue, _G.DTDUser.name.."@"..ucm)
                         os.execute("sleep 2")
                         doreq = true
-                        break
                     end
                 else
                     print("\27[91mnot a valid comment!\27[0m")
@@ -247,9 +263,12 @@ local function hub(query)
                 end io.read()
             elseif cminp == "removeall" then
                 for i,v in ipairs(packcomments) do
-                    local a, b = v.body:match("^(.-)@(.-)$")
-                    if a == DTDUser.name then
-                        DTDIssueService.comment.remove(v.id)
+                    local a = v.body:find("@")
+                    if a then
+                        local b = v.body:sub(a-1)
+                        if b == DTDUser.name then
+                            DTDIssueService.comment.remove(v.id)
+                        end
                     end
                 end
             end
