@@ -40,8 +40,9 @@ dtdstd:newcmd({
                         if ss then load(ss:read("*a"))() ss:close()
                             local test = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Market")
                             local testc = test:read("*a")
-                            test:close() local packgs = {}
-                            for g,j in testc:gmatch("%s*\"name\"%s*:%s*\"(.-)@(.-)\"") do
+                            test:close()
+                            local packgs = {}
+                            for g,j in testc:gmatch("\"name\"%s*:%s*\"(.-)@(.-)\"") do
                                 local obj = { name = g, owner = j }
                                 table.insert(packgs, obj)
                             end local found = false
@@ -51,16 +52,17 @@ dtdstd:newcmd({
                                 end
                             end local found2 = false
                             for j,k in ipairs(packgs) do
-                                if k.owner == _G.DTDUser.name and k.name ~= v then
+                                if k.owner == _G.DTDUser.name and k.name == v then
                                     found2 = true
                                 end
-                            end
+                            end print(found2)
                             if found == false and found2 == false then
                                 DTDPostService:market(content, strucn, "POST")
+                                print("\27[93mcreating issue session...\27[0m")
                                 DTDIssueService.new(v.."@comments")
                             elseif found == false and found2 == true then
                                 DTDPostService:market(content, strucn, "PUT")
-                            end
+                            end break
                         else
                             print("\27[91mfailed to load postservice, aborting...\27[0m")
                             return
@@ -72,7 +74,7 @@ dtdstd:newcmd({
                     print("\27[0m\n")
                 end
             end
-        end
+        end os.execute("clear")
     end,
     desc = "deploy a file to the market"
 })
@@ -102,6 +104,7 @@ dtdstd:newcmd({
                 if answer == "y" or answer == "Y" then
                     print("\27[93mdeleting...\27[0m")
                     DTDPostService:market("",v.name.."@".._G.DTDUser.name.."/content", "DELETE")
+                    print("\27[93mclosing issue session...\27[0m")
                     DTDIssueService.close(v.name.."@comments")
                     print("\27[92mdeleted sucefully!")
                     sucessd = true
