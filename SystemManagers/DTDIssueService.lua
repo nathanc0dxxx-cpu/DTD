@@ -8,7 +8,7 @@ local function newissue(title)
 end
 
 local cmd2 = 'curl -s -H "Authorization: token %s" -H "Accept: application/vnd.github+json" https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/issues?state=all&per_page=100'
-local cmd3 = 'curl -X PATCH -H "Authorization: token %s" -H "Accept: application/vnd.github+json" https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/issues/%s -d \'{"state": "closed"}\''
+local cmd3 = 'curl -s -X PATCH -H "Authorization: token %s" -H "Accept: application/vnd.github+json" https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/issues/%s -d \'{"state": "closed"}\''
 
 local function getissues()
     local ss = io.popen(string.format(cmd2, dtdks))
@@ -33,9 +33,9 @@ local function closeissue(issue)
     end
 end
 
-local cmdcd = 'curl -X DELETE https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/issues/comments/%s -H "Authorization: token %s" -H "Accept: application/vnd.github+json"'
-local cmdca = 'curl -X POST https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/issues/%s/comments -H "Authorization: token %s" -H "Accept: application/vnd.github+json" -H "Content-Type: application/json" -d \'{"body": "%s"}\''
-local cmdcg = 'curl -X GET https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/issues/%s/comments -H "Authorization: token %s" -H "Accept: application/vnd.github+json"'
+local cmdcd = 'curl -s -X DELETE https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/issues/comments/%s -H "Authorization: token %s" -H "Accept: application/vnd.github+json"'
+local cmdca = 'curl -s -X POST https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/issues/%s/comments -H "Authorization: token %s" -H "Accept: application/vnd.github+json" -H "Content-Type: application/json" -d \'{"body": "%s"}\''
+local cmdcg = 'curl -s -X GET https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/issues/%s/comments -H "Authorization: token %s" -H "Accept: application/vnd.github+json"'
 
 local function comment(issue, body)
     local toexec = string.format(cmdca, issue, dtdks, body)
