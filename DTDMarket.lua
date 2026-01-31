@@ -177,9 +177,9 @@ local function hub(query)
         local doreqc = true
         local issues = ""
         local foundissue = false
+        local packcomments = {}
         while commentss do
             os.execute("clear")
-            local packcomments = {}
             local mainissue = ""
             if doreqc == true then
                 foundissue = false
@@ -197,7 +197,7 @@ local function hub(query)
                         foundissue = true
                         break
                     end
-                end
+                end os.execute("clear")
             end
 
             print("\27[44m[Comments]:\27[0m") local foundcm = false
@@ -235,7 +235,7 @@ local function hub(query)
                     for i,v in ipairs(packcomments) do
                         local a = v.body:find("@")
                         if a then
-                            local b = v.body:sub(a-1)
+                            local b = v.body:sub(1, a-1)
                             local c = v.body:sub(a+1)
                             if b == _G.DTDUser.name and c == ucm then
                                 print("\27[91mspam detected\27[0m")
@@ -262,15 +262,19 @@ local function hub(query)
                     print(v.body)
                 end io.read()
             elseif cminp == "removeall" then
+                print("\27[91mremoving...\27[0m")
                 for i,v in ipairs(packcomments) do
                     local a = v.body:find("@")
                     if a then
-                        local b = v.body:sub(a-1)
+                        local b = v.body:sub(1, a-1)
                         if b == DTDUser.name then
+                            print(v.id)
                             DTDIssueService.comment.remove(v.id)
                         end
                     end
                 end
+                os.execute("sleep 1")
+                doreq = true
             end
         end
     else
