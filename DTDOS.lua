@@ -1,6 +1,8 @@
 os.execute("clear")
 io.write("\27[0m")
-if not (_VERSION:match("5.4") or _VERSION:match("5.5")) then
+if tonumber(_VERSION:match("%d+%.%d+")) >= 5.4 then
+    if not DTDUser then DTDUser = { name = "User", id = 2 } end
+else
     print("\27[91mOld client detected!\27[93m\nto use Dnes you need to update your Lua Client to Lua 5.4 or Upper!\27[0m\nAbort.")
     os.exit()
 end
@@ -14,9 +16,14 @@ function loadplugins() _G.plugins = {}
   for v in files:gmatch("%S+") do
     if v:match("%.dtdp%.lua$") then
       print("\27[0m\27[46m\27[94mLOADED:\27[0m\27[46m "..v)
-      dofile(v)
-      table.insert(_G.plugins, v)
-      havepi = true
+      local fn, err = pcall(dofile, v)
+      if not fn then
+        print("\27[91mplugin error\27[96m"..v.."\27[0m"..tostring(err))
+      else
+        fn()
+        table.insert(_G.plugins, v)
+        havepi = true
+      end
     end
   end
   if havepi == false then
