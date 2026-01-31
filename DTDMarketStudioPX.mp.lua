@@ -60,9 +60,11 @@ dtdstd:newcmd({
                                 DTDPostService:market(content, strucn, "POST")
                                 print("\27[93mcreating issue session...\27[0m")
                                 DTDIssueService.new(v.."@comments")
+                                break
                             elseif found == false and found2 == true then
                                 DTDPostService:market(content, strucn, "PUT")
-                            end break
+                                break
+                            end
                         else
                             print("\27[91mfailed to load postservice, aborting...\27[0m")
                             return
