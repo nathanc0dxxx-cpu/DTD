@@ -185,7 +185,7 @@ local function hub(query)
                 local dds = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDIssueService.lua")
                 if dds then load(dds:read("*a"))() dds:close() else hubs = true break end
                 doreqc = false
-                issues = DTDIssueService:get()
+                issues = DTDIssueService.get()
                 for i,v in ipairs(issues) do
                     local a = v.content:match("^(.-)@comments$")
                     if a == obj.name then
@@ -197,7 +197,7 @@ local function hub(query)
             end
 
             print("\27[44m[Comments]:\27[0m") local foundcm = false
-            
+
             for i,v in ipairs(packcomments) do
                 local a, b = v.body:match("^(.-)@(.-)$")
                 if a == obj.name then
@@ -206,7 +206,7 @@ local function hub(query)
                 end
             end if foundcm == false then print("\n\27[90mno comments yet.\27[0m\n") end
             print("\27[0m\27[44m[=========]:\27[0m")
-            
+
             io.write(" > \27[90mback, comment, reset, removeall\27[31D\27[92m")
             local cminp = io.read() io.write("\27[0m")
             if cminp == "back" then
