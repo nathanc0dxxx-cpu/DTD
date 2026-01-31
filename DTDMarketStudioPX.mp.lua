@@ -32,6 +32,9 @@ dtdstd:newcmd({
                         local content = file:read("*a")
                         file:close()
                         local strucn = v.."@".._G.DTDUser.name.."/content"
+                        print("\27[93mloading issueservice...")
+                        local isue = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDIssueService.lua")
+                        if isue then load(isue:read("*a"))() isue:close() else print("\27[91mfail\27[0m") return end
                         print("\27[93mloading postservice...")
                         local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDPostService.lua")
                         if ss then load(ss:read("*a"))() ss:close()
@@ -54,6 +57,7 @@ dtdstd:newcmd({
                             end
                             if found == false and found2 == false then
                                 DTDPostService:market(content, strucn, "POST")
+                                DTDIssueService.new(v.."@comments")
                             elseif found == false and found2 == true then
                                 DTDPostService:market(content, strucn, "PUT")
                             end
@@ -83,7 +87,11 @@ dtdstd:newcmd({
         for i,v in ssc:gmatch("%s*\"name\"%s*:%s*\"(.-)@(.-)\"") do
             local obj = { name = i, owner = v }
             table.insert(packgs, obj)
-        end print("\27[93mloading postservice...\27[0m")
+        end
+        print("\27[93mloading issueservice...")
+        local isue = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDIssueService.lua")
+        if isue then load(isue:read("*a"))() isue:close() else print("\27[91mfail\27[0m") return end
+        print("\27[93mloading postservice...\27[0m")
         local sss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDPostService.lua")
         if sss then load(sss:read("*a"))() sss:close() else print("\27[91mfailed to load...\27[0m") return end
         local sucessd = false
@@ -94,6 +102,7 @@ dtdstd:newcmd({
                 if answer == "y" or answer == "Y" then
                     print("\27[93mdeleting...\27[0m")
                     DTDPostService:market("",v.name.."@".._G.DTDUser.name.."/content", "DELETE")
+                    DTDIssueService.close(v.name.."@comments")
                     print("\27[92mdeleted sucefully!")
                     sucessd = true
                     break
