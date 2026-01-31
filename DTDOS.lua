@@ -20,7 +20,6 @@ function loadplugins() _G.plugins = {}
       if not fn then
         print("\27[91mplugin error\27[96m"..v.."\27[0m"..tostring(err))
       else
-        fn()
         table.insert(_G.plugins, v)
         havepi = true
       end
