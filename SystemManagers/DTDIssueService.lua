@@ -15,8 +15,8 @@ local function getissues()
     local content = ""
     if ss then content = ss:read("*a") ss:close() else return nil end
     local tab = {}
-    for i,g,v in content:gmatch("%s*\"number\"%s*:%s*(%d+),.-%s*\"state\"%s*:%s*\"(.-)\",.-%s*\"title\"%s*:%s*\"(.-)\"") do
-        local obj = { id = i, state = g, content = v }
+    for i,v in content:gmatch("\"number\"%s*:%s*(%d-),.-%s*\"title\"%s*:%s*\"(.-)\"") do
+        local obj = { id = i, content = v }
         table.insert(tab, obj)
     end
     return tab, content
@@ -38,7 +38,9 @@ local cmdca = 'curl -X POST https://api.github.com/repos/tutugrande1235-DTD/DTD-
 local cmdcg = 'curl -X GET https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/issues/%s/comments -H "Authorization: token %s" -H "Accept: application/vnd.github+json"'
 
 local function comment(issue, body)
-    os.execute(string.format(cmdca, issue, dtdks, body))
+    local toexec = string.format(cmdca, issue, dtdks, body)
+    os.execute(toexec)
+    print(toexec)
 end
 local function deletec(id)
     os.execute(string.format(cmdcd, id, dtdks))
