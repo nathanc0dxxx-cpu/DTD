@@ -62,10 +62,14 @@ local getpi = loadplugins()
 if not cmd[1] then
   print("\27[0m\27[44m[DTD::SYS]:\27[0m\27[41mNO COMMAND REGISTED\27[0m")
 end
-DTDUser = { name = "Dougla037" }
+
+if DTDUser.name == "User" then
+    print("\n\27[93mUsing the Standart Account?\n\27[96mGet your own connecting to the \27[92maccounts\27[96m server!\n\27[0mType: \27[94mconnect accounts\27[0m and regist your DTDAccount\n")
+else
+    print("\n\27[95mHello "..DTDUser.name.."!\27[0m\n")
+end
 new.cmd("finish", os.exit, "finish the session")
 new.cmd("version", function() print(_VERSION) print(tonumber(_VERSION)) end, "show your client Lua version")
-print("\n\27[95mHello "..DTDUser.name.."!\27[0m\n")
 ::s::
 args = {}
 
