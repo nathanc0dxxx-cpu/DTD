@@ -1,5 +1,9 @@
 os.execute("clear")
 io.write("\27[0m")
+if not (_VERSION:match("5.4") or _VERSION:match("5.5")) then
+    print("\27[91mOld client detected!\27[93m\nto use Dnes you need to update your Lua Client to Lua 5.4 or Upper!\27[0m\nAbort.")
+    os.exit()
+end
 function loadplugins() _G.plugins = {}
   local havepi = false
   print("\27[44m[DTD::PIL]:\27[0m\27[93m initializing...")
@@ -36,7 +40,7 @@ function new.cmd(name, func, desc)
   for i,v in ipairs(_G.cmd) do
     if v == name then return end
   end
-  
+
   if name then
     table.insert(_G.cmd, name)
     if func then
@@ -58,9 +62,10 @@ local getpi = loadplugins()
 if not cmd[1] then
   print("\27[0m\27[44m[DTD::SYS]:\27[0m\27[41mNO COMMAND REGISTED\27[0m")
 end
-
+DTDUser = { name = "Dougla037" }
 new.cmd("finish", os.exit, "finish the session")
-
+new.cmd("version", function() print(_VERSION) print(tonumber(_VERSION)) end, "show your client Lua version")
+print("\n\27[95mHello "..DTDUser.name.."!\27[0m\n")
 ::s::
 args = {}
 
@@ -68,6 +73,13 @@ print("\27[92m")
 io.write("\27[2A")
 os.execute("pwd")
 io.write("\27[0m\27[96mcmd =>\27[0m ")
+if cmd[1] then
+  local placeholder = cmd[math.random(1, #cmd)]
+  local plchldsize = 0
+  for v in placeholder:gmatch("(.)") do
+      plchldsize = plchldsize + 1
+  end io.write("\27[90m"..placeholder.."\27["..plchldsize.."D\27[0m")
+end
 _G.input = io.read()
 io.write("\27[3B")
 for v in input:gmatch("%S+") do
@@ -83,7 +95,7 @@ for i,v in ipairs(cmd) do
     else
       cmdf[i]()
     end
-    
+
     executed = true
   end
 end
