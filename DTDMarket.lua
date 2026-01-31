@@ -177,23 +177,36 @@ local function hub(query)
         local issues = ""
         while commentss do
             os.execute("clear")
+            local packcomments = {}
+            local mainissue = ""
             if doreqc == true then
+                packcomments = {}
                 print("\27[93mloading...\27[0m")
                 local dds = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDIssueService.lua")
-                if dds then load(dds:read("*a"))() dds:close() else hubs = true return end
+                if dds then load(dds:read("*a"))() dds:close() else hubs = true break end
                 doreqc = false
                 issues = DTDIssueService:get()
+                for i,v in ipairs(issues) do
+                    local a = v.content:match("^(.-)@comments$")
+                    if a == obj.name then
+                        packcomments = DTDIssueService.comment.read(v.id)
+                        mainissue = v.id
+                        break
+                    end
+                end
             end
-            
+
             print("\27[44m[Comments]:\27[0m") local foundcm = false
-            for i,v in ipairs(issues) do
-                local a, b, c = v.content:match("^(.-)@(.-)@(.*)$")
-                if c == obj.name then
+            
+            for i,v in ipairs(packcomments) do
+                local a, b = v.body:match("^(.-)@(.-)$")
+                if a == obj.name then
                     foundcm = true
                     print("\n\27[94m @"..a.."\27[0m\n  "..b.."\n----")
                 end
             end if foundcm == false then print("\n\27[90mno comments yet.\27[0m\n") end
             print("\27[0m\27[44m[=========]:\27[0m")
+            
             io.write(" > \27[90mback, comment, reset, removeall\27[31D\27[92m")
             local cminp = io.read() io.write("\27[0m")
             if cminp == "back" then
@@ -208,15 +221,16 @@ local function hub(query)
                 io.write(" > \27[90mwhat are you thinking now?...\27[29D\27[0m")
                 local ucm = io.read()
                 if ucm:gsub(" ","") ~= "" then
-                    for i,v in ipairs(issues) do
-                        local a, b, c = v.content:match("(.-)@(.-)@(.-)")
-                        if a == _G.DTDUser.name and b == ucm and c == obj.name then
+                    for i,v in ipairs(packcomments) do
+                        local a, b = v.body:match("(.-)@(.-)")
+                        if a == _G.DTDUser.name and b == ucm then
                             print("\27[91mspam detected\27[0m")
                             io.read()
                             break
                         end
-                        DTDIssueService.new(_G.DTDUser.name.."@"..ucm.."@"..obj.name)
+                        DTDIssueService.comment.add(mainissue, _G.DTDUser.name.."@"..ucm)
                         os.execute("sleep 2")
+                        doreq = true
                         break
                     end
                 else
@@ -226,14 +240,14 @@ local function hub(query)
             elseif cminp == "reset" then
                 doreqc = true
             elseif cminp == "debug" then
-                for i,v in ipairs(issues) do
-                    print(v.content)
+                for i,v in ipairs(packcomments) do
+                    print(v.body)
                 end io.read()
             elseif cminp == "removeall" then
-                for i,v in ipairs(issues) do
-                    local a, b, c = v.content:match("^(.-)@(.-)@(.*)$")
-                    if a == DTDUser.name and c == obj.name then
-                        DTDIssueService.close(v.content)
+                for i,v in ipairs(packcomments) do
+                    local a, b = v.body:match("^(.-)@(.-)$")
+                    if a == DTDUser.name then
+                        DTDIssueService.comment.remove(v.id)
                     end
                 end
             end
