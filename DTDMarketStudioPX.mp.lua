@@ -145,3 +145,22 @@ dtdstd:newcmd({
     end,
     desc = "list your local files"
 })
+dtdstd:newcmd({
+    token = "path",
+    func = function()
+        os.execute("pwd")
+    end,
+    desc = "show the actual dir path"
+})
+dtdstd:newcmd({
+    token = "open",
+    func = function()
+        local dir = std.args[2]
+        if dir then
+            os.execute("cd "..dir)
+        else
+            print("\27[91mno folder name provided!\27[0m")
+        end
+    end,
+    desc = "open a folder/directory"
+})
