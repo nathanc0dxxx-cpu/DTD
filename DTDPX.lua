@@ -26,7 +26,7 @@ new.cmd("pi", function()
   end
 end, "manage plugins session")
 
-new.cmd("connect", function()
+new.cmd("open", function()
   if args[2] then
     local url = args[2]
     if url:sub(1, 8) ~= "https://" then 
