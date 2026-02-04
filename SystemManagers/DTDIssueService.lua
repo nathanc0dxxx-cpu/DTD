@@ -86,15 +86,3 @@ _G.DTDIssueService = {
         read = getcomments,
     },
 }
-
-local issues = DTDIssueService.get()
-local id = ""
-for i,v in ipairs(issues) do
-    if v.content == "PythomMemo.memolang.lua@comments" then
-        id = v.id
-    end
-end
-local cms = DTDIssueService.comment.read(id)
-for i,v in ipairs(cms) do
-    print(v.body)
-end
