@@ -30,6 +30,7 @@ local function loadinbox()
     messages = {}
     for i,v in ipairs(m) do
         local a,b,c = v.body:match("^%s*(.-)%s*@%s*(.-)%s*@%s*(.*)%s*$")
+        c = c:gsub("<$circle$>dtd","@")
         local obj = { owner = a, to = b, content = c, id = v.id }
         table.insert(messages, obj)
     end
@@ -38,7 +39,6 @@ end loadinbox()
 local inboxsession = true
 
 while inboxsession do
-    os.execute("clear")
     os.execute("clear")
     print("\27[0m\27[44m[Your Mails]:\27[0m\n")
     do
@@ -73,7 +73,7 @@ while inboxsession do
         do
             local ss = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Accounts")
             local header = ""
-            if ss then header = ss:read("*a") ss:close() else print("\27[91mfailed while loading users...\27[0m") break end
+            if ss then header = ss:read("*a") ss:close() else print("\27[91mfailed while loading users...\27[0m") return end
             for v in header:gmatch("\"name\"%s*:%s*\"(.-)\"") do
                 table.insert(users, v)
             end
@@ -105,10 +105,11 @@ while inboxsession do
             if nextt == true then
                 session = false
                 io.write("\27[1B")
-                content = ""
+                local content = ""
                 io.write(" > ")
                 local content = io.read()
-                if content:gsub(" ",""):sub(5) then
+                content = content:gsub("@", "<$circle$>")
+                if #content:gsub(" ","") >= 5 then
                     os.execute("clear")
                     print("\27[92msending...\27[0m")
                     DTDIssueService.comment.add(inboxid, DTDUser.name.."@"..to.."@"..content)
