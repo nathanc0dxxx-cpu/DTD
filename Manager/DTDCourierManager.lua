@@ -83,21 +83,22 @@ while inboxsession do
         local to = ""
         while session do
             os.execute("clear")
-            for i,v in ipairs(users) do
-                print(v)
-            end
             print("\27[44m[From]:\27[0m "..DTDUser.name.."\n\27[44m[To]:\27[0m "..to.."\n\27[44m[Content]:\27[0m")
             if nextt == false then
                 io.write("\27[2A\27[6C")
                 to = io.read()
             end
-            if to and nextt == false then
-                 for i,v in ipairs(users) do
+            if to ~= "all" and nextt == false then
+                for i,v in ipairs(users) do
                     if v == to then
                         nextt = true
                         to = v
+                        break
                     end
                 end if nextt == false then to = "" end
+            elseif to == "all" and nextt == false then
+                nextt = true
+                to = "all"
             else
                 io.write("\27[3B\27[91mno user provided!\27[0m")
             end
