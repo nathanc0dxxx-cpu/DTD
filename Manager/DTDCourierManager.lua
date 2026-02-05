@@ -40,7 +40,7 @@ local inboxsession = true
 while inboxsession do
     os.execute("clear")
     os.execute("clear")
-    print("\27[44m[Your Mails]:\27[0m\n")
+    print("\27[0m\27[44m[Your Mails]:\27[0m\n")
     do
         local found = false
         local max = 2
@@ -59,7 +59,7 @@ while inboxsession do
         end
     end
     print("\n\n\27[0m\27[44m[==========]:\27[0m")
-    io.write("-> \27[90mexit, reset, write, markall\27[27D\27[92m")
+    io.write("-> \27[90mexit, reset, write, markall, view\27[33D\27[92m")
     local inp = io.read()
     io.write("\27[0m")
     if inp == "exit" then
@@ -120,12 +120,65 @@ while inboxsession do
             end
         end
     elseif inp == "markall" then
+        local found = false
         for i,v in ipairs(messages) do
             if v.to == DTDUser.name then
                 print("\27[93mremoving mail "..i.."\27[0m")
                 DTDIssueService.comment.remove(v.id)
+                found = true
             end
-        end print("\27[92mall mails removed!\27[0m")
+        end
+        if found == true then
+            print("\27[92mall mails removed!\27[0m")
+            loadinbox()
+        else
+            print("\27[91mim dont found any specific emails for you to mark...\27[0m")
+        end
         io.read()
+    elseif inp:sub(1,6) == "view" then
+        local session = true
+        while session do
+            os.execute("clear")
+            local mails = {}
+            for i,v in ipairs(messages) do
+                if v.owner == DTDUser.name then
+                    table.insert(mails, v)
+                end
+            end
+            print("\27[0m\27[44m[DMails you writted!]:\27[0m")
+            if mails[1] then
+                for i,v in ipairs(mails) do
+                    io.write("\n\27[94m "..i.." \27[92m["..v.to.."]\27[0m:\27[90m "..v.content:sub(1,10).."...\27[0m")
+                end
+            else
+                io.write("\n\27[90m  no dmails for now...\27[0m")
+            end
+            print("\n\n\27[0m\27[44m[===================]:\27[0m")
+            io.write(" > \27[90mback, delete\27[12D\27[92m")
+            local uinp = io.read()
+            if uinp == "back" then
+                os.execute("clear")
+                session = false
+            elseif uinp:sub(1,6) == "delete" then
+                local query = uinp:sub(8)
+                local found = false
+                for i,v in ipairs(mails) do
+                    if i == tonumber(query) then
+                        found = true
+                        print("\27[93mremoving dmail "..i.." from user "..v.to)
+                        DTDIssueService.comment.remove(v.id)
+                        break
+                    end
+                end
+                if found == true then
+                    print("\27[92mdmail removed!\27[0m")
+                    os.execute("sleep 1")
+                    loadinbox()
+                else
+                    print("\27[91mno dmail with id "..query.." found...\27[0m")
+                    io.read()
+                end
+            end
+        end
     end
 end
