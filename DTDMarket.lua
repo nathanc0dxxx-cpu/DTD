@@ -123,11 +123,12 @@ local function market()
         return
     end
 end
-
+local inpackage = false
+local obj = {}
 local function hub(query)
     os.execute("clear")
-    local obj = {}
     for i,v in ipairs(packs) do
+        if inpackage == true then break else obj = {} end
         if v.name == query then
             obj = v
             break
@@ -137,7 +138,9 @@ local function hub(query)
             local ask = io.read()
             if ask == "y" or ask == "Y" then
                 obj = v
-                query = v.name
+                inpackage = true
+                break
+            elseif ask == "no" then
                 break
             else
                 print("going to next...")
