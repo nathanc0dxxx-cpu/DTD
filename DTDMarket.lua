@@ -162,6 +162,7 @@ local function hub(query)
     io.write(" > \27[90mback, install, comments\27[23D\27[92m")
     local uinp = io.read()
     if uinp == "back" then
+        inpackage = false
         markets = true
         return
     elseif uinp == "install" then
