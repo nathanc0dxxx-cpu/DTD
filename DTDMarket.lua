@@ -128,11 +128,22 @@ local function hub(query)
     os.execute("clear")
     local obj = {}
     for i,v in ipairs(packs) do
-        if v.name:match(query) then
+        if v.name == query then
             obj = v
             break
+        elseif v.name:find(query, 1, true) then
+            print("\27[0mis "..v.name.." what you want? \27[92m[Y]\27[0m/\27[91m[N]\27[0m:")
+            io.write(" > ")
+            local ask = io.read()
+            if ask == "y" or ask == "Y" then
+                obj = v
+                break
+            else
+                print("going to next...")
+            end
         end
     end if not obj.name then markets = true return end
+    os.execute("clear")
     obj.desc = "\27[0m no description provided!"
     print("\27[0m\27[44m[HUB]:\27[41m[==========]\27[0m")
     print(string.format([[
@@ -151,26 +162,95 @@ local function hub(query)
         return
     elseif uinp == "install" then
         os.execute("clear")
-        print("\27[93mdownloading...\27[0m")
-        local ssi = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Market/"..obj.name.."@"..obj.owner.."/content")
-        if ssi then
-            local ssic = ssi:read("*a")
-            ssi:close()
-            print("\27[93minstalling...\27[0m")
-            local file = io.open(obj.name, "w")
-            if file then
-                file:write(ssic)
-                file:close()
-                print("\27[92minstalled!\n\27[0mpath: ")
-                os.execute("pwd")
-                os.execute("sleep 3")
-                hubs = true
-                return
-            else
-                print("\27[91merror while downloading...\27[0m")
+        local toinstall = {
+            [1] = { all = obj.name.."@"..obj.owner, name = obj.name, owner = obj.owner }
+        }
+        
+        local requires = {
+            [1] = {
+                keyword = "require",
+                op = "%(",
+                cl = "%)",
+            },
+            [2] = {
+                keyword = "import",
+                op = " ",
+                cl = "",
+            },
+            [3] = {
+                keyword = "#include",
+                op = "%s*<",
+                cl = ">",
+            },
+        }
+        
+        print("\27[93mchecking dependencies...")
+        local packagecontent = ""
+        local ss = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Market/"..obj.name.."@"..obj.owner.."/content")
+        if ss then
+            packagecontent = ss:read("*a")
+            ss:close()
+        else
+            print("\27[91merror on dependencies check...\27[0m")
+            markets = true
+            return
+        end
+        local toformat = {}
+        for i,v in ipairs(requires) do
+            for g in packagecontent:gmatch(v.keyword..v.op.."(.-)"..v.cl) do
+                table.insert(toformat, g)
             end
         end
-        markets = true
+        print("formating...")
+        for i,v in ipairs(toformat) do
+            for j,g in ipairs(packs) do
+                if g.name == v then
+                    local object = { all = g.name.."@"..g.owner, name = g.name, owner = g.owner }
+                    table.insert(toinstall, object)
+                end
+            end
+        end
+        print("\27[0m\27[44m[OBJECT]:\27[0m")
+        print("  installing: \27[92m"..obj.name.."\27[0m")
+        print("\27[0m\27[44m[PACKAGE DEPENDENCIES]:\27[0m\n")
+        for i,v in ipairs(toinstall) do
+            if v.name ~= obj.name then
+                print("  \27[95m["..v.name.."]\27[0m\n")
+            end
+        end if not toinstall[1] then print("  \27[90mno dependencies to install\27[0m\n") end
+        print("\27[0m\27[44m[====================]:\27[0m")
+        print("\27[93mprocced? \27[92m[Y]\27[0m/\27[91m[N]\27[0m:")
+        io.write(" > ")
+        local ask = io.read()
+        if ask == "y" or ask == "Y" then
+            print("procceding...")
+        else
+            print("cancelling...")
+            markets = true
+            return
+        end
+        
+        for i,targetpack in ipairs(toinstall) do
+            print("\27[93mdownloading "..targetpack.name.."...\27[0m")
+            local ssi = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Market/"..targetpack.all.."/content")
+            if ssi then
+                local ssic = ssi:read("*a")
+                ssi:close()
+                print("\27[93minstalling...\27[0m")
+                local file = io.open(targetpack.name, "w")
+                if file then
+                    file:write(ssic)
+                    file:close()
+                    print("\27[92minstalled!\n\27[0mpath: ")
+                    os.execute("pwd")
+                else
+                    print("\27[91merror while downloading...\27[0m")
+                end
+            end
+        end
+        io.write("\27[32m[process completed, press ENTER]:\27[0m")
+        io.read()
+        hubs = true
         return
     elseif uinp == "comments" then
         local commentss = true
