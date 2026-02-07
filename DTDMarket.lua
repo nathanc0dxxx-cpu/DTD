@@ -203,7 +203,7 @@ local function hub(query)
         local toformat = {}
         for i,v in ipairs(requires) do
             for g in packagecontent:gmatch(v.keyword..v.op.."(.-)"..v.cl) do
-                table.insert(toformat, g:gsub("\"",""):gsub("\'",""))
+                table.insert(toformat, tostring(g:gsub("\"",""):gsub("\'","")))
             end
         end
         print("formating...")
