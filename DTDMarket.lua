@@ -137,6 +137,7 @@ local function hub(query)
             local ask = io.read()
             if ask == "y" or ask == "Y" then
                 obj = v
+                query = v.name
                 break
             else
                 print("going to next...")
@@ -165,7 +166,7 @@ local function hub(query)
         local toinstall = {
             [1] = { all = obj.name.."@"..obj.owner, name = obj.name, owner = obj.owner }
         }
-        
+
         local requires = {
             [1] = {
                 keyword = "require",
@@ -183,7 +184,7 @@ local function hub(query)
                 cl = ">",
             },
         }
-        
+
         print("\27[93mchecking dependencies...")
         local packagecontent = ""
         local ss = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Market/"..obj.name.."@"..obj.owner.."/content")
@@ -229,7 +230,7 @@ local function hub(query)
             markets = true
             return
         end
-        
+
         for i,targetpack in ipairs(toinstall) do
             print("\27[93mdownloading "..targetpack.name.."...\27[0m")
             local ssi = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Market/"..targetpack.all.."/content")
