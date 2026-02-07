@@ -174,18 +174,12 @@ local function hub(query)
         local requires = {
             [1] = {
                 keyword = "require",
-                op = "%(",
-                cl = "%)",
             },
             [2] = {
                 keyword = "import",
-                op = " ",
-                cl = "",
             },
             [3] = {
                 keyword = "#include",
-                op = "%s*<",
-                cl = ">",
             },
         }
 
@@ -202,8 +196,16 @@ local function hub(query)
         end
         local toformat = {}
         for i,v in ipairs(requires) do
-            for g in packagecontent:gmatch(v.keyword..v.op.."(.-)"..v.cl) do
-                table.insert(toformat, tostring(g:gsub("\"",""):gsub("\'","")))
+            for g in packagecontent:gmatch("%S+") do
+                if g:match(v.keyword) then
+                    local dpd = g
+                    dpd = dpd:gsub("\"","")
+                    dpd = dpd:gsub(v.keyword, "")
+                    dpd = dpd:gsub("\'","")
+                    dpd = dpd:gsub("%(","")
+                    dpd = dpd:gsub("%)","")
+                    table.insert(toformat, dpd)
+                end
             end
         end
         print("formating...")
