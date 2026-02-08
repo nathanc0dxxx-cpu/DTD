@@ -1,3 +1,5 @@
+if not DTDUser then DTDUser = { name = "Dougla037"} end
+
 dtdstd:newcmd({
   token = "help",
   func = function()
@@ -31,7 +33,7 @@ dtdstd:newcmd({
                     if file then
                         local content = file:read("*a")
                         file:close()
-                        local strucn = v.."@".._G.DTDUser.name.."/content"
+                        local strucn = v.."@".._G.DTDUser.name
                         print("\27[93mloading issueservice...")
                         local isue = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDIssueService.lua")
                         if isue then load(isue:read("*a"))() isue:close() else print("\27[91mfail\27[0m") return end
@@ -56,10 +58,17 @@ dtdstd:newcmd({
                                     found2 = true
                                 end
                             end print(found2)
+                            print("\27[93minsert pack description:\27[0m")
+                            io.write(" > ")
+                            local packdesc = io.read()
+                            if packdesc == "" then 
+                                packdesc = "no description provided"
+                            end
                             if found == false and found2 == false then
-                                DTDPostService:market(content, strucn, "POST")
+                                DTDPostService:market(content, strucn.."/content", "POST")
                                 print("\27[93mcreating issue session...\27[0m")
                                 DTDIssueService.new(v.."@comments")
+                                DTDPostService:market(packdesc, strucn.."/description", "POST")
                                 break
                             elseif found == false and found2 == true then
                                 DTDPostService:market(content, strucn, "PUT")
@@ -163,4 +172,88 @@ dtdstd:newcmd({
         end
     end,
     desc = "open a folder/directory"
+})
+dtdstd:newcmd({
+    token = "desc",
+    func = function()
+        local query = dtdstd.args[2]
+        if query then
+            local ss = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Market")
+            if ss then
+                do
+                    print("\27[93mloading postservice...\27[0m")
+                    local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDPostService.lua")
+                    if ss then load(ss:read("*a"))() ss:close() else print("\27[91mfailed while loading postservice...") return end
+                end
+                local cont = ss:read("*a")
+                ss:close()
+                local packs = {}
+                for i,v in cont:gmatch("\"name\"%s*:%s*\"(.-)@(.-)\"") do
+                    local obj = { name = i, owner = v }
+                    table.insert(packs, obj)
+                end
+                local target = nil
+                for i,v in ipairs(packs) do
+                    if v.name == query and v.owner == DTDUser.name then
+                        target = v
+                        break
+                    elseif v.name:find(query, 1, true) and v.owner == DTDUser.name then
+                        print("\27[0mis "..v.name.." you want? \27[92m[Y]\27[0m/\27[91m[N]\27[0m:")
+                        io.write(" > ")
+                        local ask = io.read()
+                        if ask == "y" or ask == "Y" then
+                            target = v
+                        end
+                        break
+                    end
+                end
+                if target then
+                    local session = true
+                    local function rd()
+                        local ss = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Market/"..target.name.."@"..target.owner.."/description")
+                        if ss then local c = ss:read("*a") ss:close() return c else return nil end
+                    end
+                    local pdesc = rd()
+                    while session do
+                        os.execute("clear")
+                        print("\27[0m\27[44m["..target.name.."]:\27[0m")
+                        print(pdesc)
+                        print("\27[0m\27[44m[=================]:\27[0m")
+                        io.write(" > \27[90mback, edit, reset\27[17D\27[92m")
+                        local di = io.read()
+                        if di == "back" then
+                            os.execute("clear")
+                            session = false
+                            break
+                        elseif di == "reset" then
+                            pdesc = rd()
+                        elseif di == "edit" then
+                            os.execute("clear")
+                            print("\27[93m => inputting new description for "..target.name)
+                            io.write("\27[0m > ")
+                            local newdesc = io.read()
+                            if newdesc ~= "" then
+                                os.execute("clear")
+                                print("\27[93mworking...")
+                                if pdesc:sub(1,3) == "404" then
+                                    DTDPostService:market(newdesc, target.name.."@"..target.owner.."/description",  "POST")
+                                else
+                                    DTDPostService:market(newdesc, target.name.."@"..target.owner.."/description",  "PUT")
+                                end
+                                print("\27[92mfinished!\27[0m")
+                                os.execute("sleep 1")
+                                pdesc = rd()
+                            else
+                                print("\27[91minvalid desc!\27[0m")
+                                io.read()
+                            end
+                        end
+                    end
+                end
+            else
+                print("\27[91mfailed to load your packages...\27[0m")
+            end
+        end
+    end,
+    desc = "change a posted package description"
 })
