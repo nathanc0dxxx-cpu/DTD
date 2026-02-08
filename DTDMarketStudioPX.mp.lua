@@ -165,7 +165,7 @@ dtdstd:newcmd({
 dtdstd:newcmd({
     token = "open",
     func = function()
-        local dir = std.args[2]
+        local dir = dtdstd.args[2]
         if dir then
             os.execute("cd "..dir)
         else
