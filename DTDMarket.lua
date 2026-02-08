@@ -148,7 +148,7 @@ local function hub(query)
         end
     end if not obj.name then markets = true return end
     os.execute("clear")
-    obj.desc = "\27[0m no description provided!"
+    obj.desc = obj.desc or "type: \27[32mdesc\27[0m to load the package description"
     print("\27[0m\27[44m[HUB]:\27[41m[==========]\27[0m")
     print(string.format([[
   .--_____
@@ -364,6 +364,9 @@ local function hub(query)
                 doreqc = true
             end
         end
+    elseif uinp == "desc" then
+        local ssdesc = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Market/"..obj.name.."@"..obj.owner.."/description")
+        if ssdesc then obj.desc = ssdesc:read("*a") ssdesc:close() else print("\27[91mfailed to load package description") io.read() end
     else
         hubs = true
         return
