@@ -115,6 +115,7 @@ dtdstd:newcmd({
                 if answer == "y" or answer == "Y" then
                     print("\27[93mdeleting...\27[0m")
                     DTDPostService:market("",v.name.."@".._G.DTDUser.name.."/content", "DELETE")
+                    DTDPostService:market("",v.name.."@".._G.DTDUser.name.."/description",  "DELETE")
                     print("\27[93mclosing issue session...\27[0m")
                     DTDIssueService.close(v.name.."@comments")
                     print("\27[92mdeleted sucefully!")
