@@ -367,6 +367,8 @@ local function hub(query)
     elseif uinp == "desc" then
         local ssdesc = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Market/"..obj.name.."@"..obj.owner.."/description")
         if ssdesc then obj.desc = ssdesc:read("*a") ssdesc:close() else print("\27[91mfailed to load package description") io.read() end
+        hubs = true
+        return
     else
         hubs = true
         return
