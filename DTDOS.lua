@@ -76,13 +76,15 @@ else
 end
 new.cmd("finish", os.exit, "finish the session")
 new.cmd("version", function() print(_VERSION) print(tonumber(_VERSION)) end, "show your client Lua version")
+
+
 ::s::
 args = {}
 
 print("\27[92m") 
 io.write("\27[2A")
 os.execute("pwd")
-io.write("\27[0m\27[96mcmd =>\27[0m ")
+io.write("\27[0m\27[96m >: \27[0m ")
 if cmd[1] then
   local placeholder = cmd[math.random(1, #cmd)]
   local plchldsize = 0
@@ -105,7 +107,6 @@ for i,v in ipairs(cmd) do
     else
       cmdf[i]()
     end
-
     executed = true
   end
 end
@@ -122,3 +123,4 @@ end
 
 args = {}
 goto s
+
