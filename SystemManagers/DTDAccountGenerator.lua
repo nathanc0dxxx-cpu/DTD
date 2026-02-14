@@ -37,4 +37,6 @@ function genuser(name, pass)
         }
       }'
     ]], token, name, pass))
+    local tab = { un = name, ps = pass }
+    return tab
 end
