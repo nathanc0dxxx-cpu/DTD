@@ -83,4 +83,8 @@ _G.DTDPostService = {
   cloud = function(self, cont, file, mode)
     post("https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Cloud/"..file, cont, mode)
   end,
+  
+  post = function(cont, file, mode)
+    post("https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/"..file, cont, mode)
+  end,
 }
