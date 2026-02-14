@@ -42,7 +42,7 @@ end
 end
 
 local function post(url, content, mode)
-local dtkg = "github_pat_11B4Z".."K35Q03lx8PW9foLDz_GKsDc3LZsfJZwfpItyBlce6wcooH4IaFqsMs43WUY52GFVHMQFXRczdslza"
+local dtkg = os.getenv("PAT")
 
   local sha = getSHA(url, dtkg)
 local ct = ""
