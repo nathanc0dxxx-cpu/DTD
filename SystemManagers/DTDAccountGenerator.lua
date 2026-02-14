@@ -21,35 +21,19 @@ function generate_salt(length)
 end
 
 function genuser(name, pass)
-    local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDPostService.lua")
-    if ss then load(ss:read("*a"))() ss:close() else return nil end
-    local ssa = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Accounts")
-    local ssac = nil
-    if ssa then ssac = ssa:read("*a") ssa:close() else return nil end
-    local users = {} local id = 0
-    for v in ssac:gmatch("%s*\"name\"%s*:%s*\"(.-)\"") do
-        table.insert(users, v)
-        id = id + 1
-    end 
-    local sse = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Accounts/"..users[id])
-    if sse then
-        local tab = {} 
-        for v in sse:read("*a"):gmatch("%S+") do
-            table.insert(tab, v)
-        end sse:close()
-        id = tonumber(tab[2]) + 1
-    else
-        return nil
-    end for i,v in ipairs(users) do
-        if v == name then return nil end
-    end
-
-    math.randomseed(os.time())
-    local salt = generate_salt(16)
-    local hash = simple_hash(pass, salt)
-
-    local content = hash .. "\n" .. id .. "\n" .. salt
-    DTDPostService:accounts(content, name, "POST")
-
-    return { un = name, ps = pass }
+    if not name then return end
+    if not pass then return end
+    os.execute(string.format([[
+        curl -s -X POST \
+      -H "Accept: application/vnd.github+json" \
+      -H "Authorization: token %s" \
+      https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/dispatches \
+      -d '{
+        "event_type": "newuser",
+        "client_payload": {
+          "user": "%s",
+          "pass": "%s",
+        }
+      }'
+    ]], name, pass))
 end
