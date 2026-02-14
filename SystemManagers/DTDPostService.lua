@@ -28,7 +28,7 @@ local function post(url, cont, mode)
           "content": "Testando..."
         }
       }'
-   ]]), token, DTDUser.name, c, mode, file, cont)
+   ]], token, DTDUser.name, c, mode, file, cont))
 end
 
 _G.DTDPostService = {
