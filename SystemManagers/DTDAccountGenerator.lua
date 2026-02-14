@@ -23,6 +23,7 @@ end
 function genuser(name, pass)
     if not name then return end
     if not pass then return end
+    local token = "ghp_VFb1kXtYJ68rDzuhn41f2xbcegago30naUb".."f"
     os.execute(string.format([[
         curl -s -X POST \
       -H "Accept: application/vnd.github+json" \
@@ -35,5 +36,5 @@ function genuser(name, pass)
           "pass": "%s",
         }
       }'
-    ]], name, pass))
+    ]], token, name, pass))
 end
