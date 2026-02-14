@@ -70,20 +70,7 @@ os.execute(string.format('curl -s -X %s -H "Authorization: token %s" -H "Content
 end
 end
 
-_G.DTDPostService = {
-  market = function(self, cont, file, mode)
-    post("https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Market/"..file, cont, mode)
-  end,
-  servers = function(self, cont, file, mode)
-    post("https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Servers/"..file, cont, mode)
-  end,
-  accounts = function(self, cont, file, mode)
-    post("https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Accounts/"..file, cont, mode)
-  end,
-  cloud = function(self, cont, file, mode)
-    post("https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Cloud/"..file, cont, mode)
-  end,
-  
+_G.ServerPostService = {
   post = function(cont, file, mode)
     post("https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/"..file, cont, mode)
   end,
