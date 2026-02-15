@@ -25,10 +25,10 @@ local function post(url, cont, mode)
           "pass": "%s",
           "mode": "%s",
           "file": "%s",
-          "content": "Testando..."
+          "content": "%s"
         }
       }'
-   ]], token, DTDUser.name, c, mode, file, cont))
+   ]], token, DTDUser.name, c, mode, url, cont))
 end
 
 _G.DTDPostService = {
