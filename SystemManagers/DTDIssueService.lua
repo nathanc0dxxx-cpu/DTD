@@ -13,5 +13,5 @@ _G.DTDIssueService = {
     },
 }
 for i,v in ipairs(DTDIssueService) do
-    v = function()
+    v = function() end
 end
