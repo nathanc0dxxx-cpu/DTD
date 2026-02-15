@@ -71,7 +71,7 @@ dtdstd:newcmd({
                                 DTDPostService:market(packdesc, strucn.."/description", "POST")
                                 break
                             elseif found == false and found2 == true then
-                                DTDPostService:market(content, strucn, "PUT")
+                                DTDPostService:market(content, strucn.."/content", "PUT")
                                 break
                             end
                         else
