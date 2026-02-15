@@ -185,7 +185,7 @@ local function hub(query)
 
         print("\27[93mchecking dependencies...")
         local packagecontent = ""
-        local ss = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Market/"..obj.name.."@"..obj.owner.."/content")
+        local ss = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Market/"..obj.name.."@"..obj.owner.."/content@"..obj.owner)
         if ss then
             packagecontent = ss:read("*a")
             ss:close()
@@ -239,7 +239,7 @@ local function hub(query)
 
         for i,targetpack in ipairs(toinstall) do
             print("\27[93mdownloading "..targetpack.name.."...\27[0m")
-            local ssi = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Market/"..targetpack.all.."/content")
+            local ssi = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Market/"..targetpack.all.."/content@"..targetpack.owner)
             if ssi then
                 local ssic = ssi:read("*a")
                 ssi:close()
@@ -365,7 +365,7 @@ local function hub(query)
             end
         end
     elseif uinp == "desc" then
-        local ssdesc = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Market/"..obj.name.."@"..obj.owner.."/description")
+        local ssdesc = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Market/"..obj.name.."@"..obj.owner.."/description@"..obj.owner)
         if ssdesc then obj.desc = ssdesc:read("*a") ssdesc:close() else print("\27[91mfailed to load package description") io.read() end
         hubs = true
         return
