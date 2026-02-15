@@ -68,13 +68,13 @@ if ssc then load(ssc)() end
 ::s::
 print("\27[44m[DTD::BOOTSTRAP]:\27[0mtype a option\nof bootstrap\n\n\27[93m[1]: start\n[2]: loadpack\n[3]: removepack\n\27[0m")
 local cmd = io.read()
-if cmd == "start" then
+if cmd == "start" or cmd == "1" then
   os.execute("clear")
   start()
-elseif cmd == "loadpack" then
+elseif cmd == "loadpack" or cmd == "2" then
   os.execute("clear")
   loadpacks()
-elseif cmd == "removepack" then
+elseif cmd == "removepack" or cmd == "3" then
   os.execute("clear")
   os.remove("DTDPX.dtdp.lua")
 else
