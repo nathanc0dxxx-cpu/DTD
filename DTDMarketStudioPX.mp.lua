@@ -57,7 +57,7 @@ dtdstd:newcmd({
                                 if k.owner == _G.DTDUser.name and k.name == v then
                                     found2 = true
                                 end
-                            end print(found2)
+                            end
                             print("\27[93minsert pack description:\27[0m")
                             io.write(" > ")
                             local packdesc = io.read()
@@ -85,7 +85,7 @@ dtdstd:newcmd({
                     print("\27[0m\n")
                 end
             end
-        end os.execute("clear")
+        end
     end,
     desc = "deploy a file to the market"
 })
