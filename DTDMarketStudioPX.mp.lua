@@ -161,7 +161,7 @@ dtdstd:newcmd({
             end
             i = 0
             maxi = 0
-            print("\27[0m\27[44m[folders]:\27[0m\n")
+            print("\n\27[0m\27[44m[folders]:\27[0m\n")
             for v in c:gmatch("%S+") do
                 i = i + 1
                 if v:match("/$") then
