@@ -43,8 +43,10 @@ end
 
 local function post(url, content, mode)
 local dtkg = os.getenv("PAT")
-
-  local sha = getSHA(url, dtkg)
+  local sha = ""
+  if mode == "PUT" then
+    sha = getSHA(url, dtkg)
+  end
 local ct = ""
 for v in content:gmatch("[^\n\r]+") do
   ct = ct .. v .. "\n"
