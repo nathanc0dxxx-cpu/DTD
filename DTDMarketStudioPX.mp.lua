@@ -1,4 +1,5 @@
 if not DTDUser then DTDUser = { name = "Dougla037"} end
+local dirpath = ""
 
 dtdstd:newcmd({
   token = "help",
@@ -20,7 +21,7 @@ dtdstd:newcmd({
     token = "deploy",
     func = function()
         local query = dtdstd.args[2]
-        local pip = io.popen("ls")
+        local pip = io.popen("ls "..dirpath)
         local pipc = pip:read("*a")
         pip:close()
         for v in pipc:gmatch("%S+") do
@@ -34,10 +35,7 @@ dtdstd:newcmd({
                         local content = file:read("*a")
                         file:close()
                         local strucn = v.."@".._G.DTDUser.name
-                        print("\27[93mloading issueservice...")
-                        local isue = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDIssueService.lua")
-                        if isue then load(isue:read("*a"))() isue:close() else print("\27[91mfail\27[0m") return end
-                        print("\27[93mloading postservice...")
+                        print("\27[93mloading service...")
                         local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDPostService.lua")
                         if ss then load(ss:read("*a"))() ss:close()
                             local test = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Market")
@@ -65,12 +63,12 @@ dtdstd:newcmd({
                                 packdesc = "no description provided"
                             end
                             if found == false and found2 == false then
+                                print("\27[93msending...")
                                 DTDPostService:market(content, strucn.."/content", "POST")
-                                print("\27[93mcreating issue session...\27[0m")
-                                DTDIssueService.new(v.."@comments")
                                 DTDPostService:market(packdesc, strucn.."/description", "POST")
                                 break
                             elseif found == false and found2 == true then
+                                print("\27[93msending...")
                                 DTDPostService:market(content, strucn.."/content", "PUT")
                                 break
                             end
@@ -101,10 +99,7 @@ dtdstd:newcmd({
             local obj = { name = i, owner = v }
             table.insert(packgs, obj)
         end
-        print("\27[93mloading issueservice...")
-        local isue = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDIssueService.lua")
-        if isue then load(isue:read("*a"))() isue:close() else print("\27[91mfail\27[0m") return end
-        print("\27[93mloading postservice...\27[0m")
+        print("\27[93mloading service...\27[0m")
         local sss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDPostService.lua")
         if sss then load(sss:read("*a"))() sss:close() else print("\27[91mfailed to load...\27[0m") return end
         local sucessd = false
@@ -116,8 +111,6 @@ dtdstd:newcmd({
                     print("\27[93mdeleting...\27[0m")
                     DTDPostService:market("",v.name.."@".._G.DTDUser.name.."/content", "DELETE")
                     DTDPostService:market("",v.name.."@".._G.DTDUser.name.."/description",  "DELETE")
-                    print("\27[93mclosing issue session...\27[0m")
-                    DTDIssueService.close(v.name.."@comments")
                     print("\27[92mdeleted sucefully!")
                     sucessd = true
                     break
@@ -149,7 +142,7 @@ dtdstd:newcmd({
 dtdstd:newcmd({
     token = "ls",
     func = function()
-        local pip = io.popen("ls")
+        local pip = io.popen("ls "..dirpath)
         print("\27[96mcurrent files:\n\27[0m"..pip:read("*a"))
         pip:close()
     end,
@@ -158,7 +151,11 @@ dtdstd:newcmd({
 dtdstd:newcmd({
     token = "path",
     func = function()
-        os.execute("pwd")
+        if dirpath == "" then
+            print("\27[0mPATH: \27[92mat home")
+        else
+            print("\27[0mPATH: \27[92m"..dirpath)
+        end
     end,
     desc = "show the actual dir path"
 })
@@ -166,8 +163,22 @@ dtdstd:newcmd({
     token = "open",
     func = function()
         local dir = dtdstd.args[2]
+        
+        local cmd = io.popen("ls "..dirpath.."/"..dir)
+        local cmdc = cmd:read("*a")
+        cmd:close()
+        
+        if cmdc == "" then
+            print("\27[91mfolder not found!\27[0m")
+            return
+        end
+        
         if dir then
-            os.execute("cd "..dir)
+            if dir ~= ".." then
+                dirpath = dirpath .. "/".. dir
+            else
+                dirpath = dirpath:gsub("/(.-)$","")
+            end
         else
             print("\27[91mno folder name provided!\27[0m")
         end
@@ -182,7 +193,7 @@ dtdstd:newcmd({
             local ss = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Market")
             if ss then
                 do
-                    print("\27[93mloading postservice...\27[0m")
+                    print("\27[93mloading service...\27[0m")
                     local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDPostService.lua")
                     if ss then load(ss:read("*a"))() ss:close() else print("\27[91mfailed while loading postservice...") return end
                 end
