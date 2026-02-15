@@ -5,7 +5,7 @@
 #### What is DTD?
 
 DTD is an logo of the community 
-Devs Tech Department™
+Dynamic Techs Department™
 
 #### Who are they?
 
