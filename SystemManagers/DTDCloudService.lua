@@ -32,7 +32,7 @@ local function post(url, cont, mode)
 end
 
 _G.DTDPostService = {
-  post = function(cont, file, mode)
+  cloud = function(self, cont, file, mode)
     post(file, cont, mode)
   end,
 }
