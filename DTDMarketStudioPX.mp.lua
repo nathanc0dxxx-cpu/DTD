@@ -142,9 +142,40 @@ dtdstd:newcmd({
 dtdstd:newcmd({
     token = "ls",
     func = function()
-        local pip = io.popen("ls "..dirpath)
-        print("\27[96mcurrent files:\n\27[0m"..pip:read("*a"))
+        local pip = io.popen("ls -p"..dirpath)
+        local c = pip:read("*a")
         pip:close()
+        if c ~= "" then
+            print("\27[0m\27[44m[current files]:\27[0m\n")
+            local maxi = 0
+            local i = 0
+            for v in c:gmatch("%S+") do
+                i = i + 1
+                if not v:match("/$") then
+                    maxi = maxi + 1
+                    io.write("  \27[96m"..v)
+                    if i > maxi then
+                        print("\n")
+                    end
+                end
+            end
+            i = 0
+            maxi = 0
+            print("\27[0m\27[44m[folders]:\27[0m\n")
+            for v in c:gmatch("%S+") do
+                i = i + 1
+                if v:match("/$") then
+                    maxi = maxi + 1
+                    io.write("  \27[93m"..v)
+                    if i > maxi then
+                        print("\n")
+                    end
+                end
+            end
+            print("\27[0m\27[44m[=======]:\27[0m")
+        else
+            print("\27[91mno files or directories here...")
+        end
     end,
     desc = "list your local files"
 })
