@@ -3,7 +3,7 @@ if not DTDUser then DTDUser = { name = "Dougla037" } end
 os.execute("clear")
 print("\27[93minitializing...\27[0m")
 do
-    local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDPostService.lua")
+    local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDCloudService.lua")
     if ss then load(ss:read("*a"))() ss:close() else print("\27[91mfail while loading postservice...\27[0m") end
 end
 print("\27[93mloading objects...\27[0m")
