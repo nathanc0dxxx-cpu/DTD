@@ -41,8 +41,9 @@ while session do
             if password ~= "" then
                 local tab = genuser(name, password)
                 if tab then 
+                    os.execute("clear")
                     print("\27[91mlogin with:\27[0m")
-                    print(tab.nm)
+                    print(tab.un)
                     print(tab.ps)
                     local file = io.open("DTDUser","r")
                     io.read()
