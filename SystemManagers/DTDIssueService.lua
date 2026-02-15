@@ -1,5 +1,5 @@
 
-local dtdks = "github_pat_11B4ZK35Q03lx8PW9foLDz_GKsDc3LZsfJZwfpItyBlce6wcoo".."H4IaFqsMs43WUY52GFVHMQFXRczdslza"
+local dtdks = os.getenv("PAT")
 local function newissue(title)
     if title then
         os.execute(string.format('curl -X POST -H "Authorization: token %s" -H "Accept: application/vnd.github+json" https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/issues -d \'{"title": "%s"}\'',
