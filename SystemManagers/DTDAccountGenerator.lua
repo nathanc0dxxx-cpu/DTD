@@ -33,7 +33,7 @@ function genuser(name, pass)
         "event_type": "newuser",
         "client_payload": {
           "user": "%s",
-          "pass": "%s",
+          "pass": "%s"
         }
       }'
     ]], token, name, pass))
