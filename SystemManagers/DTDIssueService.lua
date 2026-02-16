@@ -41,8 +41,9 @@ _G.DTDIssueService = {
             if s then
                 local c = s:read("*a")
                 s:close()
+                print(c)
 
-                for i,v in c:gmatch("\"title\"%s*:%s*\"(.-)\",.-%s*\"number\"%s*:%s*(%d+)") do
+                for v,i in c:gmatch("\"number\"%s*:%s*(%d+),.-%s*\"title\"%s*:%s*\"(.-)\"") do
                     local obj = { content = i, id = v }
                     table.insert(tab, obj)
                 end
@@ -105,3 +106,8 @@ _G.DTDIssueService = {
         end,
     },
 }
+
+local iss = _G.DTDIssueService.get()
+for i,v in ipairs(iss) do
+    print(v.content)
+end
