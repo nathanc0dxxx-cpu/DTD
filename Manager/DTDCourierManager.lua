@@ -1,17 +1,23 @@
 os.execute("clear")
 if not DTDUser then DTDUser = { name = "Dougla037" } end
+
 do
+    print("\27[93mloading service...")
     local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDIssueService.lua")
-    if ss then load(ss:read("*a"))() ss:close() else print("\27[91merror while loading issue service...\27[0") return end
+    if ss then print("\27[92mloaded!\27[0m") local ssc = ss:read("*a") load(ssc)() ss:close() else print("\27[91merror while loading issue service...\27[0m") return end
 end
+
 local inboxid = nil
 local messages = {}
+
 local function loadinbox()
     messages = {}
     print("\27[93mloading inbox...\27[0m")
     local issues = DTDIssueService.get()
+    
     local found = false
     inboxid = nil
+    
     for i,v in ipairs(issues) do
         if v.content == "inbox" then
             inboxid = v.id
@@ -19,13 +25,11 @@ local function loadinbox()
         end
     end
     if found == false then
-        print("\27[93minbox not found... generating new...\27[0m")
-        DTDIssueService.new("inbox")
-        print("\27[92mgenerated! please reload")
-        os.execute("sleep 4")
+        print("\27[91minbox not found...\27[0m")
+        io.read()
     else
         print("\27[93mloading mails...\27[0m")
-        messages = DTDIssueService.comment.read(inboxid)
+        messages = DTDIssueService.comment.read("inbox")
     end local m = messages
     messages = {}
     for i,v in ipairs(m) do
