@@ -14,7 +14,7 @@ local function post(url, cont, mode)
     end
     local cc = ""
     for v in cont:gmatch("[^\n]+") do
-        cc = cc..v.."\\n"
+        cc = cc..v.."\n"
     end
     
     local token = "ghp_VFb1kXtYJ68rDzuhn41f2xbcegago30naUb".."f"
@@ -33,7 +33,7 @@ local function post(url, cont, mode)
           "content": "%s"
         }
       }'
-   ]], token, DTDUser.name, c, mode, url, cont))
+   ]], token, DTDUser.name, c, mode, url, cc))
 end
 
 _G.DTDPostService = {
