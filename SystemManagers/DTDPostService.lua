@@ -1,3 +1,12 @@
+local function json(str)
+    str = str:gsub("\\", "\\\\")
+    str = str:gsub("\"", "\\\"")
+    str = str:gsub("\n", "\\n")
+    str = str:gsub("\r", "\\r")
+    str = str:gsub("\t", "\\t")
+    return str
+end
+
 local function post(url, cont, mode)
     local fil = io.open("DTDUser","r")
     local c = ""
@@ -12,12 +21,10 @@ local function post(url, cont, mode)
     else
         return
     end
-    local cc = ""
+    local cc = cont
     print("\27[93madapting json...\27[0m")
-    for v in cont:gmatch("[^\n]+") do
-        cc = cc..v.."\\n"
-    end
-    
+    cc = json(cc)
+
     local token = "ghp_VFb1kXtYJ68rDzuhn41f2xbcegago30naUb".."f"
     os.execute(string.format([[
       curl -s -X POST \
