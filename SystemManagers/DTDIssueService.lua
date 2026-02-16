@@ -41,7 +41,6 @@ _G.DTDIssueService = {
             if s then
                 local c = s:read("*a")
                 s:close()
-                print(c)
 
                 for v,i in c:gmatch("\"number\"%s*:%s*(%d+),.-%s*\"title\"%s*:%s*\"(.-)\"") do
                     local obj = { content = i, id = v }
