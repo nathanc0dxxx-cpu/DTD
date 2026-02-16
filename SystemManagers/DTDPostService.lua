@@ -13,8 +13,9 @@ local function post(url, cont, mode)
         return
     end
     local cc = ""
+    print("\27[93madapting json...\27[0m")
     for v in cont:gmatch("[^\n]+") do
-        cc = cc..v.."\n"
+        cc = cc..v.."\\n"
     end
     
     local token = "ghp_VFb1kXtYJ68rDzuhn41f2xbcegago30naUb".."f"
