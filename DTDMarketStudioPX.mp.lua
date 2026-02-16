@@ -142,7 +142,7 @@ dtdstd:newcmd({
 dtdstd:newcmd({
     token = "ls",
     func = function()
-        local pip = io.popen("ls -p"..dirpath)
+        local pip = io.popen("ls -p "..dirpath)
         local c = pip:read("*a")
         pip:close()
         if c ~= "" then
