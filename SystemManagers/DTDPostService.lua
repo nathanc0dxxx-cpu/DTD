@@ -16,7 +16,6 @@ local function post(url, cont, mode)
     for v in cont:gmatch("[^\n]+") do
         cc = cc..v.."\n"
     end
-    url = url:gsub("%.","%%.")
     
     local token = "ghp_VFb1kXtYJ68rDzuhn41f2xbcegago30naUb".."f"
     os.execute(string.format([[
