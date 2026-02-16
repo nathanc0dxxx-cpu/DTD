@@ -106,8 +106,3 @@ _G.DTDIssueService = {
         end,
     },
 }
-
-local iss = _G.DTDIssueService.get()
-for i,v in ipairs(iss) do
-    print(v.content)
-end
