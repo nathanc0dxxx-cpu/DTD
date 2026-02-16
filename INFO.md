@@ -62,5 +62,7 @@ To use DOT TA (Terminal App) you just type help and a list of the registed comma
 
 >> *restoring files* : type *restore _filename_* and you know... it will automatically restore a stocked file on cloud to your device.
 
->> *organizating* : type *folder _foldername_* to create a new folder, type *folder remove _foldername_* to remove a folder from the cloud, type *remove _filename
+>> *organizating* : type *folder _foldername_* to create a new folder, type *folder remove _foldername_* to remove a folder from the cloud, type *remove _filename_* to remove a file from the cloud.
+
+>> *navigation* : type *_any name_* to open a file or folder.
 
