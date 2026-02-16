@@ -41,7 +41,7 @@ _G.DTDIssueService = {
             if s then
                 local c = s:read("*a")
                 s:close()
-                
+
                 for i,v in c:gmatch("\"title\"%s*:%s*\"(.-)\",.-%s*\"number\"%s*:%s*(%d+)") do
                     local obj = { content = i, id = v }
                     table.insert(tab, obj)
@@ -57,7 +57,7 @@ _G.DTDIssueService = {
             end
         end
         return tab
-    end
+    end,
     finish = function()
         DTDIssueService = nil
     end,
@@ -86,7 +86,7 @@ _G.DTDIssueService = {
                 if s then
                     local c = s:read("*a")
                     s:close()
-                    
+
                     for i,v in c:gmatch("\"id\"%s*:%s*(%d+),.-%s*\"body\"%s*:%s*\"(.-)\"") do
                         local obj = { id = i, body = v }
                         table.insert(tab, obj)
