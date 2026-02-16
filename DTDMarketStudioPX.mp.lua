@@ -194,16 +194,19 @@ dtdstd:newcmd({
     token = "open",
     func = function()
         local dir = dtdstd.args[2]
-        
-        local cmd = io.popen("ls "..dirpath.."/"..dir)
+        local ifc = ""
+        if dirpath ~= "" then
+            ifc = "/"
+        end
+        local cmd = io.popen("ls "..dirpath..ifc..dir)
         local cmdc = cmd:read("*a")
         cmd:close()
-        
+
         if cmdc == "" then
             print("\27[91mfolder not found!\27[0m")
             return
         end
-        
+
         if dir then
             if dir ~= ".." then
                 dirpath = dirpath .. "/".. dir
