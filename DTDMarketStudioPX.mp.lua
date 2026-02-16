@@ -101,7 +101,8 @@ dtdstd:newcmd({
         end
         print("\27[93mloading service...\27[0m")
         local sss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDPostService.lua")
-        if sss then load(sss:read("*a"))() sss:close() else print("\27[91mfailed to load...\27[0m") return end
+        if sss then load(sss:read("*a"))() sss:close() else print("\27[91mfailed to load service 1...\27[0m") return end
+        
         local sucessd = false
         for i,v in ipairs(packgs) do
             if v.name:match(query) and v.owner == _G.DTDUser.name then
@@ -111,6 +112,7 @@ dtdstd:newcmd({
                     print("\27[93mdeleting...\27[0m")
                     DTDPostService:market("",v.name.."@".._G.DTDUser.name.."/content", "DELETE")
                     DTDPostService:market("",v.name.."@".._G.DTDUser.name.."/description",  "DELETE")
+                    
                     print("\27[92mdeleted sucefully!")
                     sucessd = true
                     break
