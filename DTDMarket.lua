@@ -272,8 +272,28 @@ local function hub(query)
                 foundissue = false
                 packcomments = {}
                 print("\27[93mloading...\27[0m")
+                
                 local dds = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDIssueService.lua")
-                if dds then load(dds:read("*a"))() dds:close() else hubs = true break end
+                
+                if dds then
+                    local c = dds:read("*a")
+                    dds:close()
+                    local sucess, err = pcall(load, c)
+                    if var then
+                        var()
+                        print("\27[92mloaded service.\27[0m")
+                    else
+                        print(c)
+                        print(tostring(err))
+                        hubs = true
+                        commentss = false
+                        return
+                    end
+                else
+                    hubs = true
+                    commentss = false
+                    return
+                end
                 doreqc = false
                 issues = DTDIssueService.get()
                 for i,v in ipairs(issues) do
