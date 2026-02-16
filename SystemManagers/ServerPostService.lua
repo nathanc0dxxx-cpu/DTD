@@ -44,7 +44,7 @@ end
 local function post(url, content, mode)
 local dtkg = os.getenv("PAT")
   local sha = ""
-  if mode == "PUT" then
+  if mode == "PUT" or mode == "DELETE" then
     sha = getSHA(url, dtkg)
   end
 local ct = ""
