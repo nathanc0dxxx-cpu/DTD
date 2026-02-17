@@ -116,7 +116,7 @@ while inboxsession do
                 if #content:gsub(" ","") >= 5 then
                     os.execute("clear")
                     print("\27[92msending...\27[0m")
-                    DTDIssueService.comment.add(inboxid, to.."@"..content)
+                    DTDIssueService.comment.add("inbox", to.."@"..content)
                     print("\27[92msucess!\27[0m")
                     io.read()
                 else
