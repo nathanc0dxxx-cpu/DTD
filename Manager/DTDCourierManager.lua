@@ -14,10 +14,10 @@ local function loadinbox()
     messages = {}
     print("\27[93mloading inbox...\27[0m")
     local issues = DTDIssueService.get()
-    
+
     local found = false
     inboxid = nil
-    
+
     for i,v in ipairs(issues) do
         if v.content == "inbox" then
             inboxid = v.id
@@ -118,6 +118,7 @@ while inboxsession do
                     print("\27[92msending...\27[0m")
                     DTDIssueService.comment.add(inboxid, to.."@"..content)
                     print("\27[92msucess!\27[0m")
+                    io.read()
                 else
                     print("\27[1A\27[91mcontent need to have more than 5 valid chars\27[0m")
                     io.read()
