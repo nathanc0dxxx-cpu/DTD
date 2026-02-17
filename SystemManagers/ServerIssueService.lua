@@ -48,7 +48,6 @@ local cmdcg = 'curl -si -X GET "https://api.github.com/repos/tutugrande1235-DTD/
 local function comment(issue, body)
     local toexec = string.format(cmdca, issue, dtdks, body)
     os.execute(toexec)
-    print(toexec)
 end
 local function deletec(id)
     os.execute(string.format(cmdcd, id, dtdks))
