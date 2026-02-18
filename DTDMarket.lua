@@ -358,11 +358,13 @@ local function hub(query)
                     if spam == false then
                         print("\27[93msendding...\27[0m")
                         DTDIssueService.comment.add(obj.name.."@comments", ucm:gsub("@","$<dtd$ball$>"))
-                        os.execute("sleep 2")
-                        doreq = true
+                        print("\27[93mwait 15 seconds before reset, please!...\27[0m")
+                        io.write("[press ENTER]:")
+                        io.read()
                     end
                 else
                     print("\27[91mnot a valid comment!\27[0m")
+                    io.read()
                     os.execute("clear")
                 end
             elseif cminp == "reset" then
@@ -383,8 +385,9 @@ local function hub(query)
                         end
                     end
                 end
-                os.execute("sleep 1")
-                doreqc = true
+                print("\27[93mwait 15 seconds before reset, please!...\27[0m")
+                io.write("[press ENTER]:")
+                io.read()
             end
         end
     elseif uinp == "desc" then
