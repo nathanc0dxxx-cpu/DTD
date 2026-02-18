@@ -4,6 +4,7 @@ local function json(str)
     str = str:gsub("\n", "\\n")
     str = str:gsub("\r", "\\r")
     str = str:gsub("\t", "\\t")
+    str = str:gsub("%(","%%(")
     return str
 end
 
