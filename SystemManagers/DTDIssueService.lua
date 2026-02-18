@@ -65,8 +65,8 @@ _G.DTDIssueService = {
         add = function(issue, content)
             post(issue, content, "add")
         end,
-        remove = function(issue)
-            post(issue, "", "remove")
+        remove = function(id)
+            post(id, "", "remove")
         end,
         read = function(target)
             local tab = {}
