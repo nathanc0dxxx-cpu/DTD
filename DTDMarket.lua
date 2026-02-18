@@ -318,7 +318,7 @@ local function hub(query)
                     foundcm = true
                     local ac = v.body:sub(1, a-1)
                     local ad = v.body:sub(a+1)
-                    print("\n\27[94m @"..ac.."\27[0m\n  "..ad:gsub("<br>","\n").."\n----------------\n")
+                    print("\n\27[94m @"..ac.."\27[0m\n  "..ad:gsub("<br>","\n"):gsub("$<dtd$ball$>","@").."\n----------------\n")
                 end
             end if foundcm == false and foundissue == true then
                 print("\n\27[90mno comments yet.\27[0m\n")
@@ -357,7 +357,7 @@ local function hub(query)
                     end
                     if spam == false then
                         print("\27[93msendding...\27[0m")
-                        DTDIssueService.comment.add(obj.name.."@comments", _G.DTDUser.name.."@"..ucm)
+                        DTDIssueService.comment.add(obj.name.."@comments", ucm:gsub("@","$<dtd$ball$>"))
                         os.execute("sleep 2")
                         doreq = true
                     end
