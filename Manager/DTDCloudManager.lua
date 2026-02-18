@@ -158,13 +158,13 @@ while clouds do
                 if v.tp == "dir" and v.name == name then
                     founddir = true
                     print("\27[91mdirectory already exists!\27[0m")
+                    break
                 end
             end if founddir == false then
                 print("\27[93mcreating directory...\27[0m")
                 DTDPostService:cloud("", DTDUser.name.."/"..dirpath..name.."/Folder", "POST")
                 files = {}
                 loadfiles(files, dirpath)
-                break
             end
         elseif name:sub(1,6) == "remove" then
             local query = input:sub(15)
