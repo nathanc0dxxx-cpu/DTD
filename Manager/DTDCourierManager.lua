@@ -136,7 +136,7 @@ while inboxsession do
         end
         if found == true then
             print("\27[92mall mails removed!\27[0m")
-            loadinbox()
+            os.execute("sleep 1")
         else
             print("\27[91mim dont found any specific emails for you to mark...\27[0m")
         end
@@ -179,7 +179,6 @@ while inboxsession do
                 if found == true then
                     print("\27[92mdmail removed!\27[0m")
                     os.execute("sleep 1")
-                    loadinbox()
                 else
                     print("\27[91mno dmail with id "..query.." found...\27[0m")
                     io.read()
