@@ -357,7 +357,7 @@ local function hub(query)
                     end
                     if spam == false then
                         print("\27[93msendding...\27[0m")
-                        DTDIssueService.comment.add(mainissue, _G.DTDUser.name.."@"..ucm)
+                        DTDIssueService.comment.add(obj.name.."@comments", _G.DTDUser.name.."@"..ucm)
                         os.execute("sleep 2")
                         doreq = true
                     end
