@@ -272,21 +272,22 @@ local function hub(query)
                 foundissue = false
                 packcomments = {}
                 print("\27[93mloading...\27[0m")
-                
+
                 local dds = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDIssueService.lua")
-                
+
                 if dds then
                     local c = dds:read("*a")
                     dds:close()
-                    local sucess, err = pcall(load, c)
+                    local var = load(c)
                     if var then
                         var()
                         print("\27[92mloaded service.\27[0m")
                     else
                         print(c)
-                        print(tostring(err))
+                        print(tostring(var))
                         hubs = true
                         commentss = false
+                        io.read()
                         return
                     end
                 else
@@ -295,11 +296,13 @@ local function hub(query)
                     return
                 end
                 doreqc = false
+                print("searching for current channel...")
                 issues = DTDIssueService.get()
                 for i,v in ipairs(issues) do
                     local a = v.content
                     if a == obj.name.."@comments" then
-                        packcomments = DTDIssueService.comment.read(v.id)
+                        print("loading channel comments...")
+                        packcomments = DTDIssueService.comment.read(obj.name.."@comments")
                         mainissue = v.id
                         foundissue = true
                         break
@@ -308,14 +311,14 @@ local function hub(query)
             end
 
             print("\27[44m[Comments]:\27[0m") local foundcm = false
-
+            if not packcomments then packcomments = { [1] = { body = "System@error! a unexpected error as ocurred while loading this package comments... im sorry.<br> > i got these info: ID: "..mainissue.." IF: "..tostring(foundissue).." ", id = "404"} } end
             for i,v in ipairs(packcomments) do
                 local a = v.body:find("@")
                 if a then
                     foundcm = true
                     local ac = v.body:sub(1, a-1)
                     local ad = v.body:sub(a+1)
-                    print("\n\27[94m @"..ac.."\27[0m\n  "..ad.."\n----------------")
+                    print("\n\27[94m @"..ac.."\27[0m\n  "..ad:gsub("<br>","\n").."\n----------------\n")
                 end
             end if foundcm == false and foundissue == true then
                 print("\n\27[90mno comments yet.\27[0m\n")
@@ -334,7 +337,7 @@ local function hub(query)
             elseif cminp == "comment" then
                 doreqc = true
                 os.execute("clear")
-                print("\27[96m leave your comment!\n\27[93mpress ENTER to send\27[0m")
+                print("\27[96m leave your comment!\n\27[93mpress ENTER to send, use: <br> to \\n a line (break line)\27[0m")
                 io.write(" > \27[90mwhat are you thinking now?...\27[29D\27[0m")
                 local ucm = io.read()
                 if ucm:gsub(" ","") ~= "" then
