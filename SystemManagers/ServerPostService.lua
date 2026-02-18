@@ -50,7 +50,7 @@ local dtkg = os.getenv("PAT")
 local ct = ""
 for v in content:gmatch("[^\n\r]+") do
   ct = ct .. v .. "\n"
-end content = base64(ct)
+end content = ct
 local commit = "update"
 if _G.DTDUser then commit = _G.DTDUser.name .. "as sent a post request" end
 if content == nil then content = "PLACEHOLDER" end
