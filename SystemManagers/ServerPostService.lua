@@ -47,10 +47,6 @@ local dtkg = os.getenv("PAT")
   if mode == "PUT" or mode == "DELETE" then
     sha = getSHA(url, dtkg)
   end
-local ct = ""
-for v in content:gmatch("[^\n\r]+") do
-  ct = ct .. v .. "\n"
-end content = ct
 local commit = "update"
 if _G.DTDUser then commit = _G.DTDUser.name .. "as sent a post request" end
 if content == nil then content = "PLACEHOLDER" end
