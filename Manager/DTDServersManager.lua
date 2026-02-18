@@ -39,7 +39,7 @@ print(header)
 print("\n\27[0m\27[44m[======================================]\27[0m")
 
 exit = false
-io.write("\27[0m > \27[90mexit, create\27[12D\27[92m")
+io.write("\27[0m > \27[90mexit, create, reset\27[19D\27[92m")
 inp = io.read()
 
 if inp == "exit" then
@@ -88,13 +88,11 @@ elseif inp == "create" then
                 local url = io.read()
                 if url then
                     print("\27[93mworking...\27[0m")
-                    local strucn = name.."@".._G.DTDUser.name
                     strucn = strucn:gsub("\n",""):gsub(" ","")
-                    DTDPostService:servers(url, strucn, "POST")
+                    DTDPostService:servers(url, name, "POST")
                     os.execute("clear")
-                    print("\27[92m created sucessfully! \27[93mloading servers...\27[0m]")
+                    print("\27[92m created sucessfully!\27[0m]")
                     os.execute("sleep 1")
-                    loadservers()
                 else
                     print("bro we literally cant create a server without a url! :|")
                 end
@@ -124,12 +122,11 @@ elseif inp == "create" then
                 for i,v in ipairs(servers) do
                     if nameh == v.name and _G.DTDUser.name == v.owner then
                         print("\27[93mworking...\27[0m")
-                        DTDPostService:servers("",v.name.."@".._G.DTDUser.name, "DELETE")
+                        DTDPostService:servers("",v.name, "DELETE")
                         os.execute("clear")
                         session2 = false
-                        print("\27[92mfinished! \27[93mloading servers...\27[0m")
-                        os.execute("sleep 3")
-                        loadservers()
+                        print("\27[92mfinished!\27[0m")
+                        os.execute("sleep 2")
                         break
                     end if session2 == true and (nameh ~= v.name or _G.DTDUser.name ~= v.owner) then
                         print("\27[91mserver not found.\27[0m")
@@ -141,6 +138,8 @@ elseif inp == "create" then
             end
         end
     end
+elseif inp == "reset" then
+    loadservers()
 end
 
 os.execute("clear")
