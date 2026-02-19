@@ -88,8 +88,8 @@ elseif inp == "create" then
                 local url = io.read()
                 if url then
                     print("\27[93mworking...\27[0m")
-                    strucn = strucn:gsub("\n",""):gsub(" ","")
-                    DTDPostService:servers(url, name, "POST")
+                    local strucn = name:gsub("\n",""):gsub(" ","")
+                    DTDPostService:servers(url, strucn, "POST")
                     os.execute("clear")
                     print("\27[92m created sucessfully!\27[0m]")
                     os.execute("sleep 1")
