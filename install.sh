@@ -1,5 +1,4 @@
 printf "\e[93mcreating file: DOT.lua\n"
-touch DOT.lua
 printf "installing dependencies...\e[0m\n"
 pkg install lua54
 alias dtdos="lua54 DOT.lua"
