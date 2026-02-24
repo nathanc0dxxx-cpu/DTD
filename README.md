@@ -4,7 +4,7 @@ this is my repo DONT TOUCH!
 
 if you want my app just run this cmd on linux
 ```Bash
-curl -fsSL https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/install.sh | bash
+source <(curl -fsSL https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/install.sh)
 ```
 [Click Here!](https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/INSTRUCTIONS.md)
 
