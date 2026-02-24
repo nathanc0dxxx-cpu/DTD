@@ -9,7 +9,8 @@ fi
 curl -fsSL https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDBTL.lua > ~/DOT.lua
 source ~/.bashrc
 stty -echo -icanon
-printf "\e[32m[PROCCESS COMPLETED]:\e[0m\n"
+printf "\e[32m[PROCCESS COMPLETED | Press Enter]:\e[0m"
 read
 stty sane
 printf "\e[0m"
+clear
