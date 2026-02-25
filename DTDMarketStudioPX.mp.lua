@@ -1,5 +1,6 @@
 if not DTDUser then DTDUser = { name = "Dougla037"} end
 local dirpath = ""
+dtdstd.dirpath = dirpath
 
 dtdstd:newcmd({
   token = "help",
