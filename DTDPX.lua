@@ -54,7 +54,7 @@ new.cmd("open", function()
         print(urlfetch)
         url = urlfetch
     end
-    
+
     local get = io.popen("curl -s "..url)
     local content = get:read("*a")
     get:close()
@@ -65,7 +65,8 @@ new.cmd("open", function()
       print("\27[0m\27[91mno content received!")
     end
   else
-    print("\27[0m\27[91mno url provided")
+    print("\27[0m\27[91mno url provided\27[0m")
+    print("\27[90mtype \27[94mopen servers\27[90m to view avaliable servers...")
   end
 end, "load lua content from a url")
 
