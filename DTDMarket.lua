@@ -1,4 +1,5 @@
 if not DTDUser then DTDUser = { name = "Dougla037" } end
+local error0 = "Error: 0"
 
 local function key()
     os.execute("stty -icanon -echo -isig")
@@ -14,9 +15,16 @@ local markets = true
 local searchs = false
 local packs = {}
 local function loadpacks()
+    local sst = nil
     local ss = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Market")
-    local sst = ss:read("*a")
-    ss:close()
+    if not ss then
+        sst = string.format([[
+            "name": "%s@System"
+        ]], error0)
+    else
+        sst = ss:read("*a")
+        ss:close()
+    end
     packs = {}
     for i,v in sst:gmatch("%s*\"name\"%s*:%s*\"%s*(.-)@(.-)\"") do
         local obj = { name = i, owner = v }
@@ -49,9 +57,15 @@ local function search()
             local v = results[i]
             print("\27[94m [ \27[96m"..i.."\27[94m ]: \27[0m\27[44m"..v.name.."\27[0m \27[90m"..v.owner.."\n")
         end
-    else
+    elseif #results > 1 then
         for i,v in ipairs(results) do
             print("\27[94m [ \27[96m"..i.."\27[94m ]: \27[0m\27[44m"..v.name.."\27[0m \27[90m"..v.owner.."\n")
+        end
+    else
+        local i = #results
+        if i > 0 then 
+            local v = results[i]
+            print("\27[94m [ \27[96m"..i.."\27[94m ]: \27[0m\27[46m"..v.name.."\27[0m \27[90m"..v.owner.."\n")
         end
     end
     
@@ -62,6 +76,11 @@ local function search()
         local set = 1
         local target = ""
         while true do
+            if #results == 1 then
+                inp = results[1].name
+                hubs = true
+                return
+            end
             local max = #results
             if max == 0 then
                 searchs = true
@@ -234,15 +253,15 @@ local function hub(query)
   %s
     ]], "\27[96m"..obj.name.."\27[0m", "\27[90mby ", obj.owner.."\27[0m", obj.desc))
     print("\27[0m\27[44m[================]\27[0m")
-    io.write(" > \27[90m<Back> | <Install> | <Comments> | <LoadDesc>\27[0m\n")
-    io.write(" > \27[92m  [Q]  |    [I]    |     [C]    |     [D]\27[0m\n")
+    io.write(" > \27[90m<Back> | <Install> | <Comments>\27[0m\n")
+    io.write(" > \27[92m  [Q]  |    [I]    |     [C]\27[0m\n")
     
     local uinp = key()
     if uinp == "q" then
         inpackage = false
         markets = true
         return
-    elseif uinp == "i" then
+    elseif uinp == "i" and obj.name ~= error0 then
         os.execute("clear")
         local toinstall = {
             [1] = { all = obj.name.."@"..obj.owner, name = obj.name, owner = obj.owner }
@@ -336,7 +355,7 @@ local function hub(query)
         key()
         hubs = true
         return
-    elseif uinp == "c" then
+    elseif uinp == "c" and obj.name ~= error0 then
         local commentss = true
         local doreqc = true
         local issues = ""
@@ -469,7 +488,13 @@ local function hub(query)
         end
     elseif uinp == "d" then
         local ssdesc = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Market/"..obj.name.."@"..obj.owner.."/description@"..obj.owner)
-        if ssdesc then obj.desc = ssdesc:read("*a") ssdesc:close() else print("\27[91mfailed to load package description") io.read() end
+        if ssdesc and obj.name ~= error0 then
+            obj.desc = ssdesc:read("*a")
+            ssdesc:close()
+        else
+            print("\27[91mfailed to load package description")
+            key() 
+        end
         hubs = true
         return
     else
