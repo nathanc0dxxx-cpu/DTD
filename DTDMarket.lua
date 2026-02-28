@@ -1,9 +1,17 @@
 if not DTDUser then DTDUser = { name = "Dougla037" } end
 
+local function key()
+    os.execute("stty -icanon -echo -isig")
+    local k = io.read(1)
+    os.execute("stty icanon echo isig")
+    return k
+end
+
 os.execute("clear")
 local exit = false
 local hubs = false
 local markets = true
+local searchs = false
 local packs = {}
 local function loadpacks()
     local ss = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Market")
@@ -17,22 +25,90 @@ local function loadpacks()
 end loadpacks()
 
 local inp = nil
-
-local function search(query)
+local query = ""
+local function search()
     os.execute("clear")
-    print("\27[0m\27[44m[Results]:\27[41m[============]\27[0m\n")
+    local results = {}
+    print("\27[0m\27[44m[Search]:\27[41m[============]\27[0m")
     for i,v in ipairs(packs) do
-        if v.name:match(query) then
-            print("\27[92m [ \27[93m"..i.."\27[92m ]: \27[0m\27[42m"..v.name.."\27[0m \27[90m"..v.owner.."\n")
+        if v.name:find(query, 1, true) then
+            table.insert(results, v)
         end
-    end print("\27[0m\27[44m[======================]\27[0m")
-    io.write(" > \27[90m<pack>, back\27[12D\27[92m")
-    inp = io.read()
-    if inp == "back" then
-        markets = true
+    end
+    io.write(" > \27[38;5;208m"..query)
+    for i,v in ipairs(results) do
+        if v.name:sub(1, #query) == query then
+            local leng = v.name
+            io.write("\27[90m"..v.name:sub(#query + 1, #leng).."\27[0m")
+            break
+        end
+    end
+    io.write("\n\n")
+    if #results > 10 then
+        for i = 1,10 do
+            local v = results[i]
+            print("\27[94m [ \27[96m"..i.."\27[94m ]: \27[0m\27[44m"..v.name.."\27[0m \27[90m"..v.owner.."\n")
+        end
+    else
+        for i,v in ipairs(results) do
+            print("\27[94m [ \27[96m"..i.."\27[94m ]: \27[0m\27[44m"..v.name.."\27[0m \27[90m"..v.owner.."\n")
+        end
+    end
+    
+    print("\27[0m\27[41m[======================]\27[0m")
+    local uinp = key()
+    
+    if uinp == "" or uinp == "\n" then
+        local set = 1
+        local target = ""
+        while true do
+            local max = #results
+            if max == 0 then
+                searchs = true
+                return
+            end
+            if set <= 0 then set = 1 end
+            if set >= max + 1 then set = max end
+            os.execute("clear")
+            print("\27[44m[Results]:\27[41m[============]:\27[0m\n")
+            for i,v in ipairs(results) do
+                local arrow = ""
+                if i == set then
+                    arrow = " \27[1m<\27[0m"
+                    target = v.name
+                end
+                print(" \27[38;5;208m["..v.name.."]:\27[0m\27[90m "..v.owner.."\27[0m"..arrow.."\n")
+            end
+            
+            print("\27[0m\27[44m[======================]\27[0m")
+            io.write(" > \27[90m<Exit> |<Back> | <Up> | <Down> | <Select>\27[0m\n")
+            io.write(" > \27[92m [^Q]  |  [Q]  |  [W] |  [S]   |  [ENTER]\27[0m\n")
+            local k = key()
+            if k == "q" then
+                searchs = true
+                return
+            elseif k == "Q" then
+                markets = true
+                return
+            elseif k == "s" then
+                set = set + 1
+            elseif k == "w" then
+                set = set - 1
+            elseif k == "" or k == "\n" then
+                inp = target
+                hubs = true
+                return
+            end
+        end
+        searchs = true
+        return
+    elseif uinp == "\8" or uinp == "\127" then
+        query = query:sub(1, #query - 1)
+        searchs = true
         return
     else
-        hubs = true
+        query = query .. uinp
+        searchs = true
         return
     end
 end
@@ -105,21 +181,20 @@ local function market()
         end if foundpkg == false then io.write("\27[90mHmm... looks like there’s nothing of this type here.\27[0m") end
     end
     print("\n\n\27[44m[======================]\27[0m")
-    io.write(" > \27[90m<pack>, search, exit, reset\27[27D\27[92m")
-    inp = io.read()
-    if inp == "exit" then
+    io.write(" > \27[90m<Search> | <ResetList> | <Exit>\27[0m\n")
+    io.write(" > \27[92m  [S]    |     [R]     |  [^Q]\n\27[0m")
+    local uinp = key()
+    if uinp == "Q" then
         os.execute("clear")
         print("\27[91mlogout\27[0m")
         exit = true
         return
-    elseif inp == "reset" then
+    elseif uinp == "r" then
         loadpacks()
         markets = true
         return
-    elseif inp:sub(1,7) == "search " then
-        search(inp:sub(8))
-    else
-        hubs = true
+    elseif uinp == "s" then
+        searchs = true
         return
     end
 end
@@ -148,7 +223,7 @@ local function hub(query)
         end
     end if not obj.name then markets = true return end
     os.execute("clear")
-    obj.desc = obj.desc or "type: \27[32mdesc\27[0m to load the package description"
+    obj.desc = obj.desc or "press: \27[32m[D]\27[0m to load the package description"
     print("\27[0m\27[44m[HUB]:\27[41m[==========]\27[0m")
     print(string.format([[
   .--_____
@@ -159,13 +234,15 @@ local function hub(query)
   %s
     ]], "\27[96m"..obj.name.."\27[0m", "\27[90mby ", obj.owner.."\27[0m", obj.desc))
     print("\27[0m\27[44m[================]\27[0m")
-    io.write(" > \27[90mback, install, comments\27[23D\27[92m")
-    local uinp = io.read()
-    if uinp == "back" then
+    io.write(" > \27[90m<Back> | <Install> | <Comments> | <LoadDesc>\27[0m\n")
+    io.write(" > \27[92m  [Q]  |    [I]    |     [C]    |     [D]\27[0m\n")
+    
+    local uinp = key()
+    if uinp == "q" then
         inpackage = false
         markets = true
         return
-    elseif uinp == "install" then
+    elseif uinp == "i" then
         os.execute("clear")
         local toinstall = {
             [1] = { all = obj.name.."@"..obj.owner, name = obj.name, owner = obj.owner }
@@ -228,8 +305,8 @@ local function hub(query)
         print("\27[0m\27[44m[====================]:\27[0m")
         print("\27[93mprocced? \27[92m[Y]\27[0m/\27[91m[N]\27[0m:")
         io.write(" > ")
-        local ask = io.read()
-        if ask == "y" or ask == "Y" then
+        local ask = key()
+        if ask:lower() == "y" then
             print("procceding...")
         else
             print("cancelling...")
@@ -256,10 +333,10 @@ local function hub(query)
             end
         end
         io.write("\27[32m[process completed, press ENTER]:\27[0m")
-        io.read()
+        key()
         hubs = true
         return
-    elseif uinp == "comments" then
+    elseif uinp == "c" then
         local commentss = true
         local doreqc = true
         local issues = ""
@@ -327,15 +404,15 @@ local function hub(query)
             end
             print("\27[0m\27[44m[=========]:\27[0m")
 
-            io.write(" > \27[90mback, comment, reset, removeall\27[31D\27[92m")
-            local cminp = io.read() io.write("\27[0m")
-            if cminp == "back" then
+            io.write(" > \27[90m<Back> | <Comment> | <Reset> | <RemoveAllComments>\27[0m\n")
+            io.write(" > \27[92m [Q]   |    [C]    |   [R]   |         [A]\n")
+            local cminp = key() io.write("\27[0m")
+            if cminp == "q" then
                 os.execute("clear")
                 commentss = false
                 hubs = true
                 return
-            elseif cminp == "comment" then
-                doreqc = true
+            elseif cminp == "c" then
                 os.execute("clear")
                 print("\27[96m leave your comment!\n\27[93mpress ENTER to send, use: <br> to \\n a line (break line)\27[0m")
                 io.write(" > \27[90mwhat are you thinking now?...\27[29D\27[0m")
@@ -349,7 +426,7 @@ local function hub(query)
                             local c = v.body:sub(a+1)
                             if b == _G.DTDUser.name and c == ucm then
                                 print("\27[91mspam detected\27[0m")
-                                io.read()
+                                key()
                                 spam = true
                                 break
                             end
@@ -360,20 +437,20 @@ local function hub(query)
                         DTDIssueService.comment.add(obj.name.."@comments", ucm:gsub("@","$<dtd$ball$>"))
                         print("\27[93mwait 15 seconds before reset, please!...\27[0m")
                         io.write("[press ENTER]:")
-                        io.read()
+                        key()
                     end
                 else
                     print("\27[91mnot a valid comment!\27[0m")
-                    io.read()
+                    key()
                     os.execute("clear")
                 end
-            elseif cminp == "reset" then
+            elseif cminp == "r" then
                 doreqc = true
-            elseif cminp == "debug" then
+            elseif cminp == "d" then
                 for i,v in ipairs(packcomments) do
                     print(v.body)
-                end io.read()
-            elseif cminp == "removeall" then
+                end key()
+            elseif cminp == "a" then
                 print("\27[91mremoving...\27[0m")
                 for i,v in ipairs(packcomments) do
                     local a = v.body:find("@")
@@ -387,10 +464,10 @@ local function hub(query)
                 end
                 print("\27[93mwait 15 seconds before reset, please!...\27[0m")
                 io.write("[press ENTER]:")
-                io.read()
+                key()
             end
         end
-    elseif uinp == "desc" then
+    elseif uinp == "d" then
         local ssdesc = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Market/"..obj.name.."@"..obj.owner.."/description@"..obj.owner)
         if ssdesc then obj.desc = ssdesc:read("*a") ssdesc:close() else print("\27[91mfailed to load package description") io.read() end
         hubs = true
@@ -408,5 +485,8 @@ while not exit do
     elseif hubs == true then
         hubs = false
         hub(inp)
+    elseif searchs == true then
+        searchs = false
+        search()
     end
 end
