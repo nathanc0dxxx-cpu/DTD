@@ -1,91 +1,75 @@
+local m = {}
+_G.console = {}
 
-_G.page = {
-    screen = { mouse = {} },
-    objs = {},
-    obj = {
-        new = function(p)
-            if p then
-                local obj = {
-                    name = "Instance",
-                    type = p,
-                    size = { 5,5 },
-                    pos = { 5,5 },
-                    
-                    click = function(self, fn)
-                        local mx = page.screen.mouse.x
-                        local my = page.screen.mouse.y
-                        if not mx or not my then return end
-
-                        local x = self.pos[1]
-                        local y = self.pos[2]
-                        local w = self.size[1]
-                        local h = self.size[2]
-
-                        if mx >= x and mx <= x + w and
-                        my >= y and my <= y + h then
-                            f = true
-                        else
-                            f = false
-                        end fn(f)
-                        fn = nil
-                        my = nil
-                        mx = nil
-                        y = nil x = nil
-                        w = nil h = nil
-                    end
-                    
-                }
-                table.insert(page.objs, obj)
-                return obj
+function async(fn)
+    if not fn then io.stderr:write("attempt to def async with nil\n") end
+    local fn = string.dump(fn)
+    if fn then
+        function call(...)
+            local vars={...}
+            for i,v in ipairs(vars) do
+                os.setenv(i,v)
             end
-        end,
-    },
-    script = {}
-}
-
-os.execute("stty -icanon -echo min 1 time 0")
-io.write("\27[?1000h\27[?1006h")
-
-function page.script.main(fn)
-    while true do
-        local c = io.read(1)
-        if c == "\27" then
-            local b = {}
-            local seq = c .. io.read(10)
-            local d = b
-            d[1], d[2], d[3] = seq:match("(%d*);(%d*);(%d*)")
-            b = {
-                key = tonumber(d[1]),
-                x = tonumber(d[2]),
-                y = tonumber(d[3])
-            }
-            page.screen.mouse = b
+            local fun = fn
+            local self = {}
+            self.id = tostring(math.random(100000,999999))
+            local tmp = os.getenv("HOME").."/"..self.id..".lua"
+            local f = io.open(tmp,"wb")
+            if f then
+                f:write(fun)
+                f:close()
+                os.execute("lua "..tmp.." &")
+            else
+                print("error creating file")
+            end
         end
-        do
-            os.execute("clear")
-            local r = io.popen("stty size")
-            local rr = r:read("*a")
-            r:close()
-            local y,x = rr:match("(%d*) (%d*)")
-            x = tonumber(x)
-            y = tonumber(y)
-            io.write("\27[44m")
-            for i = 1,y do
-                print(string.rep(" ",x))
-            end io.write("\27[0m")
-        end
-        
-        fn()
+        return call
     end
 end
 
-local b = page.obj.new("button")
+function console.readkey()
+    os.execute("stty -icanon -echo -isig min 1 time 0")
+    local k = io.read(1)
+    os.execute("stty sane")
+    return k
+end
 
-page.script.main(function()
-    b:click(function(f)
-        if f == true then
-            os.execute("clear")
-            print("clicked!")
-        end
-    end)
-end)
+function console.readasync()
+    os.execute("stty -icanon -echo -isig min 0 time 0")
+    local inp = io.read()
+    os.execute("stty sane")
+    return inp
+end
+
+function console.readkeyasync()
+    os.execute("stty -icanon -echo -isig min 0 time 0")
+    local k = io.read(1)
+    os.execute("stty sane")
+    return k
+end
+
+function console.getmouse()
+    os.execute("stty -icanon -echo -isig min 1 time 0")
+    io.write("\27[?1006h")
+    local k = io.read(1)
+    local g = nil
+    local mouse = nil
+    if k == "\27" then
+        g = k..io.read(10)
+        local a,b,c = g:match("(%d*);(%d*);(%d*)")
+        a = tonumber(a)
+        b = tonumber(b)
+        c = tonumber(c)
+        mouse = {
+            button = a,
+            x = b,
+            y = c
+        }
+    end
+    os.execute("stty sane")
+    io.write("\27[?1006l")
+    return mouse
+end
+
+_G.luad = m
+return m
