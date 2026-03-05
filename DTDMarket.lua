@@ -68,10 +68,10 @@ local function search()
             print("\27[94m [ \27[96m"..i.."\27[94m ]: \27[0m\27[46m"..v.name.."\27[0m \27[90m"..v.owner.."\n")
         end
     end
-    
+
     print("\27[0m\27[41m[======================]\27[0m")
     local uinp = key()
-    
+
     if uinp == "" or uinp == "\n" then
         local set = 1
         local target = ""
@@ -98,7 +98,7 @@ local function search()
                 end
                 print(" \27[38;5;208m["..v.name.."]:\27[0m\27[90m "..v.owner.."\27[0m"..arrow.."\n")
             end
-            
+
             print("\27[0m\27[44m[======================]\27[0m")
             io.write(" > \27[90m<Exit> |<Back> | <Up> | <Down> | <Select>\27[0m\n")
             io.write(" > \27[92m [^Q]  |  [Q]  |  [W] |  [S]   |  [ENTER]\27[0m\n")
@@ -215,6 +215,9 @@ local function market()
     elseif uinp == "s" then
         searchs = true
         return
+    else
+        markets = true
+        return
     end
 end
 local inpackage = false
@@ -255,7 +258,7 @@ local function hub(query)
     print("\27[0m\27[44m[================]\27[0m")
     io.write(" > \27[90m<Back> | <Install> | <Comments>\27[0m\n")
     io.write(" > \27[92m  [Q]  |    [I]    |     [C]\27[0m\n")
-    
+
     local uinp = key()
     if uinp == "q" then
         inpackage = false
