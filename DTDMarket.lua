@@ -30,12 +30,16 @@ local function loadpacks()
         local obj = { name = i, owner = v }
         table.insert(packs, obj)
     end
-end loadpacks()
+end
+
+local function clear()
+    io.write("\27[3J\27[2J\27[H")
+end
 
 local inp = nil
 local query = ""
 local function search()
-    os.execute("clear")
+    clear()
     local results = {}
     print("\27[0m\27[44m[Search]:\27[41m[============]\27[0m")
     for i,v in ipairs(packs) do
@@ -88,7 +92,7 @@ local function search()
             end
             if set <= 0 then set = 1 end
             if set >= max + 1 then set = max end
-            os.execute("clear")
+            clear()
             print("\27[44m[Results]:\27[41m[============]:\27[0m\n")
             for i,v in ipairs(results) do
                 local arrow = ""
@@ -125,6 +129,9 @@ local function search()
         query = query:sub(1, #query - 1)
         searchs = true
         return
+    elseif uinp == "\3" or uinp == "\17" then
+        markets = true
+        return
     else
         query = query .. uinp
         searchs = true
@@ -133,7 +140,7 @@ local function search()
 end
 
 local function market()
-    os.execute("clear")
+    clear()
     local usedpacks = {}
     print("\27[0m\27[44m[Market]:\27[41m[=============]\27[0m\n")
     do
@@ -204,7 +211,7 @@ local function market()
     io.write(" > \27[92m  [S]    |     [R]     |  [^Q]\n\27[0m")
     local uinp = key()
     if uinp == "Q" then
-        os.execute("clear")
+        clear()
         print("\27[91mlogout\27[0m")
         exit = true
         return
@@ -223,7 +230,7 @@ end
 local inpackage = false
 local obj = {}
 local function hub(query)
-    os.execute("clear")
+    clear()
     for i,v in ipairs(packs) do
         if inpackage == true then break else obj = {} end
         if v.name == query then
@@ -244,7 +251,6 @@ local function hub(query)
             end
         end
     end if not obj.name then markets = true return end
-    os.execute("clear")
     obj.desc = obj.desc or "press: \27[32m[D]\27[0m to load the package description"
     print("\27[0m\27[44m[HUB]:\27[41m[==========]\27[0m")
     print(string.format([[
@@ -265,7 +271,7 @@ local function hub(query)
         markets = true
         return
     elseif uinp == "i" and obj.name ~= error0 then
-        os.execute("clear")
+        clear()
         local toinstall = {
             [1] = { all = obj.name.."@"..obj.owner, name = obj.name, owner = obj.owner }
         }
@@ -365,7 +371,7 @@ local function hub(query)
         local foundissue = false
         local packcomments = {}
         while commentss do
-            os.execute("clear")
+            clear()
             local mainissue = ""
             if doreqc == true then
                 foundissue = false
@@ -406,7 +412,7 @@ local function hub(query)
                         foundissue = true
                         break
                     end
-                end os.execute("clear")
+                end clear()
             end
 
             print("\27[44m[Comments]:\27[0m") local foundcm = false
@@ -430,12 +436,12 @@ local function hub(query)
             io.write(" > \27[92m [Q]   |    [C]    |   [R]   |         [A]\n")
             local cminp = key() io.write("\27[0m")
             if cminp == "q" then
-                os.execute("clear")
+                clear()
                 commentss = false
                 hubs = true
                 return
             elseif cminp == "c" then
-                os.execute("clear")
+                clear()
                 print("\27[96m leave your comment!\n\27[93mpress ENTER to send, use: <br> to \\n a line (break line)\27[0m")
                 io.write(" > \27[90mwhat are you thinking now?...\27[29D\27[0m")
                 local ucm = io.read()
@@ -464,7 +470,6 @@ local function hub(query)
                 else
                     print("\27[91mnot a valid comment!\27[0m")
                     key()
-                    os.execute("clear")
                 end
             elseif cminp == "r" then
                 doreqc = true
