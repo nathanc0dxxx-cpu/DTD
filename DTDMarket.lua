@@ -1,11 +1,41 @@
 if not DTDUser then DTDUser = { name = "Dougla037" } end
 local error0 = "Error: 0"
+io.write("\27[?1006h")
+io.write("\27[?1000h")
+
+os.execute("stty -icanon -echo -isig min 1 time 0")
 
 local function key()
-    os.execute("stty -icanon -echo -isig")
+    io.flush()
+    io.write("\27[?1006l")
+    io.write("\27[?1000l")
     local k = io.read(1)
-    os.execute("stty icanon echo isig")
+    io.write("\27[?1006h")
+    io.write("\27[?1000h")
     return k
+end
+
+local function mouse()
+    local c = io.read(1)
+    if c ~= "\27" then
+        return nil
+    end
+
+    local seq = c
+    while true do
+        local ch = io.read(1)
+        seq = seq .. ch
+        if ch == "M" or ch == "m" then
+            break
+        end
+    end
+
+    local b,x,y = seq:match("<(%d+);(%d+);(%d+)")
+    if not b then b = 0 end
+    if not x then x = 0 end
+    if not y then y = 0 end
+    seq =""
+    return tonumber(x), tonumber(y), tonumber(b)
 end
 
 os.execute("clear")
@@ -14,23 +44,71 @@ local hubs = false
 local markets = true
 local searchs = false
 local packs = {}
+local cache = false
+local fcache = false
+
 local function loadpacks()
-    local sst = nil
-    local ss = io.popen("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Market")
-    if not ss then
-        sst = string.format([[
-            "name": "%s@System"
-        ]], error0)
-    else
-        sst = ss:read("*a")
-        ss:close()
+    local sst = ""
+    if fcache == false then
+        local f = io.open("markethandler.txt","r")
+        if f then
+            cache = true
+            sst = f:read("*a")
+            f:close()
+        end
     end
+    fcache = false
+    local cmd, out = "curl", "null"
+    if cache == false then
+        local f = io.open("markethandler.txt","w")
+        if f then f:write("loading...") f:close() else sst = string.format("\"name\": \"%s@System\"", "Error: 1") end
+        os.execute("curl -s https://api.github.com/repos/tutugrande1235-DTD/DTD-Source-Scripts/contents/Market > markethandler.txt")
+    end
+    local frames = {
+        [0] = "[        ",
+        [1] = "[\27[47m  \27[0m      ",
+        [2] = "[\27[47m    \27[0m    ",
+        [3] = "[\27[47m      \27[0m  ",
+        [4] = "[\27[47m        \27[0m"
+        
+    }
+    local n = -1
+    local timeout = 5
+    local second = 0
+    
+    while true do
+        if cache == true then break end
+        second = second + 0.2
+        n = n + 1
+        if n > #frames then n = 0 end
+        io.write("\27[2J\27[3J\27[H")
+        print("\27[92m"..frames[n].."\27[92m]")
+        print("\27[0m\27[41m[Loading]\27[0m")
+        
+        os.execute("sleep 0.2")
+        
+        local f = io.open("markethandler.txt","r")
+        if f then
+            cont = f:read("*a")
+            f:close()
+            if not cont:find("loading...", 1, true) then
+                sst = cont
+                break
+            end
+        end
+        
+        if second > timeout then
+            sst = string.format("\"name\": \"%s@System\"\n\"name\": \"%s@System\"", "Request Timeout", out.." "..cmd)
+            break
+        end
+    end
+    
     packs = {}
     for i,v in sst:gmatch("%s*\"name\"%s*:%s*\"%s*(.-)@(.-)\"") do
         local obj = { name = i, owner = v }
         table.insert(packs, obj)
     end
-end
+end loadpacks()
 
 local function clear()
     io.write("\27[3J\27[2J\27[H")
@@ -41,7 +119,7 @@ local query = ""
 local function search()
     clear()
     local results = {}
-    print("\27[0m\27[44m[Search]:\27[41m[============]\27[0m")
+    print("\27[0m\27[44m[Search]:\27[41m[TYPE: CTRL+Q TO LEAVE]\27[0m")
     for i,v in ipairs(packs) do
         if v.name:find(query, 1, true) then
             table.insert(results, v)
@@ -142,7 +220,7 @@ end
 local function market()
     clear()
     local usedpacks = {}
-    print("\27[0m\27[44m[Market]:\27[41m[=============]\27[0m\n")
+    print("\27[0m\27[44m[Market]:\27[41m[=====]:\27[44m[X];[S];[R]\27[0m\n")
     do
     local maxi = 2
     local foundpkg = false
@@ -156,7 +234,7 @@ local function market()
                     print("\n")
                 end
             end
-        end if foundpkg == false then io.write("\27[90mWOW! nothing here...\27[0m\n\n") end
+        end if foundpkg == false then io.write("\27[90mWOW! nothing here, why dont you try to load the list?\27[0m") end
     end
     print("\n\n\27[0m\27[45m[Some Plugins for you!]:\27[0m\n")
     do
@@ -177,13 +255,15 @@ local function market()
     print("\n\n\27[0m\27[43m[Try some of these stuff!]:\27[0m\n")
     do
     local maxi = 2
+    local ii = 0
     local foundpkg = false
-        for i = #packs, #packs - 9 do
+        for i = math.max(#packs - 9, 1), #packs do
+            ii = ii + 1
             local target = packs[i]
             if target and (not table.concat(usedpacks, " "):match(target.name)) then
                 io.write("\27[92m [\27[93m"..target.name:gsub("%.%s*(.-)$","").."\27[92m]\27[0m")
                 foundpkg = true
-                if i >= maxi then
+                if ii >= maxi then
                     maxi = maxi + 2
                     print("\n")
                 end
@@ -206,20 +286,23 @@ local function market()
             end
         end if foundpkg == false then io.write("\27[90mHmm... looks like there’s nothing of this type here.\27[0m") end
     end
-    print("\n\n\27[44m[======================]\27[0m")
-    io.write(" > \27[90m<Search> | <ResetList> | <Exit>\27[0m\n")
-    io.write(" > \27[92m  [S]    |     [R]     |  [^Q]\n\27[0m")
-    local uinp = key()
-    if uinp == "Q" then
+    print("\n\n\27[41m[======================]\27[0m")
+    
+    local x,y = mouse()
+    local yy = false
+    if y >= 1 and y <= 2 then yy = true end
+    if x >= 18 and x <= 21 and yy then
         clear()
         print("\27[91mlogout\27[0m")
         exit = true
         return
-    elseif uinp == "r" then
+    elseif x >= 28 and x <= 31 and yy then
+        fcache = true
+        cache = false
         loadpacks()
         markets = true
         return
-    elseif uinp == "s" then
+    elseif x >= 23 and x <= 26 and yy then
         searchs = true
         return
     else
@@ -523,3 +606,7 @@ while not exit do
         search()
     end
 end
+
+io.write("\27[?1006l")
+io.write("\27[?1000l")
+os.execute("stty sane")
