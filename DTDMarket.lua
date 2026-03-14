@@ -16,6 +16,7 @@ local function key()
 end
 
 local function mouse()
+    os.execute("sleep 0.1")
     local c = io.read(1)
     if c ~= "\27" then
         return nil
@@ -29,6 +30,8 @@ local function mouse()
             break
         end
     end
+    io.flush()
+    if not seq:match("<(%d+);(%d+);(%d+)") then return 0,0,0 end
 
     local b,x,y = seq:match("<(%d+);(%d+);(%d+)")
     if not b then b = 0 end
@@ -291,19 +294,20 @@ local function market()
     local x,y = mouse()
     local yy = false
     if y >= 1 and y <= 2 then yy = true end
-    if x >= 18 and x <= 21 and yy then
+    if x >= 18 and x <= 21 and yy == true then
         clear()
         print("\27[91mlogout\27[0m")
         exit = true
         return
-    elseif x >= 28 and x <= 31 and yy then
+    elseif x >= 28 and x <= 31 and yy == true then
         fcache = true
         cache = false
         loadpacks()
         markets = true
         return
-    elseif x >= 23 and x <= 26 and yy then
+    elseif x >= 23 and x <= 26 and yy == true then
         searchs = true
+        query = ""
         return
     else
         markets = true
@@ -334,26 +338,27 @@ local function hub(query)
             end
         end
     end if not obj.name then markets = true return end
-    obj.desc = obj.desc or "press: \27[32m[D]\27[0m to load the package description"
-    print("\27[0m\27[44m[HUB]:\27[41m[==========]\27[0m")
+    local defaultd = "press \27[4m\27[94mHere\27[0m to load the package description"
+    obj.desc = obj.desc or defaultd
+    obj.loadeddesc = obj.loadeddesc or false
+    print("\27[0m\27[44m[HUB]:\27[41m[===]:[X]\27[0m")
     print(string.format([[
   .--_____
   |       | %s
-  |---?---| %s %s
-  |       |
-  |_______|
+  |---?---| %s
+  |       | %s
+  |_______| %s
   %s
-    ]], "\27[96m"..obj.name.."\27[0m", "\27[90mby ", obj.owner.."\27[0m", obj.desc))
-    print("\27[0m\27[44m[================]\27[0m")
-    io.write(" > \27[90m<Back> | <Install> | <Comments>\27[0m\n")
-    io.write(" > \27[92m  [Q]  |    [I]    |     [C]\27[0m\n")
-
-    local uinp = key()
-    if uinp == "q" then
+    ]], "\27[96m"..obj.name:gsub("(%..-)$","").."\27[0m", "\27[90mby \27[94m@"..obj.owner.."\27[0m", "\27[90mtype: \27[91m"..obj.name:gsub("^(.-)%.","").."\27[0m", "\27[42m[Install]\27[0m", obj.desc))
+    print("\27[0m\27[44m[==============]:\27[45m[Comments]\27[0m")
+    
+    local uinp = ""
+    local x,y = mouse()
+    if y == 1 and x >= 13 and x <= 15 then
         inpackage = false
         markets = true
         return
-    elseif uinp == "i" and obj.name ~= error0 then
+    elseif y == 6 and x >= 13 and x <= 21 and obj.name ~= error0 then
         clear()
         local toinstall = {
             [1] = { all = obj.name.."@"..obj.owner, name = obj.name, owner = obj.owner }
@@ -380,6 +385,7 @@ local function hub(query)
         else
             print("\27[91merror on dependencies check...\27[0m")
             markets = true
+            key()
             return
         end
         local toformat = {}
@@ -392,6 +398,8 @@ local function hub(query)
                     dpd = dpd:gsub("\'","")
                     dpd = dpd:gsub("%(","")
                     dpd = dpd:gsub("%)","")
+                    dpd = dpd:gsub("<","")
+                    dpd = dpd:gsub(">","")
                     table.insert(toformat, dpd)
                 end
             end
@@ -412,17 +420,19 @@ local function hub(query)
             if v.name ~= obj.name then
                 print("  \27[95m["..v.name.."]\27[0m\n")
             end
-        end if not toinstall[1] then print("  \27[90mno dependencies to install\27[0m\n") end
+        end if not toinstall[2] then print("  \27[90mno dependencies to install\27[0m\n") end
         print("\27[0m\27[44m[====================]:\27[0m")
         print("\27[93mprocced? \27[92m[Y]\27[0m/\27[91m[N]\27[0m:")
-        io.write(" > ")
-        local ask = key()
-        if ask:lower() == "y" then
-            print("procceding...")
-        else
-            print("cancelling...")
-            markets = true
-            return
+        while true do
+            local ask = key()
+            if ask:lower() == "y" then
+                print("procceding...")
+                break
+            elseif ask:lower() == "n" then
+                print("cancelling...")
+                markets = true
+                return
+            end
         end
 
         for i,targetpack in ipairs(toinstall) do
@@ -447,7 +457,7 @@ local function hub(query)
         key()
         hubs = true
         return
-    elseif uinp == "c" and obj.name ~= error0 then
+    elseif y == 9 and x >= 18 and x <= 27 and obj.name ~= error0 then
         local commentss = true
         local doreqc = true
         local issues = ""
@@ -577,15 +587,39 @@ local function hub(query)
                 key()
             end
         end
-    elseif uinp == "d" then
-        local ssdesc = io.popen("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Market/"..obj.name.."@"..obj.owner.."/description@"..obj.owner)
-        if ssdesc and obj.name ~= error0 then
-            obj.desc = ssdesc:read("*a")
-            ssdesc:close()
+    elseif y == 7 and x >= 9 and x <= 12 and obj.loadeddesc == false and obj.name ~= error0 then
+        local f = io.open("marketdescriptor.txt","w")
+        if f then
+            f:write("empty")
+            f:close()
         else
-            print("\27[91mfailed to load package description")
-            key() 
+            obj.desc = "\27[91mno file writing permission...\27[0m"
+            hubs = true
+            return
         end
+        os.execute("curl -s https://raw.githubusercontent.com/tutugrande1235-DTD/DTD-Source-Scripts/main/Market/"..obj.name.."@"..obj.owner.."/description@"..obj.owner.." > marketdescriptor.txt &")
+        local n = 0
+        local nn = 0
+        while true do
+            if n > 3 then n = 0 end
+            io.write("\27[3J\27[2J\27[H")
+            io.write("\27[90mloading description"..string.rep(".",n))
+            local f = io.open("marketdescriptor.txt","r")
+            if f then
+                local c = f:read("*a")
+                f:close()
+                if c ~= "empty" and c ~= "" then
+                    obj.desc = c
+                    break
+                end
+            end
+            if nn > 25 then obj.desc = "\27[91mtimeout.\27[0m" break end
+            os.execute("sleep 0.2")
+            n = n + 1
+            nn = nn + 1
+        end
+        
+        os.remove("marketdescriptor.txt")
         hubs = true
         return
     else
