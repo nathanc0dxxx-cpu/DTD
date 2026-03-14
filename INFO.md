@@ -6,6 +6,8 @@ this is a document file for you read and know more of we.
 
 DTD is the shortcutted name of Dynamic Techs Department, DTD is a Organization team in the code world.
 
+####### Please! Just to be clear, we are VERY small, so don't ask us for a totally innovative and gigantic invention... but if you want, you can ask to contribute... 
+
 ### What DTD Do:
 
 The DTD Organization is a team thats works on programs and exclusive on Lua language because of his speed and power.
