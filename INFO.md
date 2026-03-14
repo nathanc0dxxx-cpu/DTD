@@ -26,7 +26,7 @@ DOT or DTDOS is the Terminal App designed by DTD and have a lot of services and 
 
 To you use DOT you need to learn this:
 
-*installation:* First you need to have the bootloader package of DOT. Is simple! You must need a file called DOT.lua or somethinf likely, to grab your package you need to copy the DTDBTL.lua file in this repository, and paste in a file called DOT.lua or something else.
+*installation:* First you need to have the bootloader package of DOT. Is simple! You must need a file called DOT.lua or somethinf likely, to grab your package you need to copy the DTDBTL.lua file in this repository, and paste in a file called DOT.lua or something else *tip! type: . <(curl -fsSL https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/install.sh) is more faster and easy!*.
 
 *bootstraping:* I know! This is confusing! But its simple at the same time. First you need to have an DTD Account, but... how? I cant leave of this login session! Calm down! Its easy! Just write the placeholder text thats appears in the inputbox, just write on the name User and write again on the password User and finished the login page! Now you have 3 options... start, loadpack and removepack... what i do with this? If you dont have the DTDPX.dtdp.lua (DTD Plugin Extension), you just type loadpack and wait... its fast! We build it on Lua! Now with the DTDPX.dtdp.lua installed you type 1 or start to start the app! And BOOM! You finished the bootstrap session.
 
