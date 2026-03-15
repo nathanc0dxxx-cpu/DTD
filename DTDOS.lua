@@ -1,126 +1,189 @@
-os.execute("clear")
-io.write("\27[0m")
-if tonumber(_VERSION:match("%d+%.%d+")) >= 5.4 then
-    if not DTDUser then DTDUser = { name = "User", id = 2 } end
+_G.dot = {}
+dot.elements = {}
+dot.path = os.getenv("PREFIX")
+if dot.path == nil then
+    local s = os.execute("cd /usr")
+    if s == 0 then dot.path = "/usr/bin/"
+    else dot.path = "./"
+    end
 else
-    print("\27[91mOld client detected!\27[93m\nto use Dnes you need to update your Lua Client to Lua 5.4 or Upper!\27[0m\nAbort.")
-    os.exit()
+    dot.path = dot.path.."/bin/"
 end
-function loadplugins() _G.plugins = {}
-  local havepi = false
-  print("\27[44m[DTD::PIL]:\27[0m\27[93m initializing...")
-  local get = io.popen("ls")
-  local files = get:read("*a")
-  get:close()
-  print("\27[0m\27[44m[DTD::PIL]:\27[0m\27[93m searching at ./any")
-  for v in files:gmatch("%S+") do
-    if v:match("%.dtdp%.lua$") then
-      print("\27[0m\27[46m\27[94mLOADED:\27[0m\27[46m "..v)
-      local fn, err = pcall(dofile, v)
-      if not fn then
-        print("\27[91mplugin error\27[96m"..v.."\27[0m"..tostring(err))
-      else
-        table.insert(_G.plugins, v)
-        havepi = true
-      end
+dot.path = dot.path .. "dotapp/"
+local path = dot.path
+os.execute("mkdir "..dot.path:sub(1, #dot.path - 1).." >/dev/null 2>&1")
+
+dot.components = {}
+function dot.loadelements()
+    local d = io.popen("ls -p "..path)
+    if d then
+        local dd = d:read("*a")
+        d:close()
+        for v in dd:gmatch("%S+") do
+            if not v:match("/$") then
+                table.insert(dot.elements, v)
+            end
+        end
     end
-  end
-  if havepi == false then
-    print("\27[0m\27[44m[DTD::PIL]:\27[0m\27[41mNO PLUGIN FOUND\27[0m")
-  else
-    print("\27[0m\27[44m[DTD::PIL]:\27[0m\27[92m finished!")
-  end
-  print()
-  return havepi
+end
+function dot.getexecutables(pt)
+    local p = io.popen("ls -p "..pt)
+    local tab = {}
+    if p then
+        local c = p:read("*a")
+        p:close()
+        for v in c:gmatch("%S+") do
+            if not v:match("/$") then
+                table.insert(tab, v)
+            end
+        end
+    end
+    return tab
 end
 
---SYS--
-_G.cmd = {}
-_G.cmdf = {}
-_G.cmdd = {}
-_G.args = {}
-----API----
-_G.new = {}
------------
-function new.cmd(name, func, desc)
-  for i,v in ipairs(_G.cmd) do
-    if v == name then return end
-  end
+function dot.getkey()
+    local inp = io.read(1)
+    if inp == "\n" or inp == "" or inp == "\r" or inp == "\n\r" or inp == "\r\n" then
+        inp = "enter"
+    elseif inp == "\8" or inp == "\127" or inp == "\b" then
+        inp = "backspace"
+    end
+    return inp
+end
 
-  if name then
-    table.insert(_G.cmd, name)
-    if func then
-      table.insert(_G.cmdf, func)
-      if desc then
-        table.insert(_G.cmdd, desc)
-      else
-        table.insert(_G.cmdd, "no description provided!")
-      end
+dot.stdin = {
+    input = ""
+}
+dot.stdout = {
+    text = ""
+}
+dot.terminal = {
+    size = {
+        x = 0,
+        y = 0
+    }
+}
+function dot.err(txt)
+    print("\27[44m[DOT]:\27[0m\27[91m ERROR: \27[0m"..txt)
+end
+function dot.notify(txt)
+    print("\27[44m[DOT]:\27[0m "..txt)
+end
+
+os.execute("stty -icanon -echo -isig min 1 time 0")
+io.write("\27[?25l")
+
+dot.loadelements()
+local d = io.popen("stty size")
+local dd = d:read("*a") d:close()
+local y,x = dd:match("(%d*) (%d*)")
+dot.terminal.size.x = tonumber(x)
+dot.terminal.size.y = tonumber(y)
+print("\n")
+
+while true do
+    local input = dot.stdin.input
+    local args = {}
+    for v in input:gmatch("%S+") do
+        table.insert(args, v)
+    end
+    if not args[1] then args[1] = " " end
+    do
+        local reply = ""
+        for i,v in ipairs(dot.elements) do
+            if v:sub(1, #args[1]) == args[1] then
+                reply = v break
+            end
+        end local input2 = input
+        if args[1] == reply then input2 = "\27[92m"..args[1].."\27[96m"..input:sub(#args[1] + 1, #input) end
+
+        print("\27[1A\27[0J\27[96m > :\27[0m"..input2.."\27[93m<\27[90m"..reply:sub(#input + 1, #reply).."\27[0m")
+
+    end
+
+    local k = dot.getkey()
+
+    if k == "enter" then
+        if input == "exit" then os.execute("clear") os.execute("stty sane") io.write("\27[?25h") return end
+
+        if input:gsub(" ","") ~= "" then
+        local got = false
+        local pathin = path
+        if input:match("^.-/") then pathin = args[1]:match("^(.-)/.-") or "" pathin = pathin.."/" end
+        local g = dot.getexecutables(pathin)
+        for i,v in ipairs(g) do
+            if v == args[1] then
+                got = true
+                local f, err = loadfile(pathin..v)
+                if f then
+                    local leng = #args[1]
+                    local fin = input:sub(leng + 2, #input)
+                    local out = f(fin)
+                    if out then
+                        if type(out) == "table" then
+                            local result = {}
+                            local function parse(tab)
+                                for i,v in ipairs(tab) do
+                                    if type(v) == "table" then
+                                        parse(v)
+                                    else
+                                        table.insert(result, v)
+                                    end
+                                end
+                            end for i,v in ipairs(result) do
+                                print(tostring(v))
+                            end
+                        else print(tostring(out))
+                        end
+                    end
+                else
+                    dot.err(pathin..v..": "..tostring(err))
+                end
+                break
+            end
+        end
+        if got == false and input == "--lua" then
+            local code = ""
+            print("\27[90mpress CTRL+R to run or CTRL+Q to exit.\27[0m")
+            while true do
+                local k = dot.getkey()
+                if k == "enter" then break end
+            end
+            while true do
+                io.write("\27[3J\27[2J\27[H\27[0m"..code.."\27[47m \27[0m")
+                local sin = dot.getkey()
+
+                if sin == "enter" then
+                    code = code.."\n"
+                elseif sin == "backspace" then
+                    code = code:sub(1, #code - 1)
+                elseif sin == "\18"then
+                    break
+                elseif sin == "\17" then
+                    code = ""
+                    break
+                else
+                    code = code..sin
+                end
+            end
+            local fn,err = load(code)
+            if fn then
+                got = true fn(input)
+            elseif not fn and err then
+                dot.err("inline: "..tostring(err))
+            end
+        end
+        if got == false then
+            dot.err(pathin..": file "..args[1].." not found")
+        end dot.stdin.input = ""
+        end
+        print()
+    elseif k == "backspace" then
+        dot.stdin.input = input:sub(1, #input - 1)
     else
-      table.insert(_G.cmdf, function() 
-        print("\27[0m\27[44m[DTD::CMD]:\27[0m no function provided!\27[0m") 
-      end)
+        dot.stdin.input = input .. k
     end
-  end
-end
-local getpi = loadplugins()
-
-if not cmd[1] then
-  print("\27[0m\27[44m[DTD::SYS]:\27[0m\27[41mNO COMMAND REGISTED\27[0m")
 end
 
-if DTDUser.name == "User" then
-    print("\n\27[93mUsing the Standart Account?\n\27[96mGet your own opening the \27[92maccounts\27[96m server!\n\27[0mType: \27[94mopen accounts\27[0m and regist your DTDAccount\n")
-else
-    print("\n\27[95mHello "..DTDUser.name.."!\27[0m\n")
-end
-new.cmd("finish", os.exit, "finish the session")
-new.cmd("version", function() print(_VERSION) print(tonumber(_VERSION)) end, "show your client Lua version")
-
-
-::s::
-args = {}
-
-print("\27[92m") 
-io.write("\27[2A")
-os.execute("pwd")
-io.write("\27[0m\27[96m >: \27[0m ")
-if cmd[1] then
-  local placeholder = cmd[math.random(1, #cmd)]
-  local plchldsize = 0
-  for v in placeholder:gmatch("(.)") do
-      plchldsize = plchldsize + 1
-  end io.write("\27[90m"..placeholder.."\27["..plchldsize.."D\27[0m")
-end
-_G.input = io.read()
-io.write("\27[3B")
-for v in input:gmatch("%S+") do
-  table.insert(args, v)
-end
-
-local executed = false
-
-for i,v in ipairs(cmd) do
-  if args[1] == v then
-    if args[2] == "--help" then
-      print("\27[2A\27[93m--desc: \27[0m"..cmdd[i].."\27[2B\27[0m")
-    else
-      cmdf[i]()
-    end
-    executed = true
-  end
-end
-
-if executed == false then
-  if input ~= "" then
-    local get = os.execute(input)
-  else
-    for i = 1,4 do
-      io.write("\27[1A\27[2K")
-    end
-  end
-end
-
-args = {}
-goto s
-
+io.write("\27[?25h")
+os.execute("stty sane")
