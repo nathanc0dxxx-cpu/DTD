@@ -24,7 +24,7 @@ end
 function loadpacks()
     clear()
     print("fetching installer code...")
-    local s = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDPX.dtdp.lua")
+    local s = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDPX.lua")
     if s then
         local c = s:read("*a")
         s:close()
@@ -51,7 +51,6 @@ while true do
         loadpacks()
     elseif cmd == "removepack" or cmd == "3" then
         clear()
-        os.remove("DTDPX.dtdp.lua")
     else
         clear()
     end
