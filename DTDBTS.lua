@@ -2,83 +2,57 @@ do
     local ss = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDAdaptor.lua")
     if ss then load(ss:read("*a"))() ss:close() else print("\27[91mfailed to load adaptor...\27[0m") return end
 end
---inject cmd
-local hm = os.getenv("HOME")
-local bsf = io.open(hm.."/.bashrc","r")
-if not bsf then
-    bsf = io.open(hm.."/.bashrc","w")
-    if bsf then
-        bsf:write("alias dtdos='lua5.4 DTDBTL.lua'\n")
-        bsf:close()
-    end
-else
-    local cont = bsf:read("*a")
-    bsf:close()
-    bsf = io.open(hm.."/.bashrc","w")
-    if bsf and( not cont:match("alias%s*dtdos")) then
-        bsf:write(cont,"\nalias dtdos='lua5.4 DTDBTL.lua'")
-        bsf:close()
-    end
-end
-
 
 function start()
-print("\27[44m[DTD::BOOTSTRAP]:\27[0m\27[93m initializing...\27[0m")
-local get = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDOS.lua")
-local content = get:read("*a")
-get:close()
-if content:match("::s::") then
-  print("\27[44m[DTD::BOOTSTRAP]:\27[0m\27[92mcontent loaded\n\27[91mRUNNING...")
-  load(content)()
-else
-  print("\27[44m[DTD::BOOTSTRAP]:\27[0m\27[41mno content found")
+    print("\27[44m[DTD::BOOTSTRAP]:\27[0m\27[93m initializing...\27[0m")
+    local get = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDOS.lua")
+    local content = get:read("*a")
+    get:close()
+    if content:match("::s::") then
+        print("\27[44m[DTD::BOOTSTRAP]:\27[0m\27[92mcontent loaded\n\27[91mRUNNING...")
+        load(content)()
+    else
+        print("\27[44m[DTD::BOOTSTRAP]:\27[0m\27[41mno content found")
+    end
 end
+
+local function clear()
+    io.write("\27[3J\27[2J\27[H")
+    io.flush()
 end
 
 function loadpacks()
-  local test = io.open("DTDPX.dtdp.lua", "r") or nil
-  if test then
-    test:close()
-    print("\27[91mresource already installed\27[0m")
-    return
-  else
-    print("\27[44m[DTD::BOOTSTRAP]:\27[0m getting pack...")
-    local exp = io.open("DTDPX.dtdp.lua", "w")
-    local server = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDPX.lua")
-    local content = server:read("*a")
-    server:close()
-    if content then
-      exp:write(content)
-      exp:close()
-    else
-      exp:close()
-      os.remove("DTDPX.dtdp.lua")
-      print("\27[44m[DTD::BOOTSTRAP]:\27[91m failed to get content\27[0m")
-      return
+    clear()
+    print("fetching installer code...")
+    local s = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDPX.dtdp.lua")
+    if s then
+        local c = s:read("*a")
+        s:close()
+        load(c)()
     end
-    print("\27[44m[DTD::BOOTSTRAP]:\27[0m\27[92m plugin installed!\27[0m")
-  end
 end
 
-local ssl = io.popen("curl -S https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDAccountLogger.lua")
-local ssc = ssl:read("*a")
-ssl:close()
-if ssc then load(ssc)() end
-
-::s::
-print("\27[44m[DTD::BOOTSTRAP]:\27[0mtype a option\nof bootstrap\n\n\27[93m[1]: start\n[2]: loadpack\n[3]: removepack\n\27[0m")
-local cmd = io.read()
-if cmd == "start" or cmd == "1" then
-  os.execute("clear")
-  start()
-elseif cmd == "loadpack" or cmd == "2" then
-  os.execute("clear")
-  loadpacks()
-elseif cmd == "removepack" or cmd == "3" then
-  os.execute("clear")
-  os.remove("DTDPX.dtdp.lua")
-else
-  os.execute("clear")
+do
+    local ssl = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/SystemManagers/DTDAccountLogger.lua")
+    local ssc = ssl:read("*a")
+    ssl:close()
+    if ssc then load(ssc)() end
 end
 
-goto s
+while true do
+    print("\27[44m[DTD::BOOTSTRAP]:\27[0mtype a option\n\n\27[93m[1]: start\n[2]: loadpack\n[3]: removepack\n\27[0m")
+    local cmd = io.read()
+    if cmd == "start" or cmd == "1" then
+        clear()
+        start()
+        break
+    elseif cmd == "loadpack" or cmd == "2" then
+        clear()
+        loadpacks()
+    elseif cmd == "removepack" or cmd == "3" then
+        clear()
+        os.remove("DTDPX.dtdp.lua")
+    else
+        clear()
+    end
+end
