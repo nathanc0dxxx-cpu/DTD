@@ -8,7 +8,7 @@ function start()
     local get = io.popen("curl -s https://raw.githubusercontent.com/nathanc0dxxx-cpu/DTD/main/DTDOS.lua")
     local content = get:read("*a")
     get:close()
-    if content:match("::s::") then
+    if content:match("dot") then
         print("\27[44m[DTD::BOOTSTRAP]:\27[0m\27[92mcontent loaded\n\27[91mRUNNING...")
         load(content)()
     else
